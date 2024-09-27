@@ -1,0 +1,54 @@
+{
+  "_from": "@project-sunbird/sunbird-questionset-editor-web-component@^4.0.2",
+  "_id": "@project-sunbird/sunbird-questionset-editor-web-component@4.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-xTsKPNZJ98zkIFJYF3mGK7+s89OFBQ5Np0I1Lr4PPLuORsxU1WJ7ztlxxjPQg+djIifzIK9IN+c9jc9nqu8B6w==",
+  "_location": "/@project-sunbird/sunbird-questionset-editor-web-component",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@project-sunbird/sunbird-questionset-editor-web-component@^4.0.2",
+    "name": "@project-sunbird/sunbird-questionset-editor-web-component",
+    "escapedName": "@project-sunbird%2fsunbird-questionset-editor-web-component",
+    "scope": "@project-sunbird",
+    "rawSpec": "^4.0.2",
+    "saveSpec": null,
+    "fetchSpec": "^4.0.2"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@project-sunbird/sunbird-questionset-editor-web-component/-/sunbird-questionset-editor-web-component-4.0.2.tgz",
+  "_shasum": "b3c16702b9f72d1471884ea789ccdbedc8dbf2b0",
+  "_spec": "@project-sunbird/sunbird-questionset-editor-web-component@^4.0.2",
+  "_where": "/home/ttpl-rt-171/Documents/A_Tekdi/Pratham/Test/my-react-app",
+  "author": {
+    "name": "Sunbird"
+  },
+  "bugs": {
+    "url": "https://github.com/Sunbird-inQuiry/editor/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "The web component package for the sunbird questionset editor",
+  "homepage": "https://github.com/Sunbird-inQuiry/editor#readme",
+  "keywords": [
+    "sunbird",
+    "questionSet",
+    "Question",
+    "editor",
+    "web-component"
+  ],
+  "license": "MIT",
+  "main": "sunbird-questionset-editor.js",
+  "name": "@project-sunbird/sunbird-questionset-editor-web-component",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sunbird-inQuiry/editor.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "4.0.2"
+}
