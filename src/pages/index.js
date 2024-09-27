@@ -1,5 +1,5 @@
 import React from "react";
-import QuestionSetEditor from "./components/QuestionSetEditor";
+import QuestionSetEditor from "../components/QuestionSetEditor";
 
 function IndexPage() {
   return (
