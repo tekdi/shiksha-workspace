@@ -10,7 +10,7 @@ export default function Document() {
           rel="stylesheet"
           href="/sunbird-questionset-editor-web-component/styles.css"
         />
-        <Script src="/sunbird-questionset-editor-web-component/sunbird-questionset-editor.js"></Script>
+        <script src="/sunbird-questionset-editor-web-component/sunbird-questionset-editor.js" async></script>
       </Head>
       <body>
         <Main />
