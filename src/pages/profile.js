@@ -38,7 +38,7 @@ const Profile = () => {
 
   return (
     <div>
-      <h1>Profile API Data (React)</h1>
+      <h1>Profile API Data (Next.js)</h1>
       <p><strong>Title:</strong> {postData.title}</p>
       <p><strong>Body:</strong> {postData.body}</p>
     </div>
