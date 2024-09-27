@@ -10,7 +10,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/posts/1");
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts/1");
         console.log(response, "response");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -38,7 +38,7 @@ const Profile = () => {
 
   return (
     <div>
-      <h1>Fake API Data (React)</h1>
+      <h1>Profile API Data (React)</h1>
       <p><strong>Title:</strong> {postData.title}</p>
       <p><strong>Body:</strong> {postData.body}</p>
     </div>
