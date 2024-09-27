@@ -2,7 +2,6 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
-  
   return (
     <Html lang="en">
       <Head>
@@ -10,14 +9,7 @@ export default function Document() {
           rel="stylesheet"
           href="/sunbird-questionset-editor-web-component/styles.css"
         />
-        <script
-          src="https://code.jquery.com/jquery-3.6.0.min.js"
-          defer
-        ></script>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.37.0/jquery.fancytree-all-deps.min.js"
-          defer
-        ></script>
+        <script src="/sunbird-questionset-editor-web-component/sunbird-questionset-editor.js"></script>
       </Head>
       <body>
         <Main />
