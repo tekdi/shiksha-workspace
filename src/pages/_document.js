@@ -1,5 +1,6 @@
 // pages/_document.js
 import { Html, Head, Main, NextScript } from "next/document";
+import Script from "next/script";
 
 export default function Document() {
   return (
@@ -9,7 +10,7 @@ export default function Document() {
           rel="stylesheet"
           href="/sunbird-questionset-editor-web-component/styles.css"
         />
-        <script src="/sunbird-questionset-editor-web-component/sunbird-questionset-editor.js"></script>
+        <Script src="/sunbird-questionset-editor-web-component/sunbird-questionset-editor.js"></Script>
       </Head>
       <body>
         <Main />
