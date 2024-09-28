@@ -3,18 +3,18 @@ export const questionSetEditorConfig = {
     programId: '',
     contributionOrgId: '',
     user: {
-      id: '5a587cc1-e018-4859-a0a8-e842650b9d64',
-      fullName: 'Test User',
-      firstName: 'Test',
-      lastName: 'User',
-      orgIds: ['01269878797503692810']
+      id: 'ef99949b-7f3a-4a5f-806a-e67e683e38f3',
+      fullName: 'Rahul Tekdi',
+      firstName: 'Rahul ',
+      lastName: 'Tekdi',
+      orgIds: ['test-k12-channel']
     },
-    identifier: 'do_21411914423214899211',
+    identifier: 'do_214151758052073472145',
     authToken: ' ',
     sid: 'iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV',
     did: '7e85b4967aebd6704ba1f604f20056b6',
     uid: 'bf020396-0d7b-436f-ae9f-869c6780fc45',
-    channel: '01269878797503692810',
+    channel: 'test-k12-channel',
     pdata: {
       id: 'dev.dock.portal',
       ver: '2.8.0',
@@ -43,73 +43,12 @@ export const questionSetEditorConfig = {
       l1: 'do_113140468925825024117',
       l2: 'do_113140468926914560125'
     },
-    host: 'https://staging.sunbirded.org',
+    host: '',
     defaultLicense: 'CC BY 4.0',
     endpoint: '/data/v3/telemetry',
     env: 'questionset_editor',
-    framework: 'tn_k-12_5',
-    cloudStorageUrls: ['https://s3.ap-south-1.amazonaws.com/ekstep-public-qa/', 'https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/',
-      'https://sunbirddev.blob.core.windows.net/sunbird-content-dev/', 'https://sunbirddevbbpublic.blob.core.windows.net/sunbird-content-staging/',
-      'https://obj.stage.sunbirded.org/sunbird-content-staging/'
-    ],
-    board: 'CBSE',
-    medium: ['English'],
-    gradeLevel: ['Class 1'],
-    subject: ['Hindi'],
-    additionalCategories: [
-      {
-        value: 'Classroom Teaching Video',
-        label: 'Classroom Teaching Video'
-      },
-      {
-        value: 'Concept Map',
-        label: 'Concept Map'
-      },
-      {
-        value: 'Curiosity Question Set',
-        label: 'Curiosity Question Set'
-      },
-      {
-        value: 'Textbook',
-        label: 'Textbook'
-      },
-      {
-        value: 'Experiential Resource',
-        label: 'Experiential Resource'
-      },
-      {
-        value: 'Explanation Video',
-        label: 'Explanation Video'
-      },
-      {
-        value: 'Focus Spot',
-        label: 'Focus Spot'
-      },
-      {
-        value: 'Learning Outcome Definition',
-        label: 'Learning Outcome Definition'
-      },
-      {
-        value: 'Marking Scheme Rubric',
-        label: 'Marking Scheme Rubric'
-      },
-      {
-        value: 'Pedagogy Flow',
-        label: 'Pedagogy Flow'
-      },
-      {
-        value: 'Lesson Plan',
-        label: 'Lesson Plan'
-      },
-      {
-        value: 'Previous Board Exam Papers',
-        label: 'Previous Board Exam Papers'
-      },
-      {
-        value: 'TV Lesson',
-        label: 'TV Lesson'
-      }
-    ],
+    framework: 'test_k12_framework',
+    cloudStorageUrls: ['https://knowlg-public.s3-ap-south-1.amazonaws.com/'],
     labels: {
       save_collection_btn_label: 'Save as Draft',
     },
