@@ -11,7 +11,6 @@ const QuestionSetEditor = () => {
       const questionsetEditorElement = document.createElement(
         "lib-questionset-editor"
       );
-      
       questionsetEditorElement.setAttribute(
         "editor-config",
         JSON.stringify(editorConfig)
@@ -29,7 +28,7 @@ const QuestionSetEditor = () => {
     }
   }, []);
 
-  return <div ref={editorRef}></div>;
+  return <div ref={editorRef} ></div>;
 };
 
 export default QuestionSetEditor;
