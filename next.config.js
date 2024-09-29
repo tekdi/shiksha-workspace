@@ -51,16 +51,6 @@ const nextConfig = {
          "./Index": "./pages/index.js",
         },
         shared: {
-          '@emotion/': {
-            eager: true,
-            requiredVersion: false,
-            singleton: true,
-          },
-          '@chakra-ui/': {
-            eager: true,
-            requiredVersion: false,
-            singleton: true,
-          },
         },
       })
     );
