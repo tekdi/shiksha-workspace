@@ -16,21 +16,13 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/cats',
-        destination: 'https://meowfacts.herokuapp.com',
+        source: '/action/:path*', // Match any route starting with /action/
+        destination: '/api/proxy?path=/action/:path*', // Forward to the proxy API
       },
       {
-        source: '/ducks',
-        destination: 'https://random-d.uk/api/random',
-      },
-      {
-        source: '/action/:path*',
-        destination: 'http://localhost:4000/action/:path*', // Proxy to Backend
-      },
-      {
-        source: '/api/:path*',
-        destination: 'http://localhost:4000/api/:path*', // Proxy to Backend
-      },
+        source: '/api/:path*', // Match any route starting with /api/
+        destination: '/api/proxy?path=/api/:path*', // Forward to the proxy API
+      }
     ];
   },
   /**
