@@ -16,13 +16,6 @@ const CreatePage = () => {
 
   const cardData = [
     {
-      title: "Course",
-      description:
-        "Design courses using collections and resources. Courses are for a duration, to achieve an objective.",
-      icon: <DescriptionOutlinedIcon fontSize="large" />,
-      onClick: openEditor,
-    },
-    {
       title: "Upload Content",
       description: "You can upload content here.",
       icon: <UploadIcon fontSize="large" />,
@@ -35,10 +28,7 @@ const CreatePage = () => {
       title: "Question Set",
       description: "Create Questionsets",
       icon: <DescriptionIcon fontSize="large" />,
-      onClick: () => {
-        console.log("Creating question set");
-        // Add your question set creation logic here
-      },
+      onClick: openEditor,
     },
   ];
 
