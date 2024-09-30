@@ -11,6 +11,10 @@
   "dependencies": {
     "@module-federation/nextjs-mf": "^8.6.0",
     "@module-federation/utilities": "1.7.3",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/material": "^6.1.1",
     "@project-sunbird/sunbird-questionset-editor-web-component": "^4.0.2",
     "async": "^3.2.5",
     "body-parser": "^1.20.2",
@@ -30,8 +34,12 @@
     "url": "^0.11.3"
   },
   "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "18.3.10",
+    "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "webpack": "^5.76.2"
+    "typescript": "5.6.2",
+    "webpack": "^5.95.0"
   }
 }

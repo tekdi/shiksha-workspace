@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { questionSetEditorConfig } from "./data";
+import { questionSetEditorConfig } from "../components/data";
 
 const QuestionSetEditor = () => {
   const editorRef = useRef(null);
@@ -11,7 +11,7 @@ const QuestionSetEditor = () => {
       const questionsetEditorElement = document.createElement(
         "lib-questionset-editor"
       );
-      
+
       questionsetEditorElement.setAttribute(
         "editor-config",
         JSON.stringify(editorConfig)
