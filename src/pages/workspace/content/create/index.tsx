@@ -11,7 +11,7 @@ const CreatePage = () => {
   const router = useRouter();
 
   const openEditor = () => {
-    router.push("/QuestionSetEditor");
+    router.push("/Editor");
   };
 
   const cardData = [
