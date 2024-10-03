@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { questionSetEditorConfig } from "./data";
 
-const QuestionSetEditor = () => {
-  const editorRef = useRef(null);
+const QuestionSetEditor: React.FC = () => {
+  const editorRef = useRef<HTMLDivElement | null>(null);
   let isAppended = false;
 
   useEffect(() => {
@@ -11,13 +11,13 @@ const QuestionSetEditor = () => {
       const questionsetEditorElement = document.createElement(
         "lib-questionset-editor"
       );
-      
+
       questionsetEditorElement.setAttribute(
         "editor-config",
         JSON.stringify(editorConfig)
       );
 
-      questionsetEditorElement.addEventListener("editorEmitter", (event) => {
+      questionsetEditorElement.addEventListener("editorEmitter", (event: Event) => {
         console.log("On editorEvent", event);
       });
 
