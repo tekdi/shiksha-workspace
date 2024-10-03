@@ -24,14 +24,18 @@
     "jquery.fancytree": "^2.38.3",
     "mathjax-full": "^3.2.2",
     "next": "14.2.5",
+    "next-transpile-modules": "^10.0.1",
     "react": "^18",
     "react-dom": "^18",
     "svg2img": "^1.0.0-beta.2",
     "url": "^0.11.3"
   },
   "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.11",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "typescript": "^5.6.2",
     "webpack": "^5.76.2"
   }
 }

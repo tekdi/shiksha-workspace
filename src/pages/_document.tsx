@@ -1,8 +1,9 @@
-// pages/_document.js
-import { Html, Head, Main, NextScript } from "next/document";
-import Script from "next/script";
+// pages/_document.tsx
+import { Html, Head, Main, NextScript } from 'next/document';
+import { DocumentProps } from 'next/document';
+import Script from 'next/script';
 
-export default function Document() {
+export default function Document(props: DocumentProps) {
   return (
     <Html lang="en">
       <Head>
