@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { questionSetEditorConfig } from "../components/data";
 
-const QuestionSetEditor = () => {
-  const editorRef = useRef(null);
+const QuestionSetEditor: React.FC = () => {
+  const editorRef = (useRef < HTMLDivElement) | (null > null);
   let isAppended = false;
 
   useEffect(() => {
@@ -17,9 +17,12 @@ const QuestionSetEditor = () => {
         JSON.stringify(editorConfig)
       );
 
-      questionsetEditorElement.addEventListener("editorEmitter", (event) => {
-        console.log("On editorEvent", event);
-      });
+      questionsetEditorElement.addEventListener(
+        "editorEmitter",
+        (event: Event) => {
+          console.log("On editorEvent", event);
+        }
+      );
 
       if (editorRef.current) {
         console.log("Element appended");
