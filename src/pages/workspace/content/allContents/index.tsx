@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -14,6 +14,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpReviewTinyImage from "@mui/icons-material/LibraryBooks";
 import SearchBox from "../../../../components/SearchBox";
+import { getContent } from "../../../../services/ContentService";
 
 const sampleData = [
   {
@@ -91,6 +92,53 @@ const AllContentsPage = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  useEffect(() => {
+    const getContentList = async () => {
+      try {
+        const reqBody = {
+          request: {
+            filters: {
+              status: [
+                "Draft",
+                "FlagDraft",
+                "Review",
+                "Processing",
+                "Live",
+                "Unlisted",
+                "FlagReview",
+              ],
+              createdBy: "84721b4a-6536-4cb0-b8c3-57583ef4cada",
+              primaryCategory: [
+                "Course Assessment",
+                "eTextbook",
+                "Explanation Content",
+                "Learning Resource",
+                "Practice Question Set",
+                "Teacher Resource",
+                "Exam Question",
+                "Content Playlist",
+                "Course",
+                "Digital Textbook",
+                "Question paper",
+              ],
+            },
+            offset: 0,
+            limit: 9,
+            query: "",
+            sort_by: {
+              lastUpdatedOn: "desc",
+            },
+          },
+        };
+        const response = await getContent(reqBody);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getContentList();
+  }, []);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
