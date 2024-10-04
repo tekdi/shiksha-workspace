@@ -10,52 +10,32 @@ import {
   TableCell,
   TablePagination,
   IconButton,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpReviewTinyImage from "@mui/icons-material/LibraryBooks";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "../../../../services/ContentService";
+import { timeAgo } from "@/utils/Helper";
 
-const sampleData = [
-  {
-    title: "",
-    type: "",
-    lastUpdated: "10 days ago",
-    status: "Draft",
-  },
-  {
-    title: "",
-    type: "",
-    lastUpdated: "15 days ago",
-    status: "Draft",
-  },
-  {
-    title: "Home Science",
-    type: "eTextbook",
-    lastUpdated: "14 minutes ago",
-    status: "Draft",
-  },
-  {
-    title: "Test1",
-    type: "Practice Question set",
-    lastUpdated: "25 hours ago",
-    status: "Publish",
-  },
-  {
-    title: "",
-    type: "",
-    lastUpdated: "5 days ago",
-    status: "Draft",
-  },
-];
+interface content {
+  name: string;
+  status: string;
+  lastUpdatedOn: string;
+  appIcon: string;
+  contentType: string;
+}
 
 const AllContentsPage = () => {
+  const theme = useTheme<any>();
+
   const [selectedKey, setSelectedKey] = useState("allContents");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
+  const [contentList, setContentList] = React.useState<content[]>([]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -82,8 +62,8 @@ const AllContentsPage = () => {
 
   const filteredData = useMemo(
     () =>
-      sampleData.filter((content) =>
-        content.title.toLowerCase().includes(searchTerm)
+      contentList?.filter((content) =>
+        content?.name.toLowerCase().includes(searchTerm)
       ),
     [searchTerm]
   );
@@ -132,7 +112,8 @@ const AllContentsPage = () => {
           },
         };
         const response = await getContent(reqBody);
-        console.log(response);
+        const contentList = response?.content || [];
+        setContentList(contentList);
       } catch (error) {
         console.log(error);
       }
@@ -150,53 +131,58 @@ const AllContentsPage = () => {
           <SearchBox
             placeholder="Search by title..."
             onSearch={handleSearch}
-            onFilterChange={handleFilterChange}
-            onSortChange={handleSortChange}
+            // onFilterChange={handleFilterChange}
+            // onSortChange={handleSortChange}
           />
         </Box>
-
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Content</TableCell>
-              <TableCell>Last Updated</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {displayedRows.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <Box display="flex" alignItems="center">
-                    <UpReviewTinyImage fontSize="small" />
-                    <Box ml={2}>
-                      <Typography variant="body1">
-                        {row.title || "Untitled Course"}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {row.type || "Course"}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell>{row.lastUpdated}</TableCell>
-                <TableCell>{row.status}</TableCell>
-                <TableCell>
-                  {row.status === "Draft" && (
-                    <IconButton aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
-                </TableCell>
+        {contentList && contentList.length > 0 && (
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Content</TableCell>
+                <TableCell>Last Updated</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-
+            </TableHead>
+            <TableBody>
+              {contentList?.map((content, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Box display="flex" alignItems="center">
+                      {content?.appIcon ? (
+                        <img src={content?.appIcon} />
+                      ) : (
+                        <UpReviewTinyImage fontSize="small" />
+                      )}
+                      <Box ml={2}>
+                        <Typography variant="body1">{content?.name}</Typography>
+                        <Typography
+                          variant="body2"
+                          color={theme.palette.warning["A200"]}
+                        >
+                          {content?.contentType}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </TableCell>
+                  <TableCell>{timeAgo(content?.lastUpdatedOn)}</TableCell>
+                  <TableCell>{content?.status}</TableCell>
+                  <TableCell>
+                    {content?.status === "Draft" && (
+                      <IconButton aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
         <TablePagination
           component="div"
-          count={sampleData.length}
+          count={contentList.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}

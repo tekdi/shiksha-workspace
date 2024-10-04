@@ -1,95 +1,82 @@
-// components/SearchBox.tsx
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Box,
-  TextField,
-  InputAdornment,
-  MenuItem,
-  FormControl,
-  Select,
-  SelectChangeEvent,
-  InputLabel,
+  Grid,
+  IconButton,
+  InputBase,
+  Paper,
+  useTheme,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+import { debounce } from "@/utils/Helper";
 
-// Define the props for the SearchBox component
-interface SearchBoxProps {
-  placeholder?: string;
-  onSearch: (searchTerm: string) => void;
-  onFilterChange: (filter: string) => void;
-  onSortChange: (sortBy: string) => void;
+export interface SearchBarProps {
+  onSearch: (value: string) => void;
+  value?: string;
+  onClear?: () => void;
+  placeholder: string;
 }
 
-// Main SearchBox Component
-const SearchBox: React.FC<SearchBoxProps> = ({
-  placeholder,
+const SearchBox: React.FC<SearchBarProps> = ({
   onSearch,
-  onFilterChange,
-  onSortChange,
+  value = "",
+  placeholder = "Search...",
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("");
-  const [sortBy, setSortBy] = useState("");
+  const theme = useTheme<any>();
+  const [searchTerm, setSearchTerm] = useState(value);
 
-  // Handle changes in the search field
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-    onSearch(value);
+  const handleSearchClear = () => {
+    onSearch("");
+    setSearchTerm("");
   };
 
-  // Handle changes in the filter dropdown
-  const handleFilterChange = (event: SelectChangeEvent<string>) => {
-    const value = event.target.value;
-    setFilter(value);
-    onFilterChange(value);
-  };
+  const handleSearch = useCallback(
+    debounce((searchTerm: string) => {
+      onSearch(searchTerm);
+    }, 300), // Debounce for 300 milliseconds
+    [onSearch]
+  );
 
-  // Handle changes in the sort-by dropdown
-  const handleSortChange = (event: SelectChangeEvent<string>) => {
-    const value = event.target.value;
-    setSortBy(value);
-    onSortChange(value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerm = event.target.value;
+    setSearchTerm(searchTerm);
+    handleSearch(searchTerm);
   };
 
   return (
-    <Box display="flex" gap={2} mb={2}>
-      {/* Search Field */}
-      <TextField
-        placeholder={placeholder || "Search..."}
-        value={searchTerm}
-        onChange={handleSearch}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
-
-      {/* Filter Dropdown */}
-      <FormControl sx={{ minWidth: 150 }}>
-        <InputLabel>Filter</InputLabel>
-        <Select value={filter} onChange={handleFilterChange} label="Filter">
-          {/* Add dummy filters here */}
-          <MenuItem value="all">All</MenuItem>
-          <MenuItem value="courses">Courses</MenuItem>
-          <MenuItem value="ebooks">eBooks</MenuItem>
-          <MenuItem value="questionsets">Question Sets</MenuItem>
-        </Select>
-      </FormControl>
-
-      {/* Sort By Dropdown */}
-      <FormControl sx={{ minWidth: 150 }}>
-        <InputLabel>Sort By</InputLabel>
-        <Select value={sortBy} onChange={handleSortChange} label="Sort By">
-          {/* Add sort options here */}
-          <MenuItem value="updated">Updated On</MenuItem>
-          <MenuItem value="modified">Modified On</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
+    <Grid container>
+      <Grid item xs={12} md={6}>
+        <Box sx={{ mt: 2, px: theme.spacing(2.5) }}>
+          <Paper
+            component="form"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              borderRadius: "50px",
+              background: theme.palette.warning.A700,
+              boxShadow: "none",
+            }}
+          >
+            <InputBase
+              value={searchTerm}
+              onChange={handleChange}
+              sx={{ ml: theme.spacing(3), flex: 1, fontSize: "14px" }}
+              placeholder={placeholder}
+              inputProps={{ "aria-label": placeholder }}
+            />
+            <IconButton
+              type="button"
+              onClick={searchTerm ? handleSearchClear : undefined}
+              sx={{ p: theme.spacing(1.25) }}
+              aria-label={searchTerm ? "Clear" : "Search"}
+            >
+              {searchTerm ? <ClearIcon /> : <SearchIcon />}
+            </IconButton>
+          </Paper>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
