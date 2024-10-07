@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { questionSetEditorConfig } from "./data";
+import { questionSetEditorConfig } from "../components/data";
 
 const QuestionSetEditor: React.FC = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
