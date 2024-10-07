@@ -8,9 +8,11 @@ import {
   Typography,
   Box,
   IconButton,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
+import { Status } from "@/utils/app.constant";
 
 interface ContentCardProps {
   title: string;
@@ -29,6 +31,8 @@ const CourseCard: React.FC<ContentCardProps> = ({
   status,
   onDelete,
 }) => {
+  const theme = useTheme<any>();
+
   return (
     <Card
       sx={{
@@ -43,7 +47,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
           component="div"
           sx={{
             height: 140,
-            backgroundColor: "#e0e0e0",
+            backgroundColor: theme.palette.info.contrastText,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -52,7 +56,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
           {imageUrl ? (
             <img
               src={imageUrl}
-              alt={title || "Untitled Course"}
+              alt={title}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
@@ -61,25 +65,25 @@ const CourseCard: React.FC<ContentCardProps> = ({
         </CardMedia>
 
         <Chip
-          label={type || "Course"}
+          label={type}
           sx={{
             position: "absolute",
             top: 10,
             right: 10,
-            backgroundColor: "black",
-            color: "white",
+            backgroundColor: theme.palette.warning["100"],
+            color: theme.palette.warning["A700"],
           }}
         />
       </Box>
 
       <CardContent sx={{ flex: 1 }}>
-        <Typography variant="h6">{title || "Untitled Course"}</Typography>
+        <Typography variant="h6">{title}</Typography>
         <Typography variant="body2" color="text.secondary">
-          {description || "Enter description of course"}
+          {description}
         </Typography>
       </CardContent>
 
-      {(status === "draft" || status === "published") && (
+      {(status === Status.DRAFT || status === Status.LIVE) && (
         <CardActions disableSpacing>
           <Box display="flex" justifyContent="flex-end" width="100%">
             <IconButton aria-label="delete" onClick={onDelete}>

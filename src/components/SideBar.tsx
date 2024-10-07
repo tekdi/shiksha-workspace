@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
+  useTheme,
 } from "@mui/material";
 import DatabaseIcon from "@mui/icons-material/Storage";
 const menuItems = [
@@ -19,7 +20,7 @@ const menuItems = [
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   const router = useRouter();
-
+  const theme = useTheme<any>();
   const handleNavigation = (key: string) => {
     router.push(`/workspace/content/${key}`);
     onSelect(key);
