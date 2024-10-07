@@ -1,6 +1,17 @@
-import '../styles/global.css';
-import { AppProps } from 'next/app';
+import {
+  Experimental_CssVarsProvider as CssVarsProvider,
+  useColorScheme,
+  useTheme,
+} from "@mui/material/styles";
+import "../styles/global.css";
+
+import { AppProps } from "next/app";
+import customTheme from "@/styles/CustomTheme";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <CssVarsProvider theme={customTheme}>
+      <Component {...pageProps} />;
+    </CssVarsProvider>
+  );
 }
