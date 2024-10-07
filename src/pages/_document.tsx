@@ -1,17 +1,19 @@
-// pages/_document.tsx
+// pages/_document.js
 import { Html, Head, Main, NextScript } from 'next/document';
-import { DocumentProps } from 'next/document';
-import Script from 'next/script';
+import React from 'react';
 
-export default function Document(props: DocumentProps) {
+export default function Document() {
   return (
     <Html lang="en">
       <Head>
         <link
           rel="stylesheet"
-          href="/sunbird-questionset-editor-web-component/styles.css"
+          href="https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-questionset-editor-web-component/styles.css"
         />
-        <script src="/sunbird-questionset-editor-web-component/sunbird-questionset-editor.js" async></script>
+        <script
+          src="https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-questionset-editor-web-component/sunbird-questionset-editor.js"
+          async
+        ></script>
       </Head>
       <body>
         <Main />
@@ -20,3 +22,4 @@ export default function Document(props: DocumentProps) {
     </Html>
   );
 }
+  
