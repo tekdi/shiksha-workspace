@@ -6,3 +6,12 @@ interface SidebarProps {
 interface DashboardContentProps {
   selectedKey: any;
 }
+
+interface content {
+  name: string;
+  status: string;
+  lastUpdatedOn: string;
+  appIcon: string;
+  contentType: string;
+  description?: string;
+}
