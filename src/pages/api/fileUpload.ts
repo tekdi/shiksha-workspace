@@ -1,10 +1,8 @@
-// pages/api/fileUpload.ts
 import multer, { MulterError } from 'multer';
 import FormData from 'form-data';
-import axios from 'axios'; // Ensure axios is installed
+import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-// Set up Multer with a file size limit (e.g., 2 MB)
 const upload = multer({
   limits: {
     fileSize: 2 * 1024 * 1024, // 2 MB limit
