@@ -48,8 +48,24 @@ const nextConfig = {
         name: 'editor',
         filename: 'static/chunks/remoteEntry.js',
         remotes: remotes(isServer),
+        shared: {
+          '@mui/material': {
+            singleton: true,
+            requiredVersion: false,
+          },
+          '@mui/icons-material': {
+            singleton: true,
+            requiredVersion: false,
+          },
+        },
         exposes: {
           "./Index": "./src/pages/index.tsx",
+          "./Create": "/src/pages/workspace/content/create/index.tsx",
+          "./Content": "/src/pages/workspace/content/allContents/index.tsx",
+          "./Draft": "/src/pages/workspace/content/draft/index.tsx",
+          "./Publish": "/src/pages/workspace/content/publish/index.tsx",
+          "./Submitted": "/src/pages/workspace/content/submitted/index.tsx",
+          "./Editor": "/src/pages/Editor.tsx",
         },
       })
     );
