@@ -33,7 +33,7 @@ const nextConfig = {
       },
       {
         source: '/assets/public/:path*', // Match any URL starting with /assets/public/
-        destination: 'https://knowlg-public.s3-ap-south-1.amazonaws.com/:path*', // Forward to S3, stripping "/assets/public"
+        destination: `${process.env.CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
       },
     ];
   },
