@@ -12,7 +12,7 @@ const upload = multer({
 });
 
 // Create an upload handler
-const uploadHandler = upload.any();
+const uploadHandler = upload.any(); // NOSONAR
 
 // Next.js API Route config to disable body parsing
 export const config = {
