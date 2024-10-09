@@ -13,7 +13,7 @@ const CreatePage = () => {
   const router = useRouter();
 
   const openEditor = () => {
-    router.push("/Editor");
+    router.push("/editor");
   };
 
   const cardData = [
