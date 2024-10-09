@@ -58,7 +58,7 @@ const DraftPage = () => {
     const getDraftContentList = async () => {
       try {
         const response = await getContent(["Draft", "FlagDraft"]);
-        const contentList = response?.content || [];
+        const contentList = response?.content || response?.QuestionSet;
         setContentList(contentList);
       } catch (error) {
         console.log(error);
@@ -83,7 +83,7 @@ const DraftPage = () => {
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap={3}>
-          {contentList.map((content, index) => (
+          {contentList?.map((content, index) => (
             <Box
               key={index}
               sx={{

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Layout from "../../../../components/Layout";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, useTheme } from "@mui/material";
 import ContentCard from "../../../../components/ContentCard";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import UploadIcon from "@mui/icons-material/Upload";
 import { useRouter } from "next/router";
+
 const CreatePage = () => {
+  const theme = useTheme<any>();
   const [selectedKey, setSelectedKey] = useState("create");
   const router = useRouter();
 
@@ -35,8 +37,13 @@ const CreatePage = () => {
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <Box p={3}>
-        <Typography variant="h4">Create Content</Typography>
-        <Typography>Here you can create new content.</Typography>
+        <Typography
+          variant="h2"
+          fontSize={"16px"}
+          sx={{ color: theme.palette.warning["100"] }}
+        >
+          Here you can create new content.
+        </Typography>
       </Box>
 
       <Box
