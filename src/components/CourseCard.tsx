@@ -54,7 +54,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
           }}
         >
           {imageUrl ? (
-            <img src={imageUrl} alt={title} />
+            <img src={imageUrl} alt={title} height={"100%"} width={"100%"} />
           ) : (
             <ImageIcon fontSize="large" />
           )}

@@ -79,7 +79,7 @@ const AllContentsPage = () => {
         ];
 
         const response = await getContent(status);
-        const contentList = response?.content || [];
+        const contentList = response?.content || response?.QuestionSet;
         setContentList(contentList);
       } catch (error) {
         console.log(error);
@@ -118,7 +118,7 @@ const AllContentsPage = () => {
                   <TableCell>
                     <Box display="flex" alignItems="center">
                       {content?.appIcon ? (
-                        <img src={content?.appIcon} />
+                        <img src={content?.appIcon} height={"25px"} />
                       ) : (
                         <UpReviewTinyImage fontSize="small" />
                       )}
