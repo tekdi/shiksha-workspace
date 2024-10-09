@@ -6,7 +6,7 @@
             "dispatcher": "local",
             "apislug": "/action",
             "alertOnUnload": true,
-            "headerLogo": "https://dev.sunbirdsaas.com/assets/images/sunbird_logo.png",
+            "headerLogo": "",
             "loadingImage": "",
             "plugins": [
                 {
@@ -53,7 +53,7 @@
             "enableTelemetryValidation": false,
             "videoMaxSize": "150",
             "defaultContentFileSize": "150",
-            "absURL": "https://dev.sunbirdsaas.com:443",
+            "absURL": "",
             "genericeditorPlugins": [
                 {
                     "id": "org.ekstep.sunbirdcommonheader",
@@ -70,7 +70,10 @@
                     "ver": "1.5",
                     "type": "plugin"
                 }
-            ]
+            ],
+            "headerConfig": {
+                "managecollaborator": false
+            }
         },
         "WINDOW_CONTEXT": {
             "user": {
@@ -83,13 +86,13 @@
                     "test-k12-channel": "Test Channel"
                 }
             },
-            "did": "f35aa1b4e81bb1b8ff87dd9060921266",
-            "sid": "tMRlQoiirB4XkGSBW5bKWgN77ZFAsQGk",
+            "did": "",
+            "sid": "",
             "contentId": "",
             "pdata": {
-                "id": "dev.dev.portal",
-                "ver": "5.1.0",
-                "pid": "sunbird-portal.collectioneditor"
+                "id": "dev.admin.portal",
+                "ver": "1.0.0",
+                "pid": "admin-portal.genericEditor"
             },
             "contextRollUp": {
                 "l1": "test-k12-channel"
@@ -114,22 +117,6 @@
                 "partner": [],
                 "dims": []
             }
-        },
-        "contentState": [
-            "upForReview",
-            "review",
-            "published",
-            "limitedPublish",
-            "flagreviewer",
-            "collaborating-on"
-        ],
-        "contentStatus": [
-            "Review",
-            "Draft",
-            "Live",
-            "Unlisted",
-            "FlagDraft",
-            "FlagReview"
-        ]
+        }
     }
 }
