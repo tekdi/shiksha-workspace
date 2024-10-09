@@ -1,0 +1,135 @@
+{
+    "GENERIC_EDITOR": {
+        "WINDOW_CONFIG": {
+            "corePluginsPackaged": true,
+            "modalId": "genericEditor",
+            "dispatcher": "local",
+            "apislug": "/action",
+            "alertOnUnload": true,
+            "headerLogo": "https://dev.sunbirdsaas.com/assets/images/sunbird_logo.png",
+            "loadingImage": "",
+            "plugins": [
+                {
+                    "id": "org.ekstep.sunbirdcommonheader",
+                    "ver": "1.9",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.sunbirdmetadata",
+                    "ver": "1.1",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.metadata",
+                    "ver": "1.5",
+                    "type": "plugin"
+                }
+            ],
+            "previewConfig": {
+                "repos": [
+                    "/sunbird-plugins/renderer"
+                ],
+                "plugins": [
+                    {
+                        "id": "org.sunbird.player.endpage",
+                        "ver": 1.1,
+                        "type": "plugin"
+                    }
+                ],
+                "splash": {
+                    "text": "",
+                    "icon": "",
+                    "bgImage": "assets/icons/splacebackground_1.png",
+                    "webLink": ""
+                },
+                "overlay": {
+                    "showUser": false
+                },
+                "showEndPage": false
+            },
+            "build_number": "5.1.0.1243321",
+            "lock": {},
+            "extContWhitelistedDomains": "youtube.com,youtu.be",
+            "enableTelemetryValidation": false,
+            "videoMaxSize": "150",
+            "defaultContentFileSize": "150",
+            "absURL": "https://dev.sunbirdsaas.com:443",
+            "genericeditorPlugins": [
+                {
+                    "id": "org.ekstep.sunbirdcommonheader",
+                    "ver": "1.9",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.sunbirdmetadata",
+                    "ver": "1.1",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.metadata",
+                    "ver": "1.5",
+                    "type": "plugin"
+                }
+            ]
+        },
+        "WINDOW_CONTEXT": {
+            "user": {
+                "id": "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+                "name": "Rahul Tekdi",
+                "orgIds": [
+                    "test-k12-channel"
+                ],
+                "organisations": {
+                    "test-k12-channel": "Test Channel"
+                }
+            },
+            "did": "f35aa1b4e81bb1b8ff87dd9060921266",
+            "sid": "tMRlQoiirB4XkGSBW5bKWgN77ZFAsQGk",
+            "contentId": "",
+            "pdata": {
+                "id": "dev.dev.portal",
+                "ver": "5.1.0",
+                "pid": "sunbird-portal.collectioneditor"
+            },
+            "contextRollUp": {
+                "l1": "test-k12-channel"
+            },
+            "tags": [
+                "test-k12-channel"
+            ],
+            "channel": "test-k12-channel",
+            "env": "generic-editor",
+            "framework": "test_k12_framework",
+            "ownershipType": [
+                "createdBy",
+                "createdFor"
+            ],
+            "timeDiff": -0.295,
+            "primaryCategories": [
+                "Learning Resource"
+            ],
+            "uid": "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+            "etags": {
+                "app": [],
+                "partner": [],
+                "dims": []
+            }
+        },
+        "contentState": [
+            "upForReview",
+            "review",
+            "published",
+            "limitedPublish",
+            "flagreviewer",
+            "collaborating-on"
+        ],
+        "contentStatus": [
+            "Review",
+            "Draft",
+            "Live",
+            "Unlisted",
+            "FlagDraft",
+            "FlagReview"
+        ]
+    }
+}

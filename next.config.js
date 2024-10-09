@@ -7,6 +7,21 @@ const remotes = (isServer) => {
   };
 }
 
+const PORTAL_BASE_URL = 'https://staging.sunbirded.org'
+
+const routes = {
+  API: {
+    GENERAL: {
+      CONTENT_PREVIEW: '/content/preview/:path*',
+      CONTENT_PLUGINS: '/content-plugins/:path*',
+      ASSET_PUBLIC: '/assets/public/:path*',
+      GENERIC_EDITOR: '/generic-editor/:path*',
+      CONTENT_EDITOR: '/editor/content/:path*',
+      ASSET_IMAGE: '/assets/images/:path*'
+    }
+  }
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -34,6 +49,34 @@ const nextConfig = {
       {
         source: '/assets/public/:path*',                        // Match any URL starting with /assets/public/
         destination: `${process.env.CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
+      },
+      {
+        source: routes.API.GENERAL.CONTENT_PREVIEW,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_PREVIEW}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.CONTENT_PLUGINS,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_PLUGINS}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.ASSET_PUBLIC,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.ASSET_PUBLIC}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.GENERIC_EDITOR,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.GENERIC_EDITOR}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.CONTENT_EDITOR,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_EDITOR}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.ASSET_IMAGE,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.ASSET_IMAGE}`, // Proxy to portal
+      },
+      {
+        source: '/app/telemetry',      // Match telemetry route
+        destination: '/api/telemetry', // Redirect to telemetry proxy
       },
     ];
   },
@@ -66,6 +109,7 @@ const nextConfig = {
           "./Publish": "/src/pages/workspace/content/publish/index.tsx",
           "./Submitted": "/src/pages/workspace/content/submitted/index.tsx",
           "./Editor": "/src/pages/Editor.tsx",
+          "./UploadEditor": "/src/pages/UploadEditor.tsx",
         },
       })
     );
