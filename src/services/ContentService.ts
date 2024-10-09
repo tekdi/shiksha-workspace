@@ -62,7 +62,7 @@ export const createQuestionSet = async () => {
   const reqBody = {
     request: {
       questionset: {
-        name: "Test QuestionSet",
+        name: "Untitled QuestionSet",
         mimeType: "application/vnd.sunbird.questionset",
         primaryCategory: "Practice Question Set",
         code: "de1508e3-cd30-48ba-b4de-25a98d8cfdd2"
