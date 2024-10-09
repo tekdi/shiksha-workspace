@@ -18,14 +18,6 @@ import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "../../../../services/ContentService";
 import { timeAgo } from "@/utils/Helper";
 
-interface content {
-  name: string;
-  status: string;
-  lastUpdatedOn: string;
-  appIcon: string;
-  contentType: string;
-}
-
 const AllContentsPage = () => {
   const theme = useTheme<any>();
 
@@ -76,42 +68,17 @@ const AllContentsPage = () => {
   useEffect(() => {
     const getContentList = async () => {
       try {
-        const reqBody = {
-          request: {
-            filters: {
-              status: [
-                "Draft",
-                "FlagDraft",
-                "Review",
-                "Processing",
-                "Live",
-                "Unlisted",
-                "FlagReview",
-              ],
-              createdBy: "84721b4a-6536-4cb0-b8c3-57583ef4cada",
-              primaryCategory: [
-                "Course Assessment",
-                "eTextbook",
-                "Explanation Content",
-                "Learning Resource",
-                "Practice Question Set",
-                "Teacher Resource",
-                "Exam Question",
-                "Content Playlist",
-                "Course",
-                "Digital Textbook",
-                "Question paper",
-              ],
-            },
-            offset: 0,
-            limit: 9,
-            query: "",
-            sort_by: {
-              lastUpdatedOn: "desc",
-            },
-          },
-        };
-        const response = await getContent(reqBody);
+        const status = [
+          "Draft",
+          "FlagDraft",
+          "Review",
+          "Processing",
+          "Live",
+          "Unlisted",
+          "FlagReview",
+        ];
+
+        const response = await getContent(status);
         const contentList = response?.content || [];
         setContentList(contentList);
       } catch (error) {

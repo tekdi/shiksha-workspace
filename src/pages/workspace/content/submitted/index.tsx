@@ -1,38 +1,16 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../../../../components/Layout";
 import { Typography, Box } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
-
-const ReviewData = [
-  {
-    title: "Home Science",
-    description: "Learn about home science basics.",
-    type: "Course",
-    imageUrl: "",
-    status: "submittedForReview",
-  },
-  {
-    title: "Test1",
-    description: "Practice question set for Test1.",
-    type: "Question Set",
-    imageUrl: "",
-    status: "submittedForReview",
-  },
-  {
-    title: "",
-    description: "",
-    type: "eBook",
-    imageUrl: "",
-    status: "submittedForReview",
-  },
-];
+import { getContent } from "@/services/ContentService";
 
 const SubmittedForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("submitted");
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
   const [searchTerm, setSearchTerm] = useState("");
+  const [contentList, setContentList] = React.useState<content[]>([]);
 
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -48,8 +26,8 @@ const SubmittedForReviewPage = () => {
 
   const filteredData = useMemo(
     () =>
-      ReviewData.filter((content) =>
-        content.title.toLowerCase().includes(searchTerm)
+      contentList.filter((content) =>
+        content?.name.toLowerCase().includes(searchTerm)
       ),
     [searchTerm]
   );
@@ -64,6 +42,19 @@ const SubmittedForReviewPage = () => {
     console.log(`Deleting item at index ${index}`);
   };
 
+  useEffect(() => {
+    const getReviewContentList = async () => {
+      try {
+        const response = await getContent(["Review", "FlagReview"]);
+        const contentList = response?.content || response?.QuestionSet;
+        setContentList(contentList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getReviewContentList();
+  }, [searchTerm]);
+
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <Box p={3}>
@@ -76,13 +67,13 @@ const SubmittedForReviewPage = () => {
           <SearchBox
             placeholder="Search by title..."
             onSearch={handleSearch}
-            onFilterChange={handleFilterChange}
-            onSortChange={handleSortChange}
+            // onFilterChange={handleFilterChange}
+            // onSortChange={handleSortChange}
           />
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap={3} padding={2}>
-          {displayedCards.map((content, index) => (
+          {contentList.map((content, index) => (
             <Box
               key={index}
               sx={{
@@ -93,12 +84,10 @@ const SubmittedForReviewPage = () => {
               }}
             >
               <CourseCard
-                title={content.title || "Untitled Course"}
-                description={
-                  content.description || "Enter description of course"
-                }
-                type={content.type || "Course"}
-                imageUrl={content.imageUrl}
+                title={content?.name}
+                description={content?.description}
+                type={content?.contentType || "QuestionSet"}
+                imageUrl={content.appIcon}
                 status={content.status}
                 onDelete={() => handleDelete(index)}
               />

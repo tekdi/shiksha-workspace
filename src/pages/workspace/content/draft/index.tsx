@@ -1,33 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../../../../components/Layout";
-import { Typography, Box, Grid, TablePagination } from "@mui/material";
+import { Typography, Box, TablePagination } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
-
-// Sample data for draft contents
-const draftData = [
-  {
-    title: "Home Science",
-    description: "Learn about home science basics.",
-    type: "Course",
-    imageUrl: "", // URL for image if available, else empty
-    status: "draft", // Status of the content
-  },
-  {
-    title: "Test1",
-    description: "Practice question set for Test1.",
-    type: "Question Set",
-    imageUrl: "",
-    status: "draft",
-  },
-  {
-    title: "",
-    description: "",
-    type: "eBook",
-    imageUrl: "",
-    status: "draft",
-  },
-];
+import { getContent } from "@/services/ContentService";
 
 const DraftPage = () => {
   const [selectedKey, setSelectedKey] = useState("draft");
@@ -36,6 +12,7 @@ const DraftPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
+  const [contentList, setContentList] = React.useState<content[]>([]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -62,20 +39,33 @@ const DraftPage = () => {
 
   const filteredData = useMemo(
     () =>
-      draftData.filter((content) =>
-        content.title.toLowerCase().includes(searchTerm)
+      contentList.filter((content) =>
+        content.name.toLowerCase().includes(searchTerm)
       ),
     [searchTerm]
   );
 
-  const displayedCards = filteredData.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
+  // const displayedCards = filteredData.slice(
+  //   page * rowsPerPage,
+  //   page * rowsPerPage + rowsPerPage
+  // );
 
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
   };
+
+  useEffect(() => {
+    const getDraftContentList = async () => {
+      try {
+        const response = await getContent(["Draft", "FlagDraft"]);
+        const contentList = response?.content || [];
+        setContentList(contentList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getDraftContentList();
+  }, []);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -87,13 +77,13 @@ const DraftPage = () => {
           <SearchBox
             placeholder="Search by title..."
             onSearch={handleSearch}
-            onFilterChange={handleFilterChange}
-            onSortChange={handleSortChange}
+            // onFilterChange={handleFilterChange}
+            // onSortChange={handleSortChange}
           />
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap={3}>
-          {displayedCards.map((content, index) => (
+          {contentList.map((content, index) => (
             <Box
               key={index}
               sx={{
@@ -104,12 +94,10 @@ const DraftPage = () => {
               }}
             >
               <CourseCard
-                title={content.title || "Untitled Course"}
-                description={
-                  content.description || "Enter description of course"
-                }
-                type={content.type || "Course"}
-                imageUrl={content.imageUrl}
+                title={content?.name}
+                description={content?.description}
+                type={content?.contentType}
+                imageUrl={content.appIcon}
                 status={content.status}
                 onDelete={() => handleDelete(index)}
               />
@@ -120,7 +108,7 @@ const DraftPage = () => {
         <Box display="flex" justifyContent="center" mt={3}>
           <TablePagination
             component="div"
-            count={draftData.length}
+            count={contentList.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}

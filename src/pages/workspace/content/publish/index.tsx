@@ -1,38 +1,16 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../../../../components/Layout";
 import { Typography, Box } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
-
-const PublishData = [
-  {
-    title: "Home Science",
-    description: "Learn about home science basics.",
-    type: "Course",
-    imageUrl: "",
-    status: "published",
-  },
-  {
-    title: "Test1",
-    description: "Practice question set for Test1.",
-    type: "Question Set",
-    imageUrl: "",
-    status: "published",
-  },
-  {
-    title: "",
-    description: "",
-    type: "eBook",
-    imageUrl: "",
-    status: "published",
-  },
-];
+import { getContent } from "@/services/ContentService";
 
 const PublishPage = () => {
   const [selectedKey, setSelectedKey] = useState("publish");
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
+  const [contentList, setContentList] = React.useState<content[]>([]);
 
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -48,8 +26,8 @@ const PublishPage = () => {
 
   const filteredData = useMemo(
     () =>
-      PublishData.filter((content) =>
-        content.title.toLowerCase().includes(searchTerm)
+      contentList.filter((content) =>
+        content.name.toLowerCase().includes(searchTerm)
       ),
     [searchTerm]
   );
@@ -64,6 +42,19 @@ const PublishPage = () => {
     console.log(`Deleting item at index ${index}`);
   };
 
+  useEffect(() => {
+    const getPublishContentList = async () => {
+      try {
+        const response = await getContent(["Live"]);
+        const contentList = response?.content || response?.QuestionSet;
+        setContentList(contentList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPublishContentList();
+  }, [searchTerm]);
+
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <Box p={3}>
@@ -74,13 +65,13 @@ const PublishPage = () => {
           <SearchBox
             placeholder="Search by title..."
             onSearch={handleSearch}
-            onFilterChange={handleFilterChange}
-            onSortChange={handleSortChange}
+            // onFilterChange={handleFilterChange}
+            // onSortChange={handleSortChange}
           />
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap={3} padding={2}>
-          {displayedCards.map((content, index) => (
+          {contentList.map((content, index) => (
             <Box
               key={index}
               sx={{
@@ -91,12 +82,10 @@ const PublishPage = () => {
               }}
             >
               <CourseCard
-                title={content.title || "Untitled Course"}
-                description={
-                  content.description || "Enter description of course"
-                }
-                type={content.type || "Course"}
-                imageUrl={content.imageUrl}
+                title={content?.name}
+                description={content?.description}
+                type={content?.contentType || "QuestionSet"}
+                imageUrl={content.appIcon}
                 status={content.status}
                 onDelete={() => handleDelete(index)}
               />

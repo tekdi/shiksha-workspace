@@ -16,7 +16,7 @@ import { Status } from "@/utils/app.constant";
 
 interface ContentCardProps {
   title: string;
-  description: string;
+  description?: string;
   type: string;
   imageUrl?: string;
   status: string;
@@ -54,11 +54,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
           }}
         >
           {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={title}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
+            <img src={imageUrl} alt={title} />
           ) : (
             <ImageIcon fontSize="large" />
           )}
@@ -75,14 +71,12 @@ const CourseCard: React.FC<ContentCardProps> = ({
           }}
         />
       </Box>
-
       <CardContent sx={{ flex: 1 }}>
         <Typography variant="h6">{title}</Typography>
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
       </CardContent>
-
       {(status === Status.DRAFT || status === Status.LIVE) && (
         <CardActions disableSpacing>
           <Box display="flex" justifyContent="flex-end" width="100%">
