@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
+  const { mode } = router.query;
   const questionSetEditorConfig = {
     context: {
       programId: "",
@@ -67,7 +68,7 @@ const QuestionSetEditor: React.FC = () => {
       },
     },
     config: {
-      mode: "edit",
+      mode: mode || "edit",
       enableQuestionCreation: true,
       enableAddFromLibrary: true,
       editableFields: {

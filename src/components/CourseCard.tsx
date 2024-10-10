@@ -23,6 +23,7 @@ interface ContentCardProps {
   status: string;
   identifier?: string;
   mimeType?: string;
+  mode?:string;
   onDelete?: () => void;
 }
 
@@ -34,6 +35,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
   status,
   identifier,
   mimeType,
+  mode,
   onDelete,
 }) => {
   const theme = useTheme<any>();
@@ -42,7 +44,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
     if (mimeType === "application/vnd.sunbird.questionset") {
       router.push({
         pathname: `/editor`,
-        query: { identifier },
+        query: { identifier, mode },
       });
     }
   };
