@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { genericEditorFormRead, telemetryResponse, creatLockResponse } from './mocked-response';
+import { genericEditorSaveFormResponse, telemetryResponse,
+  creatLockResponse, genericEditorReviewFormResponse } from './mocked-response';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, query } = req;
   const { path } = query;
@@ -15,8 +16,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (pathString === '/action/data/v1/form/read') {
-    console.log('form path Staring hit ====> helllooo')
-    return res.status(200).json(genericEditorFormRead);
+    if (req.body.request.action === 'save' && req.body.request.subType === 'resource') {
+      return res.status(200).json(genericEditorSaveFormResponse);
+    }
+    if (req.body.request.action === 'review' && req.body.request.subType === 'resource') {
+      return res.status(200).json(genericEditorReviewFormResponse);
+    }
+    console.log('req body ====>', req.body);
   }
 
   if (pathString === '/action/lock/v1/create') {
