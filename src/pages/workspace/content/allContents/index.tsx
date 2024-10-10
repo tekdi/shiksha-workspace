@@ -17,6 +17,8 @@ import UpReviewTinyImage from "@mui/icons-material/LibraryBooks";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "../../../../services/ContentService";
 import { timeAgo } from "@/utils/Helper";
+import Loader from "@/components/Loader";
+import NoDataFound from "@/components/NoDataFound";
 
 const AllContentsPage = () => {
   const theme = useTheme<any>();
@@ -28,6 +30,7 @@ const AllContentsPage = () => {
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -68,6 +71,7 @@ const AllContentsPage = () => {
   useEffect(() => {
     const getContentList = async () => {
       try {
+        setLoading(true);
         const status = [
           "Draft",
           "FlagDraft",
@@ -81,6 +85,7 @@ const AllContentsPage = () => {
         const response = await getContent(status);
         const contentList = response?.content || response?.QuestionSet;
         setContentList(contentList);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -102,60 +107,71 @@ const AllContentsPage = () => {
             // onSortChange={handleSortChange}
           />
         </Box>
-        {contentList && contentList.length > 0 && (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Content</TableCell>
-                <TableCell>Last Updated</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {contentList?.map((content, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Box display="flex" alignItems="center">
-                      {content?.appIcon ? (
-                        <img src={content?.appIcon} height={"25px"} />
-                      ) : (
-                        <UpReviewTinyImage fontSize="small" />
-                      )}
-                      <Box ml={2}>
-                        <Typography variant="body1">{content?.name}</Typography>
-                        <Typography
-                          variant="body2"
-                          color={theme.palette.warning["A200"]}
-                        >
-                          {content?.contentType}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell>{timeAgo(content?.lastUpdatedOn)}</TableCell>
-                  <TableCell>{content?.status}</TableCell>
-                  <TableCell>
-                    {content?.status === "Draft" && (
-                      <IconButton aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        {loading ? (
+          <Loader showBackdrop={true} loadingText={"Loading"} />
+        ) : contentList && contentList.length > 0 ? (
+          contentList &&
+          contentList.length > 0 && (
+            <>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Content</TableCell>
+                    <TableCell>Last Updated</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {contentList?.map((content, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          {content?.appIcon ? (
+                            <img src={content?.appIcon} height={"25px"} />
+                          ) : (
+                            <UpReviewTinyImage fontSize="small" />
+                          )}
+                          <Box ml={2}>
+                            <Typography variant="body1">
+                              {content?.name}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color={theme.palette.warning["A200"]}
+                            >
+                              {content?.contentType}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </TableCell>
+                      <TableCell>{timeAgo(content?.lastUpdatedOn)}</TableCell>
+                      <TableCell>{content?.status}</TableCell>
+                      <TableCell>
+                        {content?.status === "Draft" && (
+                          <IconButton aria-label="delete">
+                            <DeleteIcon />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                component="div"
+                count={contentList.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPageOptions={[10, 25, 50]}
+              />
+            </>
+          )
+        ) : (
+          <NoDataFound />
         )}
-        <TablePagination
-          component="div"
-          count={contentList.length}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[10, 25, 50]}
-        />
       </Box>
     </Layout>
   );

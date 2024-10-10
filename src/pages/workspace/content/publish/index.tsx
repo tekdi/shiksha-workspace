@@ -5,6 +5,8 @@ import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
 import { ContentType } from "@/utils/app.constant";
+import Loader from "@/components/Loader";
+import NoDataFound from "@/components/NoDataFound";
 
 const PublishPage = () => {
   const [selectedKey, setSelectedKey] = useState("publish");
@@ -13,6 +15,7 @@ const PublishPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [contentType, setContentType] = React.useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -47,12 +50,14 @@ const PublishPage = () => {
   useEffect(() => {
     const getPublishContentList = async () => {
       try {
+        setLoading(true);
         const response = await getContent(["Live"]);
         const contentList = response?.content || response?.QuestionSet;
         if (response?.QuestionSet) {
           setContentType(ContentType.QUESTION_SET);
         }
         setContentList(contentList);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -76,28 +81,34 @@ const PublishPage = () => {
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap={3} padding={2}>
-          {contentList.map((content, index) => (
-            <Box
-              key={index}
-              sx={{
-                minWidth: "250px",
-                maxWidth: "250px",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <CourseCard
-                title={content?.name}
-                description={content?.description}
-                type={content?.contentType || contentType}
-                imageUrl={content.appIcon}
-                status={content.status}
-                identifier={content?.identifier}
-                mimeType={content?.mimeType}
-                onDelete={() => handleDelete(index)}
-              />
-            </Box>
-          ))}
+          {loading ? (
+            <Loader showBackdrop={true} loadingText={"Loading"} />
+          ) : contentList && contentList.length > 0 ? (
+            contentList?.map((content, index) => (
+              <Box
+                key={index}
+                sx={{
+                  minWidth: "250px",
+                  maxWidth: "250px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <CourseCard
+                  title={content?.name}
+                  description={content?.description}
+                  type={content?.contentType || contentType}
+                  imageUrl={content.appIcon}
+                  status={content.status}
+                  identifier={content?.identifier}
+                  mimeType={content?.mimeType}
+                  onDelete={() => handleDelete(index)}
+                />
+              </Box>
+            ))
+          ) : (
+            <NoDataFound />
+          )}
         </Box>
       </Box>
     </Layout>
