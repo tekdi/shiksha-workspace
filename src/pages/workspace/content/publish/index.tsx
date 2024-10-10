@@ -102,6 +102,7 @@ const PublishPage = () => {
                   status={content.status}
                   identifier={content?.identifier}
                   mimeType={content?.mimeType}
+                  mode={'read'}
                   onDelete={() => handleDelete(index)}
                 />
               </Box>
