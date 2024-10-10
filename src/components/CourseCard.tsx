@@ -13,6 +13,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
 import { Status } from "@/utils/app.constant";
+import router from "next/router";
 
 interface ContentCardProps {
   title: string;
@@ -20,6 +21,8 @@ interface ContentCardProps {
   type: string;
   imageUrl?: string;
   status: string;
+  identifier?: string;
+  mimeType?: string;
   onDelete?: () => void;
 }
 
@@ -29,9 +32,20 @@ const CourseCard: React.FC<ContentCardProps> = ({
   type,
   imageUrl,
   status,
+  identifier,
+  mimeType,
   onDelete,
 }) => {
   const theme = useTheme<any>();
+
+  const openEditor = () => {
+    if (mimeType === "application/vnd.sunbird.questionset") {
+      router.push({
+        pathname: `/editor`,
+        query: { identifier },
+      });
+    }
+  };
 
   return (
     <Card
@@ -42,7 +56,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
         width: "250px",
       }}
     >
-      <Box position="relative">
+      <Box position="relative" onClick={openEditor}>
         <CardMedia
           component="div"
           sx={{

@@ -4,6 +4,7 @@ import { Typography, Box, TablePagination } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
+import { ContentType } from "@/utils/app.constant";
 
 const DraftPage = () => {
   const [selectedKey, setSelectedKey] = useState("draft");
@@ -13,6 +14,7 @@ const DraftPage = () => {
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
+  const [contentType, setContentType] = React.useState<string>("");
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -59,6 +61,9 @@ const DraftPage = () => {
       try {
         const response = await getContent(["Draft", "FlagDraft"]);
         const contentList = response?.content || response?.QuestionSet;
+        if (response?.QuestionSet) {
+          setContentType(ContentType.QUESTION_SET);
+        }
         setContentList(contentList);
       } catch (error) {
         console.log(error);
@@ -85,7 +90,7 @@ const DraftPage = () => {
         <Box display="flex" flexWrap="wrap" gap={3}>
           {contentList?.map((content, index) => (
             <Box
-              key={index}
+              key={content?.identifier}
               sx={{
                 minWidth: "250px",
                 maxWidth: "250px",
@@ -96,9 +101,11 @@ const DraftPage = () => {
               <CourseCard
                 title={content?.name}
                 description={content?.description}
-                type={content?.contentType}
+                type={content?.contentType || contentType}
                 imageUrl={content.appIcon}
                 status={content.status}
+                identifier={content?.identifier}
+                mimeType={content?.mimeType}
                 onDelete={() => handleDelete(index)}
               />
             </Box>

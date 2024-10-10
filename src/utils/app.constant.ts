@@ -3,3 +3,7 @@ export enum Status {
   LIVE = "Live",
   SUBMITTED_FOR_REVIEW = "Review",
 }
+
+export enum ContentType {
+  QUESTION_SET = "QuestionSet",
+}
