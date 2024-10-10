@@ -4,7 +4,6 @@ import { Typography, Box } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
-import { ContentType } from "@/utils/app.constant";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
 
