@@ -10,10 +10,6 @@ const GenericEditor = () => {
   const router = useRouter();
   const { identifier } = router.query;
   const [showLoader, setShowLoader] = useState(true);
-  const [contentDetails, setContentDetails] = useState(null);
-  const [error, setError] = useState<string | null>(null);
-  const [logo, setLogo] = useState('');
-  const [ownershipType, setOwnershipType] = useState([]);
   const buildNumber = '';
   const extContWhitelistedDomains = 'youtube.com,youtu.be';
   const videoMaxSize = "150";
@@ -24,8 +20,6 @@ const GenericEditor = () => {
       console.log('editorConfig ==>', editorConfig);
       getContentDetails(identifier)
         .then((data: any) => {
-          setLogo('https://staging.sunbirded.org/assets/images/sunbird_logo.png');
-          setOwnershipType(data.ownershipType);
           initEditor();
           setWindowContext(data);
           setWindowConfig();
