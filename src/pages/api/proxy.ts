@@ -14,6 +14,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ message: 'Mocked Success - Skipping actual API call', data: {} });
   }
 
+  if (pathString === '/action/lock/v1/create') {
+    const lockResponse = {
+      "responseCode": "OK",
+      "result": {
+        "lockKey": "69d82e1c-6d91-4b2e-a873-39ebeab007b9",
+          "expiresAt": "2026-10-09T12:53:41.138Z",
+          "expiresIn": 63072000
+        }
+      };
+    return res.status(200).json(lockResponse);
+  }
+
   const queryString = req.url?.includes('?') ? req.url.split('?')[1] : '';
 
   // Build target URL
@@ -27,6 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${API_KEY}`,
         'tenantId': TENANT_ID,
+        'X-Channel-Id': 'test-k12-channel'
       },
     };
 

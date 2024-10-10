@@ -21,11 +21,14 @@ const CreatePage = () => {
       icon: <UploadIcon fontSize="large" />,
       onClick: () => {
         console.log("Uploading content");
+        /*
         const identifier = 'do_214155281301733376144'; // PDF - Content-Id - Dev
         router.push({
           pathname: `/UploadEditor`,
           query: { identifier },
         });
+        */
+        router.push("/UploadEditor");
       },
     },
     {

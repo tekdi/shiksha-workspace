@@ -35,8 +35,20 @@ const nextConfig = {
         destination: '/api/fileUpload',                         // Forward asset uploads to fileUpload.js
       },
       {
+        source: '/action/content/v3/upload/url/:identifier*',                       // Match content upload with 'url' in the path
+        destination: '/api/proxy?path=/action/content/v3/upload/url/:identifier*',  // Forward to proxy route with path as query param
+      },
+      {
+        source: '/action/content/v3/upload/:identifier*',       // Match content upload routes
+        destination: '/api/fileUpload',                         // Forward content uploads to fileUpload.js
+      },
+      {
         source: '/action/asset/:path*',                         // Match other /action/asset routes
         destination: '/api/proxy?path=/action/asset/:path*',    // Forward other /action/asset requests to proxy.js
+      },
+      {
+        source: '/action/content/:path*',                         // Match other /action/asset routes
+        destination: '/api/proxy?path=/action/content/:path*',    // Forward other /action/asset requests to proxy.js
       },
       {
         source: '/action/:path*',                               // Match any other routes starting with /action/
