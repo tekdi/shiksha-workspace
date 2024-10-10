@@ -104,6 +104,7 @@ const SubmittedForReviewPage = () => {
                   status={content.status}
                   identifier={content?.identifier}
                   mimeType={content?.mimeType}
+                  mode={'review'}
                   onDelete={() => handleDelete(index)}
                 />
               </Box>
