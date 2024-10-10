@@ -7,6 +7,21 @@ const remotes = (isServer) => {
   };
 }
 
+const PORTAL_BASE_URL = 'https://staging.sunbirded.org'
+
+const routes = {
+  API: {
+    GENERAL: {
+      CONTENT_PREVIEW: '/content/preview/:path*',
+      CONTENT_PLUGINS: '/content-plugins/:path*',
+      ASSET_PUBLIC: '/assets/public/:path*',
+      GENERIC_EDITOR: '/generic-editor/:path*',
+      CONTENT_EDITOR: '/editor/content/:path*',
+      ASSET_IMAGE: '/assets/images/:path*'
+    }
+  }
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -20,8 +35,20 @@ const nextConfig = {
         destination: '/api/fileUpload',                         // Forward asset uploads to fileUpload.js
       },
       {
+        source: '/action/content/v3/upload/url/:identifier*',                       // Match content upload with 'url' in the path
+        destination: '/api/proxy?path=/action/content/v3/upload/url/:identifier*',  // Forward to proxy route with path as query param
+      },
+      {
+        source: '/action/content/v3/upload/:identifier*',       // Match content upload routes
+        destination: '/api/fileUpload',                         // Forward content uploads to fileUpload.js
+      },
+      {
         source: '/action/asset/:path*',                         // Match other /action/asset routes
         destination: '/api/proxy?path=/action/asset/:path*',    // Forward other /action/asset requests to proxy.js
+      },
+      {
+        source: '/action/content/:path*',                         // Match other /action/asset routes
+        destination: '/api/proxy?path=/action/content/:path*',    // Forward other /action/asset requests to proxy.js
       },
       {
         source: '/action/:path*',                               // Match any other routes starting with /action/
@@ -34,6 +61,34 @@ const nextConfig = {
       {
         source: '/assets/public/:path*',                        // Match any URL starting with /assets/public/
         destination: `${process.env.CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
+      },
+      {
+        source: routes.API.GENERAL.CONTENT_PREVIEW,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_PREVIEW}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.CONTENT_PLUGINS,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_PLUGINS}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.ASSET_PUBLIC,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.ASSET_PUBLIC}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.GENERIC_EDITOR,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.GENERIC_EDITOR}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.CONTENT_EDITOR,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_EDITOR}`, // Proxy to portal
+      },
+      {
+        source: routes.API.GENERAL.ASSET_IMAGE,
+        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.ASSET_IMAGE}`, // Proxy to portal
+      },
+      {
+        source: '/app/telemetry',      // Match telemetry route
+        destination: '/api/telemetry', // Redirect to telemetry proxy
       },
     ];
   },
@@ -66,6 +121,7 @@ const nextConfig = {
           "./Publish": "/src/pages/workspace/content/publish/index.tsx",
           "./Submitted": "/src/pages/workspace/content/submitted/index.tsx",
           "./Editor": "/src/pages/editor.tsx",
+          "./UploadEditor": "/src/pages/upload-editor.tsx"
         },
       })
     );

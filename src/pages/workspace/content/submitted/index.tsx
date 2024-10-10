@@ -4,7 +4,6 @@ import { Typography, Box } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
-import { ContentType } from "@/utils/app.constant";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
 
@@ -14,7 +13,6 @@ const SubmittedForReviewPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = React.useState<content[]>([]);
-  const [contentType, setContentType] = React.useState<string>("");
   const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
@@ -64,10 +62,7 @@ const SubmittedForReviewPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const response = await getContent(["Review", "FlagReview"], query);
-        const contentList = response?.content || response?.QuestionSet;
-        if (response?.QuestionSet) {
-          setContentType(ContentType.QUESTION_SET);
-        }
+        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         setContentList(contentList);
         setLoading(false);
       } catch (error) {
@@ -111,7 +106,7 @@ const SubmittedForReviewPage = () => {
                 <CourseCard
                   title={content?.name}
                   description={content?.description}
-                  type={content?.contentType || contentType}
+                  type={content?.primaryCategory}
                   imageUrl={content.appIcon}
                   status={content.status}
                   identifier={content?.identifier}

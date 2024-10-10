@@ -1,0 +1,122 @@
+{
+    "GENERIC_EDITOR": {
+        "WINDOW_CONFIG": {
+            "corePluginsPackaged": true,
+            "modalId": "genericEditor",
+            "dispatcher": "local",
+            "apislug": "/action",
+            "alertOnUnload": true,
+            "headerLogo": "",
+            "loadingImage": "",
+            "plugins": [
+                {
+                    "id": "org.ekstep.sunbirdcommonheader",
+                    "ver": "1.9",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.sunbirdmetadata",
+                    "ver": "1.1",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.metadata",
+                    "ver": "1.5",
+                    "type": "plugin"
+                }
+            ],
+            "previewConfig": {
+                "repos": [
+                    "/sunbird-plugins/renderer"
+                ],
+                "plugins": [
+                    {
+                        "id": "org.sunbird.player.endpage",
+                        "ver": 1.1,
+                        "type": "plugin"
+                    }
+                ],
+                "splash": {
+                    "text": "",
+                    "icon": "",
+                    "bgImage": "assets/icons/splacebackground_1.png",
+                    "webLink": ""
+                },
+                "overlay": {
+                    "showUser": false
+                },
+                "showEndPage": false
+            },
+            "build_number": "5.1.0.1243321",
+            "lock": {},
+            "extContWhitelistedDomains": "youtube.com,youtu.be",
+            "enableTelemetryValidation": false,
+            "videoMaxSize": "150",
+            "defaultContentFileSize": "150",
+            "absURL": "",
+            "genericeditorPlugins": [
+                {
+                    "id": "org.ekstep.sunbirdcommonheader",
+                    "ver": "1.9",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.sunbirdmetadata",
+                    "ver": "1.1",
+                    "type": "plugin"
+                },
+                {
+                    "id": "org.ekstep.metadata",
+                    "ver": "1.5",
+                    "type": "plugin"
+                }
+            ],
+            "headerConfig": {
+                "managecollaborator": false
+            }
+        },
+        "WINDOW_CONTEXT": {
+            "user": {
+                "id": "",
+                "name": "Rahul Tekdi",
+                "orgIds": [
+                    "test-k12-channel"
+                ],
+                "organisations": {
+                    "test-k12-channel": "Test Channel"
+                }
+            },
+            "did": "",
+            "sid": "",
+            "contentId": "",
+            "pdata": {
+                "id": "dev.admin.portal",
+                "ver": "1.0.0",
+                "pid": "admin-portal.genericEditor"
+            },
+            "contextRollUp": {
+                "l1": "test-k12-channel"
+            },
+            "tags": [
+                "test-k12-channel"
+            ],
+            "channel": "test-k12-channel",
+            "env": "generic-editor",
+            "framework": "test_k12_framework",
+            "ownershipType": [
+                "createdBy",
+                "createdFor"
+            ],
+            "timeDiff": -0.295,
+            "primaryCategories": [
+                "Learning Resource"
+            ],
+            "uid": "",
+            "etags": {
+                "app": [],
+                "partner": [],
+                "dims": []
+            }
+        }
+    }
+}

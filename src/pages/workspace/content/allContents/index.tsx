@@ -82,7 +82,7 @@ const AllContentsPage = () => {
         ];
         const query = debouncedSearchTerm || "";
         const response = await getContent(status, query);
-        const contentList = response?.content || response?.QuestionSet;
+        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         setContentList(contentList);
         setLoading(false);
       } catch (error) {
@@ -147,7 +147,7 @@ const AllContentsPage = () => {
                               variant="body2"
                               color={theme.palette.warning["A200"]}
                             >
-                              {content?.contentType}
+                              {content?.primaryCategory}
                             </Typography>
                           </Box>
                         </Box>

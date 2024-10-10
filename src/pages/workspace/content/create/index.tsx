@@ -43,7 +43,7 @@ const CreatePage = () => {
       icon: <UploadIcon fontSize="large" />,
       onClick: () => {
         console.log("Uploading content");
-        // Add your content upload logic here
+        router.push("/upload-editor");
       },
     },
     {

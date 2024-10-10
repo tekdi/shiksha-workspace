@@ -13,6 +13,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
 import { Status } from "@/utils/app.constant";
+import { MIME_TYPE } from "@/utils/app.config";
 import router from "next/router";
 
 interface ContentCardProps {
@@ -41,11 +42,10 @@ const CourseCard: React.FC<ContentCardProps> = ({
   const theme = useTheme<any>();
 
   const openEditor = () => {
-    if (mimeType === "application/vnd.sunbird.questionset") {
-      router.push({
-        pathname: `/editor`,
-        query: { identifier, mode },
-      });
+    if (mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+      router.push({ pathname: `/editor`, query: { identifier, mode } });
+    } else if (mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType)) {
+      router.push({ pathname: `/upload-editor`, query: { identifier } });
     }
   };
 
