@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -31,6 +31,8 @@ const AllContentsPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [loading, setLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] =
+    useState<string>(searchTerm);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -43,8 +45,18 @@ const AllContentsPage = () => {
     setPage(0);
   };
 
-  const handleSearch = (search: string) => {
-    setSearchTerm(search.toLowerCase());
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
   };
 
   const handleFilterChange = (filter: string) => {
@@ -54,19 +66,6 @@ const AllContentsPage = () => {
   const handleSortChange = (sortBy: string) => {
     setSortBy(sortBy);
   };
-
-  const filteredData = useMemo(
-    () =>
-      contentList?.filter((content) =>
-        content?.name.toLowerCase().includes(searchTerm)
-      ),
-    [searchTerm]
-  );
-
-  const displayedRows = filteredData.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
 
   useEffect(() => {
     const getContentList = async () => {
@@ -81,8 +80,8 @@ const AllContentsPage = () => {
           "Unlisted",
           "FlagReview",
         ];
-
-        const response = await getContent(status);
+        const query = debouncedSearchTerm || "";
+        const response = await getContent(status, query);
         const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         setContentList(contentList);
         setLoading(false);
@@ -91,7 +90,20 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, []);
+  }, [debouncedSearchTerm]);
+
+  const filteredData = useMemo(
+    () =>
+      contentList?.filter((content) =>
+        content?.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      ),
+    [debouncedSearchTerm, contentList]
+  );
+
+  const displayedRows = filteredData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -100,12 +112,7 @@ const AllContentsPage = () => {
         <Typography mb={2}>Here you see all your content.</Typography>
 
         <Box mb={3}>
-          <SearchBox
-            placeholder="Search by title..."
-            onSearch={handleSearch}
-            // onFilterChange={handleFilterChange}
-            // onSortChange={handleSortChange}
-          />
+          <SearchBox placeholder="Search by title..." onSearch={handleSearch} />
         </Box>
         {loading ? (
           <Loader showBackdrop={true} loadingText={"Loading"} />

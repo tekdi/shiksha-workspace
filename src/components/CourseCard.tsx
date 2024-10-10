@@ -24,6 +24,7 @@ interface ContentCardProps {
   status: string;
   identifier?: string;
   mimeType?: string;
+  mode?:string;
   onDelete?: () => void;
 }
 
@@ -35,13 +36,14 @@ const CourseCard: React.FC<ContentCardProps> = ({
   status,
   identifier,
   mimeType,
+  mode,
   onDelete,
 }) => {
   const theme = useTheme<any>();
 
   const openEditor = () => {
     if (mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
-      router.push({ pathname: `/editor`, query: { identifier } });
+      router.push({ pathname: `/editor`, query: { identifier, mode } });
     } else if (mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType)) {
       router.push({ pathname: `/upload-editor`, query: { identifier } });
     }

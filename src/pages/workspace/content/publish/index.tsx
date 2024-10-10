@@ -15,6 +15,18 @@ const PublishPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [loading, setLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] =
+    useState<string>(searchTerm);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -30,14 +42,14 @@ const PublishPage = () => {
 
   const filteredData = useMemo(
     () =>
-      contentList.filter((content) =>
+      contentList?.filter((content) =>
         content.name.toLowerCase().includes(searchTerm)
       ),
     [searchTerm]
   );
 
   const displayedCards = filteredData
-    .slice
+    ?.slice
     // page * rowsPerPage,
     // page * rowsPerPage + rowsPerPage
     ();
@@ -50,7 +62,8 @@ const PublishPage = () => {
     const getPublishContentList = async () => {
       try {
         setLoading(true);
-        const response = await getContent(["Live"]);
+        const query = debouncedSearchTerm || "";
+        const response = await getContent(["Live"], query);
         const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         setContentList(contentList);
         setLoading(false);
@@ -59,7 +72,7 @@ const PublishPage = () => {
       }
     };
     getPublishContentList();
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -98,6 +111,7 @@ const PublishPage = () => {
                   status={content.status}
                   identifier={content?.identifier}
                   mimeType={content?.mimeType}
+                  mode={'read'}
                   onDelete={() => handleDelete(index)}
                 />
               </Box>

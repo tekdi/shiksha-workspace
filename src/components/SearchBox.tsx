@@ -34,7 +34,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
   const handleSearch = useCallback(
     debounce((searchTerm: string) => {
       onSearch(searchTerm);
-    }, 300), // Debounce for 300 milliseconds
+    }, 300),
     [onSearch]
   );
 
