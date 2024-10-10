@@ -128,12 +128,6 @@ const QuestionSetEditor: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await createQuestionSet();
-        // const identifier = response?.result?.identifier;
-        console.log("DO ID created successfully:", identifier);
-
-        questionSetEditorConfig.context.identifier = identifier;
-
         if (!isAppended && editorRef.current) {
           const editorConfig = questionSetEditorConfig;
           const questionsetEditorElement = document.createElement(

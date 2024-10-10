@@ -59,7 +59,7 @@ export const getContent = async (status: string[]) => {
 };
 
 export const createQuestionSet = async () => {
-  const apiURL = `action/questionset/v2/create`;
+  const apiURL = `/action/questionset/v2/create`;
   const reqBody = {
     request: {
       questionset: {
@@ -77,7 +77,6 @@ export const createQuestionSet = async () => {
       headers: {
         "Content-Type": "application/json",
         tenantId: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
-        Authorization: `Bearer ${authToken}`,
       },
     });
     return response?.data;

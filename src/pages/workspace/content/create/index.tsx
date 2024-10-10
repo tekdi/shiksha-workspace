@@ -6,14 +6,34 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import UploadIcon from "@mui/icons-material/Upload";
 import { useRouter } from "next/router";
+import { createQuestionSet } from "@/services/ContentService";
 
 const CreatePage = () => {
   const theme = useTheme<any>();
   const [selectedKey, setSelectedKey] = useState("create");
   const router = useRouter();
 
+
+    const fetchData = async () => {
+      try {
+        const response = await createQuestionSet();
+        console.log('Question set created successfully:', response);
+        const identifier = response?.result?.identifier;
+ 
+        router.push({
+          pathname: `/editor`,
+          query: { identifier },
+        });
+      
+      } catch (error) {
+        console.error('Error creating question set:', error);
+      }
+    };
+
+
+
   const openEditor = () => {
-    router.push("/editor");
+       fetchData();
   };
 
   const cardData = [
