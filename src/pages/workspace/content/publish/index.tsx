@@ -4,6 +4,7 @@ import { Typography, Box } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
+import { ContentType } from "@/utils/app.constant";
 
 const PublishPage = () => {
   const [selectedKey, setSelectedKey] = useState("publish");
@@ -11,6 +12,7 @@ const PublishPage = () => {
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
+  const [contentType, setContentType] = React.useState<string>("");
 
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -47,6 +49,9 @@ const PublishPage = () => {
       try {
         const response = await getContent(["Live"]);
         const contentList = response?.content || response?.QuestionSet;
+        if (response?.QuestionSet) {
+          setContentType(ContentType.QUESTION_SET);
+        }
         setContentList(contentList);
       } catch (error) {
         console.log(error);
@@ -84,9 +89,11 @@ const PublishPage = () => {
               <CourseCard
                 title={content?.name}
                 description={content?.description}
-                type={content?.contentType || "QuestionSet"}
+                type={content?.contentType || contentType}
                 imageUrl={content.appIcon}
                 status={content.status}
+                identifier={content?.identifier}
+                mimeType={content?.mimeType}
                 onDelete={() => handleDelete(index)}
               />
             </Box>

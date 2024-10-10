@@ -4,6 +4,7 @@ import { Typography, Box } from "@mui/material";
 import CourseCard from "../../../../components/CourseCard";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
+import { ContentType } from "@/utils/app.constant";
 
 const SubmittedForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("submitted");
@@ -11,6 +12,7 @@ const SubmittedForReviewPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = React.useState<content[]>([]);
+  const [contentType, setContentType] = React.useState<string>("");
 
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -47,6 +49,9 @@ const SubmittedForReviewPage = () => {
       try {
         const response = await getContent(["Review", "FlagReview"]);
         const contentList = response?.content || response?.QuestionSet;
+        if (response?.QuestionSet) {
+          setContentType(ContentType.QUESTION_SET);
+        }
         setContentList(contentList);
       } catch (error) {
         console.log(error);
@@ -86,9 +91,11 @@ const SubmittedForReviewPage = () => {
               <CourseCard
                 title={content?.name}
                 description={content?.description}
-                type={content?.contentType || "QuestionSet"}
+                type={content?.contentType || contentType}
                 imageUrl={content.appIcon}
                 status={content.status}
+                identifier={content?.identifier}
+                mimeType={content?.mimeType}
                 onDelete={() => handleDelete(index)}
               />
             </Box>

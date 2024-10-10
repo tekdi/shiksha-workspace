@@ -14,4 +14,6 @@ interface content {
   appIcon: string;
   contentType: string;
   description?: string;
+  identifier?: string;
+  mimeType?: string;
 }
