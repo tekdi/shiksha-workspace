@@ -120,8 +120,8 @@ const nextConfig = {
           "./Draft": "/src/pages/workspace/content/draft/index.tsx",
           "./Publish": "/src/pages/workspace/content/publish/index.tsx",
           "./Submitted": "/src/pages/workspace/content/submitted/index.tsx",
-          "./Editor": "/src/pages/Editor.tsx",
-          "./UploadEditor": "/src/pages/UploadEditor.tsx",
+          "./Editor": "/src/pages/editor.tsx",
+          "./UploadEditor": "/src/pages/UploadEditor.tsx"
         },
       })
     );
