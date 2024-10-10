@@ -18,6 +18,8 @@ const DraftPage = () => {
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [contentType, setContentType] = React.useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] =
+    useState<string>(searchTerm);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -29,6 +31,16 @@ const DraftPage = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -44,13 +56,13 @@ const DraftPage = () => {
 
   const filteredData = useMemo(
     () =>
-      contentList.filter((content) =>
+      contentList?.filter((content) =>
         content.name.toLowerCase().includes(searchTerm)
       ),
     [searchTerm]
   );
 
-  // const displayedCards = filteredData.slice(
+  // const displayedCards = filteredData?.slice(
   //   page * rowsPerPage,
   //   page * rowsPerPage + rowsPerPage
   // );
@@ -63,7 +75,8 @@ const DraftPage = () => {
     const getDraftContentList = async () => {
       try {
         setLoading(true);
-        const response = await getContent(["Draft", "FlagDraft"]);
+        const query = debouncedSearchTerm || "";
+        const response = await getContent(["Draft", "FlagDraft"], query);
         const contentList = response?.content || response?.QuestionSet;
         if (response?.QuestionSet) {
           setContentType(ContentType.QUESTION_SET);
@@ -75,7 +88,7 @@ const DraftPage = () => {
       }
     };
     getDraftContentList();
-  }, []);
+  }, [debouncedSearchTerm]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -123,7 +136,7 @@ const DraftPage = () => {
           )}
         </Box>
 
-        <Box display="flex" justifyContent="center" mt={3}>
+        {/* <Box display="flex" justifyContent="center" mt={3}>
           <TablePagination
             component="div"
             count={contentList.length}
@@ -133,7 +146,7 @@ const DraftPage = () => {
             onRowsPerPageChange={handleChangeRowsPerPage}
             rowsPerPageOptions={[4, 8, 12]}
           />
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );
