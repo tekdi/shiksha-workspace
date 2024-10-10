@@ -16,7 +16,18 @@ const SubmittedForReviewPage = () => {
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [contentType, setContentType] = React.useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] =
+    useState<string>(searchTerm);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
   };
@@ -31,14 +42,14 @@ const SubmittedForReviewPage = () => {
 
   const filteredData = useMemo(
     () =>
-      contentList.filter((content) =>
+      contentList?.filter((content) =>
         content?.name.toLowerCase().includes(searchTerm)
       ),
     [searchTerm]
   );
 
   const displayedCards = filteredData
-    .slice
+    ?.slice
     // page * rowsPerPage,
     // page * rowsPerPage + rowsPerPage
     ();
@@ -51,7 +62,8 @@ const SubmittedForReviewPage = () => {
     const getReviewContentList = async () => {
       try {
         setLoading(true);
-        const response = await getContent(["Review", "FlagReview"]);
+        const query = debouncedSearchTerm || "";
+        const response = await getContent(["Review", "FlagReview"], query);
         const contentList = response?.content || response?.QuestionSet;
         if (response?.QuestionSet) {
           setContentType(ContentType.QUESTION_SET);
@@ -63,7 +75,7 @@ const SubmittedForReviewPage = () => {
       }
     };
     getReviewContentList();
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>

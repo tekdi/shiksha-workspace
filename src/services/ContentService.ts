@@ -27,14 +27,14 @@ const defaultReqBody = {
         "Question paper",
       ],
     },
-    query: "",
+    // query: "",
     sort_by: {
       lastUpdatedOn: "desc",
     },
   },
 };
 
-const getReqBodyWithStatus = (status: string[]) => {
+const getReqBodyWithStatus = (status: string[], query: string) => {
   return {
     ...defaultReqBody,
     request: {
@@ -43,14 +43,15 @@ const getReqBodyWithStatus = (status: string[]) => {
         ...defaultReqBody.request.filters,
         status,
       },
+      query,
     },
   };
 };
 
-export const getContent = async (status: string[]) => {
+export const getContent = async (status: string[], query: string) => {
   const apiURL = "/action/composite/v3/search";
   try {
-    const reqBody = getReqBodyWithStatus(status);
+    const reqBody = getReqBodyWithStatus(status, query);
     const response = await post(apiURL, reqBody);
     return response?.data?.result;
   } catch (error) {
