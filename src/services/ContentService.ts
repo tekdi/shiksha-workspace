@@ -55,7 +55,7 @@ export const getContent = async (status: string[]) => {
 
 
 export const createQuestionSet = async () => {
-  const apiURL = `${baseUrl}/action/questionset/v2/create`;
+  const apiURL = `action/questionset/v2/create`;
   const reqBody = {
     request: {
       questionset: {
