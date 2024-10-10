@@ -14,7 +14,6 @@ const SubmittedForReviewPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = React.useState<content[]>([]);
-  const [contentType, setContentType] = React.useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const handleSearch = (search: string) => {
@@ -53,9 +52,6 @@ const SubmittedForReviewPage = () => {
         setLoading(true);
         const response = await getContent(["Review", "FlagReview"]);
         const contentList = (response?.content || []).concat(response?.QuestionSet || []);
-        if (response?.QuestionSet) {
-          setContentType(ContentType.QUESTION_SET);
-        }
         setContentList(contentList);
         setLoading(false);
       } catch (error) {
@@ -99,7 +95,7 @@ const SubmittedForReviewPage = () => {
                 <CourseCard
                   title={content?.name}
                   description={content?.description}
-                  type={content?.contentType || contentType}
+                  type={content?.primaryCategory}
                   imageUrl={content.appIcon}
                   status={content.status}
                   identifier={content?.identifier}

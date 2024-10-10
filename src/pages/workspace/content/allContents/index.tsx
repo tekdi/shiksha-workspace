@@ -140,7 +140,7 @@ const AllContentsPage = () => {
                               variant="body2"
                               color={theme.palette.warning["A200"]}
                             >
-                              {content?.contentType}
+                              {content?.primaryCategory}
                             </Typography>
                           </Box>
                         </Box>

@@ -14,7 +14,6 @@ const PublishPage = () => {
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
-  const [contentType, setContentType] = React.useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const handleSearch = (search: string) => {
@@ -53,9 +52,6 @@ const PublishPage = () => {
         setLoading(true);
         const response = await getContent(["Live"]);
         const contentList = (response?.content || []).concat(response?.QuestionSet || []);
-        if (response?.QuestionSet) {
-          setContentType(ContentType.QUESTION_SET);
-        }
         setContentList(contentList);
         setLoading(false);
       } catch (error) {
@@ -97,7 +93,7 @@ const PublishPage = () => {
                 <CourseCard
                   title={content?.name}
                   description={content?.description}
-                  type={content?.contentType || contentType}
+                  type={content?.primaryCategory}
                   imageUrl={content.appIcon}
                   status={content.status}
                   identifier={content?.identifier}
