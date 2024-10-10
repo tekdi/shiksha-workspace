@@ -77,7 +77,7 @@
         },
         "WINDOW_CONTEXT": {
             "user": {
-                "id": "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+                "id": "",
                 "name": "Rahul Tekdi",
                 "orgIds": [
                     "test-k12-channel"
@@ -111,7 +111,7 @@
             "primaryCategories": [
                 "Learning Resource"
             ],
-            "uid": "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+            "uid": "",
             "etags": {
                 "app": [],
                 "partner": [],

@@ -5,8 +5,11 @@ import _ from 'lodash';
 import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
+import { getLocalStoredUserData } from "@/services/LocalStorageService";
+
 
 const GenericEditor = () => {
+  const userId = getLocalStoredUserData();
   const router = useRouter();
   const { identifier } = router.query;
   const [showLoader, setShowLoader] = useState(true);
@@ -84,6 +87,8 @@ const GenericEditor = () => {
       if (identifier) {
         window['context'].contentId = identifier;
       }
+      window['context'].user.id = userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"
+      window['context'].uid = userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"
     }
   };
 
