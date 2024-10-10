@@ -64,7 +64,7 @@ const DraftPage = () => {
       try {
         setLoading(true);
         const response = await getContent(["Draft", "FlagDraft"]);
-        const contentList = response?.content || response?.QuestionSet;
+        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         if (response?.QuestionSet) {
           setContentType(ContentType.QUESTION_SET);
         }

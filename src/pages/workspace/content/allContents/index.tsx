@@ -83,7 +83,7 @@ const AllContentsPage = () => {
         ];
 
         const response = await getContent(status);
-        const contentList = response?.content || response?.QuestionSet;
+        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         setContentList(contentList);
         setLoading(false);
       } catch (error) {

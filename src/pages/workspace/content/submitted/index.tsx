@@ -52,7 +52,7 @@ const SubmittedForReviewPage = () => {
       try {
         setLoading(true);
         const response = await getContent(["Review", "FlagReview"]);
-        const contentList = response?.content || response?.QuestionSet;
+        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         if (response?.QuestionSet) {
           setContentType(ContentType.QUESTION_SET);
         }
