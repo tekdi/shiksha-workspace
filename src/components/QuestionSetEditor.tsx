@@ -145,7 +145,8 @@ const QuestionSetEditor: React.FC = () => {
             "editorEmitter",
             (event: CustomEvent) => {
               console.log("On editorEvent", event);
-              if (event.detail?.action === "backContent") {
+              if (event.detail?.action === 'backContent' || event.detail?.action === 'submitContent' ||
+                event.detail?.action === 'publishContent' || event.detail?.action === 'rejectContent') {
                 window.history.back();
               }
             }
