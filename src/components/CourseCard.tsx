@@ -66,7 +66,6 @@ const CourseCard: React.FC<ContentCardProps> = ({
 
   return (
     <Card
-      onClick={openEditor}
       sx={{
         height: "100%",
         display: "flex",
@@ -74,7 +73,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
         width: "250px",
       }}
     >
-      <Box position="relative">
+      <Box position="relative" onClick={openEditor}>
         <CardMedia
           component="div"
           sx={{
@@ -103,7 +102,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
           }}
         />
       </Box>
-      <CardContent sx={{ flex: 1 }}>
+      <CardContent sx={{ flex: 1 }} onClick={openEditor}>
         <Typography variant="h6">{title}</Typography>
         <Typography variant="body2" color="text.secondary">
           {description}
