@@ -70,7 +70,7 @@ const DraftPage = () => {
     console.log(`Deleting item at index ${index}`);
     setTimeout(() => {
       setContentDeleted((prev) => !prev);
-    }, 2000);
+    }, 1000);
   };
 
   useEffect(() => {
