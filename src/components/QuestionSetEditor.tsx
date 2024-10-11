@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { createQuestionSet } from "@/services/ContentService";
 import { useRouter } from "next/router";
 
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
   const { mode } = router.query;
+
   const questionSetEditorConfig = {
     context: {
       programId: "",
@@ -123,13 +123,14 @@ const QuestionSetEditor: React.FC = () => {
       commonFrameworkLicenseUrl: "https://creativecommons.org/licenses/",
     },
   };
+
   const editorRef = useRef<HTMLDivElement | null>(null);
-  let isAppended = false;
+  const isAppendedRef = useRef(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!isAppended && editorRef.current) {
+        if (!isAppendedRef.current && editorRef.current) {
           const editorConfig = questionSetEditorConfig;
           const questionsetEditorElement = document.createElement(
             "lib-questionset-editor"
@@ -140,17 +141,20 @@ const QuestionSetEditor: React.FC = () => {
             JSON.stringify(editorConfig)
           );
 
-          questionsetEditorElement.addEventListener(
+          questionsetEditorElement.addEventListener<any>(
             "editorEmitter",
-            (event: Event) => {
+            (event: CustomEvent) => {
               console.log("On editorEvent", event);
+              if (event.detail?.action === "backContent") {
+                window.history.back();
+              }
             }
           );
 
           if (editorRef.current) {
             console.log("Element appended");
             editorRef.current.appendChild(questionsetEditorElement);
-            isAppended = true;
+            isAppendedRef.current = true;
           }
         }
       } catch (error) {
