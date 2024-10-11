@@ -15,6 +15,8 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import DatabaseIcon from "@mui/icons-material/Storage";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 
 const menuItems = [
   { text: "Create", key: "create" },
@@ -48,6 +50,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
     setDrawerOpen(!drawerOpen);
   };
 
+  const goBack = () => {
+    window.history.back();
+  };
+
+
   const drawerContent = (
     <Box margin={"1rem"} width={"100%"} height={"100%"}>
       <Box
@@ -58,6 +65,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
       >
         <Box display="flex" alignItems="center">
           <ListItemIcon>
+          <IconButton onClick={goBack}>
+              <ArrowBackIcon sx={{ color: theme.palette.warning["100"] }} />
+            </IconButton>
             <IconButton>
               <MenuIcon sx={{ color: theme.palette.warning["100"] }} />
             </IconButton>
@@ -67,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             fontSize={"16px"}
             sx={{ color: theme.palette.warning["100"] }}
           >
-            My Workspace
+            Workspace
           </Typography>
         </Box>
         {isMobile && (
