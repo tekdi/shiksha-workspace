@@ -18,6 +18,13 @@ const GenericEditor: React.FC = () => {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
+            // Attach jQuery to window and window.parent
+            window.$ = window.jQuery = $;
+            if (window.parent) {
+                window.parent.$ = window.$;
+                window.parent.jQuery = window.jQuery;
+            }
+
             console.log('editorConfig ==>', editorConfig);
             getContentDetails(identifier)
                 .then((data: any) => {
@@ -115,7 +122,7 @@ const GenericEditor: React.FC = () => {
         if (editorElement) {
             editorElement.remove();
         }
-        router.push('/');
+        window.history.back();
     };
 
     return (
