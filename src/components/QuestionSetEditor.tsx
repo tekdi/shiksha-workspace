@@ -125,7 +125,7 @@ const QuestionSetEditor: React.FC = () => {
   };
 
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const isAppendedRef = useRef(false); // useRef to persist across renders
+  const isAppendedRef = useRef(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -154,7 +154,7 @@ const QuestionSetEditor: React.FC = () => {
           if (editorRef.current) {
             console.log("Element appended");
             editorRef.current.appendChild(questionsetEditorElement);
-            isAppendedRef.current = true; // Update ref to prevent re-append
+            isAppendedRef.current = true;
           }
         }
       } catch (error) {
