@@ -56,7 +56,9 @@ const PublishPage = () => {
 
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
-    setContentDeleted((prev) => !prev);
+    setTimeout(() => {
+      setContentDeleted((prev) => !prev);
+    }, 1000);
   };
 
   useEffect(() => {

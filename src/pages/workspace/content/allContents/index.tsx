@@ -15,10 +15,12 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpReviewTinyImage from "@mui/icons-material/LibraryBooks";
 import SearchBox from "../../../../components/SearchBox";
-import { getContent } from "../../../../services/ContentService";
+import { deleteContent, getContent } from "../../../../services/ContentService";
 import { timeAgo } from "@/utils/Helper";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
+import { MIME_TYPE } from "@/utils/app.config";
+import router from "next/router";
 
 const AllContentsPage = () => {
   const theme = useTheme<any>();
@@ -31,6 +33,7 @@ const AllContentsPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [loading, setLoading] = useState(false);
+  const [contentDeleted, setContentDeleted] = React.useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
 
@@ -67,6 +70,19 @@ const AllContentsPage = () => {
     setSortBy(sortBy);
   };
 
+  const openEditor = (content: any) => {
+    const identifier = content?.identifier;
+    const mode = content?.mode;
+    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+      router.push({ pathname: `/editor`, query: { identifier, mode } });
+    } else if (
+      content?.mimeType &&
+      MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
+    ) {
+      router.push({ pathname: `/upload-editor`, query: { identifier } });
+    }
+  };
+
   useEffect(() => {
     const getContentList = async () => {
       try {
@@ -82,7 +98,9 @@ const AllContentsPage = () => {
         ];
         const query = debouncedSearchTerm || "";
         const response = await getContent(status, query);
-        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
+        const contentList = (response?.content || []).concat(
+          response?.QuestionSet || []
+        );
         setContentList(contentList);
         setLoading(false);
       } catch (error) {
@@ -90,7 +108,21 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, contentDeleted]);
+
+  const handleDeleteClick = async (content: any) => {
+    if (content?.identifier && content?.mimeType) {
+      try {
+        await deleteContent(content?.identifier, content?.mimeType);
+        console.log(`Deleted item with identifier - ${content?.identifier}`);
+        setTimeout(() => {
+          setContentDeleted((prev) => !prev);
+        }, 1000);
+      } catch (error) {
+        console.error("Failed to delete content:", error);
+      }
+    }
+  };
 
   const filteredData = useMemo(
     () =>
@@ -132,8 +164,12 @@ const AllContentsPage = () => {
                 <TableBody>
                   {contentList?.map((content, index) => (
                     <TableRow key={index}>
-                      <TableCell>
-                        <Box display="flex" alignItems="center">
+                      <TableCell onClick={() => openEditor(content)}>
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          sx={{ cursor: "pointer" }}
+                        >
                           {content?.appIcon ? (
                             <img src={content?.appIcon} height={"25px"} />
                           ) : (
@@ -156,7 +192,10 @@ const AllContentsPage = () => {
                       <TableCell>{content?.status}</TableCell>
                       <TableCell>
                         {content?.status === "Draft" && (
-                          <IconButton aria-label="delete">
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => handleDeleteClick(content)}
+                          >
                             <DeleteIcon />
                           </IconButton>
                         )}

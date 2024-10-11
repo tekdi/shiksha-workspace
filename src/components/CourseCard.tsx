@@ -66,6 +66,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
 
   return (
     <Card
+      onClick={openEditor}
       sx={{
         height: "100%",
         display: "flex",
@@ -73,7 +74,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
         width: "250px",
       }}
     >
-      <Box position="relative" onClick={openEditor}>
+      <Box position="relative">
         <CardMedia
           component="div"
           sx={{
