@@ -68,7 +68,9 @@ const DraftPage = () => {
 
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
-    setContentDeleted((prev) => !prev);
+    setTimeout(() => {
+      setContentDeleted((prev) => !prev);
+    }, 2000);
   };
 
   useEffect(() => {
