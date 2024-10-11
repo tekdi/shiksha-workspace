@@ -40,3 +40,11 @@ export async function deleteApi<T>(
 ): Promise<AxiosResponse> {
   return axiosInstance.delete(url, { data: body, headers });
 }
+
+export async function delApi<T>(
+  url: string,
+  body?: T,
+  headers: AxiosRequestConfig["headers"] = {}
+): Promise<AxiosResponse> {
+  return axiosInstance.delete(url, { data: body, headers });
+}

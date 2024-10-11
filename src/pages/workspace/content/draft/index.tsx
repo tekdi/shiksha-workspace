@@ -15,6 +15,7 @@ const DraftPage = () => {
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
+  const [contentDeleted, setContentDeleted] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
@@ -67,6 +68,7 @@ const DraftPage = () => {
 
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
+    setContentDeleted((prev) => !prev);
   };
 
   useEffect(() => {
@@ -75,7 +77,9 @@ const DraftPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const response = await getContent(["Draft", "FlagDraft"], query);
-        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
+        const contentList = (response?.content || []).concat(
+          response?.QuestionSet || []
+        );
         setContentList(contentList);
         setLoading(false);
       } catch (error) {
@@ -83,7 +87,7 @@ const DraftPage = () => {
       }
     };
     getDraftContentList();
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, contentDeleted]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>

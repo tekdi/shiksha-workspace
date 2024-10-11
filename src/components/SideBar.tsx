@@ -87,8 +87,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
               borderRadius: "4rem",
               backgroundColor:
                 selectedKey === item.key
-                  ? theme.palette.primary.main
-                  : "transparent", // Background for selected item
+                  ? "var(--mui-palette-primary-main)"
+                  : "transparent",
               color:
                 selectedKey === item.key
                   ? "#2E1500"
@@ -97,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
               "&:hover": {
                 background:
                   selectedKey === item.key
-                    ? theme.palette.primary.main
+                    ? "var(--mui-palette-primary-main)"
                     : "transparent",
               },
             }}
