@@ -14,6 +14,7 @@ const SubmittedForReviewPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [loading, setLoading] = useState(false);
+  const [contentDeleted, setContentDeleted] = React.useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
 
@@ -54,6 +55,7 @@ const SubmittedForReviewPage = () => {
 
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
+    setContentDeleted((prev) => !prev);
   };
 
   useEffect(() => {
@@ -62,7 +64,9 @@ const SubmittedForReviewPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const response = await getContent(["Review", "FlagReview"], query);
-        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
+        const contentList = (response?.content || []).concat(
+          response?.QuestionSet || []
+        );
         setContentList(contentList);
         setLoading(false);
       } catch (error) {
@@ -70,7 +74,7 @@ const SubmittedForReviewPage = () => {
       }
     };
     getReviewContentList();
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, contentDeleted]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -111,7 +115,7 @@ const SubmittedForReviewPage = () => {
                   status={content.status}
                   identifier={content?.identifier}
                   mimeType={content?.mimeType}
-                  mode={'review'}
+                  mode={"review"}
                   onDelete={() => handleDelete(index)}
                 />
               </Box>

@@ -1,7 +1,8 @@
 import { stringify } from "json5";
 import { getLocalStoredUserData } from "./LocalStorageService";
-import { post } from "./RestClient";
+import { delApi, deleteApi, post } from "./RestClient";
 import axios from "axios";
+import { MIME_TYPE } from "@/utils/app.config";
 const authToken = process.env.NEXT_PUBLIC_AUTH_API_TOKEN;
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -81,6 +82,26 @@ export const createQuestionSet = async () => {
       },
     });
     return response?.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteContent = async (identifier: string, mimeType: string) => {
+  const questionsetRetireURL = `/action/questionset/v2/retire/${identifier}`;
+  const contentRetireURL = `/action/content/v3/retire/${identifier}`;
+  let apiURL = "";
+  if (mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+    apiURL = questionsetRetireURL;
+  } else if (
+    mimeType !== MIME_TYPE.QUESTIONSET_MIME_TYPE &&
+    mimeType !== MIME_TYPE.COLLECTION_MIME_TYPE
+  ) {
+    apiURL = contentRetireURL;
+  }
+  try {
+    const response = await delApi(apiURL); // Assuming you have a 'del' method that handles DELETE
+    return response?.data?.result;
   } catch (error) {
     throw error;
   }

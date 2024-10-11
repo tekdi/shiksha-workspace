@@ -15,6 +15,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import { Status } from "@/utils/app.constant";
 import { MIME_TYPE } from "@/utils/app.config";
 import router from "next/router";
+import { deleteContent } from "@/services/ContentService";
 
 interface ContentCardProps {
   title: string;
@@ -24,7 +25,7 @@ interface ContentCardProps {
   status: string;
   identifier?: string;
   mimeType?: string;
-  mode?:string;
+  mode?: string;
   onDelete?: () => void;
 }
 
@@ -46,6 +47,20 @@ const CourseCard: React.FC<ContentCardProps> = ({
       router.push({ pathname: `/editor`, query: { identifier, mode } });
     } else if (mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType)) {
       router.push({ pathname: `/upload-editor`, query: { identifier } });
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    if (identifier && mimeType) {
+      try {
+        await deleteContent(identifier, mimeType);
+        console.log(`Deleted item with identifier - ${identifier}`);
+        if (onDelete) {
+          onDelete();
+        }
+      } catch (error) {
+        console.error("Failed to delete content:", error);
+      }
     }
   };
 
@@ -96,7 +111,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
       {(status === Status.DRAFT || status === Status.LIVE) && (
         <CardActions disableSpacing>
           <Box display="flex" justifyContent="flex-end" width="100%">
-            <IconButton aria-label="delete" onClick={onDelete}>
+            <IconButton aria-label="delete" onClick={handleDeleteClick}>
               <DeleteIcon />
             </IconButton>
           </Box>
