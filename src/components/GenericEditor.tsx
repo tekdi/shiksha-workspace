@@ -8,7 +8,6 @@ import editorConfig from './editor.config.json';
 import { getLocalStoredUserData } from "@/services/LocalStorageService";
 
 const GenericEditor: React.FC = () => {
-    let userId: any;
     const router = useRouter();
     const { identifier } = router.query;
     const [showLoader, setShowLoader] = useState(true);
@@ -18,7 +17,6 @@ const GenericEditor: React.FC = () => {
     const defaultContentFileSize = "150";
 
     useEffect(() => {
-        userId = getLocalStoredUserData();
         if (typeof window !== 'undefined') {
             console.log('editorConfig ==>', editorConfig);
             getContentDetails(identifier)
@@ -87,8 +85,8 @@ const GenericEditor: React.FC = () => {
             if (identifier) {
                 window['context'].contentId = identifier;
             }
-            window['context'].user.id = userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"
-            window['context'].uid = userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"
+            window['context'].user.id = getLocalStoredUserData() || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"
+            window['context'].uid = getLocalStoredUserData() || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"
         }
     };
 
