@@ -17,7 +17,6 @@ import DatabaseIcon from "@mui/icons-material/Storage";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-
 const menuItems = [
   { text: "Create", key: "create" },
   { text: "All My Contents", key: "allContents" },
@@ -51,9 +50,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   };
 
   const goBack = () => {
-    window.history.back();
+    router.push("/");
   };
-
 
   const drawerContent = (
     <Box margin={"1rem"} width={"100%"} height={"100%"}>
@@ -65,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
       >
         <Box display="flex" alignItems="center">
           <ListItemIcon>
-          <IconButton onClick={goBack}>
+            <IconButton onClick={goBack}>
               <ArrowBackIcon sx={{ color: theme.palette.warning["100"] }} />
             </IconButton>
             <IconButton>
