@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
-  const { identifier } = router.query;
-  const { mode } = router.query;
+  const { identifier, mode } = router.query;
 
   const questionSetEditorConfig = {
     context: {
@@ -126,47 +125,68 @@ const QuestionSetEditor: React.FC = () => {
 
   const editorRef = useRef<HTMLDivElement | null>(null);
   const isAppendedRef = useRef(false);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!isAppendedRef.current && editorRef.current) {
-          const editorConfig = questionSetEditorConfig;
-          const questionsetEditorElement = document.createElement(
-            "lib-questionset-editor"
-          );
+    const loadAssets = () => {
+      if (!document.getElementById("sunbird-editor-css")) {
+        const link = document.createElement("link");
+        link.id = "sunbird-editor-css";
+        link.rel = "stylesheet";
+        link.href =
+          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.1/styles.css";
+        document.head.appendChild(link);
+      }
 
-          questionsetEditorElement.setAttribute(
-            "editor-config",
-            JSON.stringify(editorConfig)
-          );
-
-          questionsetEditorElement.addEventListener<any>(
-            "editorEmitter",
-            (event: CustomEvent) => {
-              console.log("On editorEvent", event);
-              if (event.detail?.action === 'backContent' || event.detail?.action === 'submitContent' ||
-                event.detail?.action === 'publishContent' || event.detail?.action === 'rejectContent') {
-                window.history.back();
-              }
-            }
-          );
-
-          if (editorRef.current) {
-            console.log("Element appended");
-            editorRef.current.appendChild(questionsetEditorElement);
-            isAppendedRef.current = true;
-          }
-        }
-      } catch (error) {
-        console.error("Error creating question set:", error);
+      if (!document.getElementById("sunbird-editor-js")) {
+        const script = document.createElement("script");
+        script.id = "sunbird-editor-js";
+        script.src =
+          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.1/sunbird-questionset-editor.js";
+        script.async = true;
+        script.onload = () => setAssetsLoaded(true);
+        document.body.appendChild(script);
+      } else {
+        setAssetsLoaded(true);
       }
     };
 
-    fetchData();
+    loadAssets();
   }, []);
 
-  return <div ref={editorRef}></div>;
+  // Initialize the editor only after assets are loaded
+  useEffect(() => {
+    if (assetsLoaded && editorRef.current && !isAppendedRef.current) {
+      const questionsetEditorElement = document.createElement(
+        "lib-questionset-editor"
+      );
+
+      questionsetEditorElement.setAttribute(
+        "editor-config",
+        JSON.stringify(questionSetEditorConfig)
+      );
+
+      questionsetEditorElement.addEventListener("editorEmitter", (event: any) => {
+        console.log("Editor event:", event);
+        if (event.detail?.action === "backContent") {
+          window.history.back();
+        }
+      });
+
+      editorRef.current.appendChild(questionsetEditorElement);
+      isAppendedRef.current = true;
+    }
+  }, [assetsLoaded]);
+
+  return (
+    <div>
+      {assetsLoaded ? (
+        <div ref={editorRef}></div>
+      ) : (
+        <p>Loading editor...</p>
+      )}
+    </div>
+  );
 };
 
 export default QuestionSetEditor;
