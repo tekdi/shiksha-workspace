@@ -152,6 +152,14 @@ const QuestionSetEditor: React.FC = () => {
     };
 
     loadAssets();
+
+    return () => {
+      const editorCss = document.getElementById("sunbird-editor-css");
+      const editorScript = document.getElementById("sunbird-editor-js");
+
+      if (editorCss) document.head.removeChild(editorCss);
+      if (editorScript) document.body.removeChild(editorScript);
+    };
   }, []);
 
   // Initialize the editor only after assets are loaded
@@ -166,12 +174,15 @@ const QuestionSetEditor: React.FC = () => {
         JSON.stringify(questionSetEditorConfig)
       );
 
-      questionsetEditorElement.addEventListener("editorEmitter", (event: any) => {
-        console.log("Editor event:", event);
-        if (event.detail?.action === "backContent") {
-          window.history.back();
+      questionsetEditorElement.addEventListener(
+        "editorEmitter",
+        (event: any) => {
+          console.log("Editor event:", event);
+          if (event.detail?.action === "backContent") {
+            window.history.back();
+          }
         }
-      });
+      );
 
       editorRef.current.appendChild(questionsetEditorElement);
       isAppendedRef.current = true;
@@ -180,11 +191,7 @@ const QuestionSetEditor: React.FC = () => {
 
   return (
     <div>
-      {assetsLoaded ? (
-        <div ref={editorRef}></div>
-      ) : (
-        <p>Loading editor...</p>
-      )}
+      {assetsLoaded ? <div ref={editorRef}></div> : <p>Loading editor...</p>}
     </div>
   );
 };
