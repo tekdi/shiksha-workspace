@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { genericEditorSaveFormResponse, telemetryResponse,
   creatLockResponse, genericEditorReviewFormResponse } from './mocked-response';
-  
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, query } = req;
   const { path } = query;
