@@ -7,3 +7,7 @@ export enum Status {
 export enum ContentType {
   QUESTION_SET = "QuestionSet",
 }
+
+export enum TOKEN {
+  TOKEN = 'token'
+}
