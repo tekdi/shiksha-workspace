@@ -10,7 +10,7 @@ const Loader: React.FC<{ showBackdrop: boolean; loadingText: string }> = ({
       <>
         <CircularProgress color="inherit" />
         <br />
-        <Typography variant="h2">{loadingText}...</Typography>
+        <Typography variant="h4">{loadingText}...</Typography>
       </>
     );
   };

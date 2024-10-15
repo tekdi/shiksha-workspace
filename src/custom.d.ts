@@ -2,6 +2,8 @@ interface Window {
     config: any;
     context: any;
     redirectUrl: any;
+    $: typeof import('jquery');
+    jQuery: typeof import('jquery');
   }
   
   declare module '*.json' {

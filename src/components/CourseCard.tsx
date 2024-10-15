@@ -102,7 +102,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
           }}
         />
       </Box>
-      <CardContent sx={{ flex: 1 }}>
+      <CardContent sx={{ flex: 1 }} onClick={openEditor}>
         <Typography variant="h6">{title}</Typography>
         <Typography variant="body2" color="text.secondary">
           {description}

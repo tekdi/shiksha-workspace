@@ -6,6 +6,7 @@ import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
+import { setTimeout } from "timers";
 
 const SubmittedForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("submitted");
@@ -55,7 +56,9 @@ const SubmittedForReviewPage = () => {
 
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
-    setContentDeleted((prev) => !prev);
+    setTimeout(() => {
+      setContentDeleted((prev) => !prev);
+    }, 1000);
   };
 
   useEffect(() => {
