@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { genericEditorSaveFormResponse, telemetryResponse,
   creatLockResponse, genericEditorReviewFormResponse } from './mocked-response';
-import { TOKEN } from '@/utils/app.constant';
+  
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, query } = req;
   const { path } = query;
@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let pathString = Array.isArray(path) ? path.join('/') : (path as string);
 
   const BASE_URL = process.env.BASE_URL as string;
-  const API_KEY = localStorage.getItem(TOKEN.TOKEN) || process.env.AUTH_API_TOKEN as string;
+  const API_KEY = process.env.AUTH_API_TOKEN as string;
   const TENANT_ID = process.env.TENANT_ID as string;
 
   if (pathString === '/action/data/v3/telemetry') {
