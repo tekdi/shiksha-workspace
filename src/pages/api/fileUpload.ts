@@ -2,6 +2,7 @@ import multer, { MulterError } from 'multer';
 import FormData from 'form-data';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { TOKEN } from '@/utils/app.constant';
 
 const upload = multer({
   limits: {
@@ -81,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Set your base URL
       const baseURL = process.env.BASE_URL as string;
-      const authApiToken = localStorage.getItem('token') || process.env.AUTH_API_TOKEN as string;
+      const authApiToken = localStorage.getItem(TOKEN.TOKEN) || process.env.AUTH_API_TOKEN as string;
       const tenantId = process.env.TENANT_ID as string;
 
       // Extract the relative URL from the incoming request (after /action)
