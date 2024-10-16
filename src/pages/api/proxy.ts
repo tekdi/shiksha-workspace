@@ -1,5 +1,3 @@
-// api/proxy.ts
-
 import { NextApiRequest, NextApiResponse } from "next";
 import {
   genericEditorSaveFormResponse,
