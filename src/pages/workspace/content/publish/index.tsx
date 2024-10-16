@@ -6,6 +6,8 @@ import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
+import PaginationComponent from "@/components/PaginationComponent";
+import { LIMIT } from "@/utils/app.constant";
 
 const PublishPage = () => {
   const [selectedKey, setSelectedKey] = useState("publish");
@@ -17,6 +19,12 @@ const PublishPage = () => {
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
+  const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage - 1);
+  };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -66,18 +74,21 @@ const PublishPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const response = await getContent(["Live"], query);
+        const limit = LIMIT;
+        const offset = page * LIMIT;
+        const response = await getContent(["Live"], query, limit, offset);
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
         setContentList(contentList);
+        setTotalCount(response?.count);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     getPublishContentList();
-  }, [debouncedSearchTerm, contentDeleted]);
+  }, [debouncedSearchTerm, contentDeleted, page]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -125,6 +136,13 @@ const PublishPage = () => {
             <NoDataFound />
           )}
         </Box>
+        {totalCount > LIMIT && (
+          <PaginationComponent
+            count={Math.ceil(totalCount / LIMIT)}
+            page={page}
+            onPageChange={handleChangePage}
+          />
+        )}
       </Box>
     </Layout>
   );
