@@ -1,66 +1,81 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { genericEditorSaveFormResponse, telemetryResponse,
-  creatLockResponse, genericEditorReviewFormResponse } from './mocked-response';
+import { NextApiRequest, NextApiResponse } from "next";
+import {
+  genericEditorSaveFormResponse,
+  telemetryResponse,
+  creatLockResponse,
+  genericEditorReviewFormResponse,
+} from "./mocked-response";
+
+let storedToken: string | null = null;
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method, query } = req;
+  const { method, body, query } = req;
   const { path } = query;
 
-  let pathString = Array.isArray(path) ? path.join('/') : (path as string);
-
   const BASE_URL = process.env.BASE_URL as string;
-  const API_KEY = process.env.AUTH_API_TOKEN as string;
   const TENANT_ID = process.env.TENANT_ID as string;
+  const API_KEY = process.env.AUTH_API_TOKEN as string;
 
-  if (pathString === '/action/data/v3/telemetry') {
+  const token = body?.token || storedToken || API_KEY;
+
+  if (body?.token) {
+    console.log("Received new token:", body.token);
+    storedToken = body.token;
+    return res.status(200).json({ message: "Token received" });
+  }
+
+  if (!token) {
+    console.error("No valid token available");
+    return res.status(401).json({ message: "Unauthorized: Token is required" });
+  }
+
+  console.log("Using token:", token);
+
+  let pathString = Array.isArray(path) ? path.join("/") : (path as string);
+
+  // Handle mocked responses
+  if (pathString === "/action/data/v3/telemetry") {
     return res.status(200).json(telemetryResponse);
   }
 
-  if (pathString === '/action/data/v1/form/read') {
-    if (req.body.request.action === 'save' && req.body.request.subType === 'resource') {
+  if (pathString === "/action/data/v1/form/read") {
+    const { action, subType } = body.request;
+    if (action === "save" && subType === "resource") {
       return res.status(200).json(genericEditorSaveFormResponse);
     }
-    if (req.body.request.action === 'review' && req.body.request.subType === 'resource') {
+    if (action === "review" && subType === "resource") {
       return res.status(200).json(genericEditorReviewFormResponse);
     }
-    console.log('req body ====>', req.body);
   }
 
-  if (pathString === '/action/lock/v1/create') {
+  if (pathString === "/action/lock/v1/create") {
     return res.status(200).json(creatLockResponse);
   }
 
-  if (pathString.startsWith('/action/framework/v3/read/')) {
-    pathString = pathString.replace('/action/framework/v3/read/', '/api/framework/v1/read/');
+  if (pathString.startsWith("/action/framework/v3/read/")) {
+    pathString = pathString.replace("/action/framework/v3/read/", "/api/framework/v1/read/");
   }
 
-  const queryString = req.url?.includes('?') ? req.url.split('?')[1] : '';
-
-  // Build target URL
-  const targetUrl = `${BASE_URL}${pathString}${queryString ? `?${queryString}` : ''}`;
-  console.log('Target URL:', targetUrl);
+  const queryString = req.url?.includes("?") ? req.url.split("?")[1] : "";
+  const targetUrl = `${BASE_URL}${pathString}${queryString ? `?${queryString}` : ""}`;
 
   try {
     const options: RequestInit = {
       method,
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`,
-        'tenantId': TENANT_ID,
-        'X-Channel-Id': 'test-k12-channel'
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        tenantId: TENANT_ID,
+        "X-Channel-Id": "test-k12-channel",
       },
+      ...(method === "POST" || method === "PATCH" ? { body: JSON.stringify(body) } : {}),
     };
 
-    if (method === 'POST' || method === 'PATCH') {
-      options.body = JSON.stringify(req.body);
-    }
-
     const response = await fetch(targetUrl, options);
-
     const data = await response.json();
-
     res.status(response.status).json(data);
   } catch (error: any) {
-    console.error('Error in proxy:', error.message);
-    res.status(500).json({ message: 'Error fetching data', error: error.message });
+    console.error("Error in proxy:", error.message);
+    res.status(500).json({ message: "Error fetching data", error: error.message });
   }
 }
