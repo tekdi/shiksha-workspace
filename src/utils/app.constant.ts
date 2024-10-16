@@ -7,3 +7,5 @@ export enum Status {
 export enum ContentType {
   QUESTION_SET = "QuestionSet",
 }
+
+export const LIMIT = 6;
