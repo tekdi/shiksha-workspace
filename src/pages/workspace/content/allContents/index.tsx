@@ -100,9 +100,8 @@ const AllContentsPage = () => {
           "FlagReview",
         ];
         const query = debouncedSearchTerm || "";
-        const limit = LIMIT;
         const offset = page * LIMIT;
-        const response = await getContent(status, query, limit, offset);
+        const response = await getContent(status, query, LIMIT, offset);
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );

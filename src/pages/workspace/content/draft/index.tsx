@@ -81,12 +81,11 @@ const DraftPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const limit = LIMIT;
         const offset = page * LIMIT;
         const response = await getContent(
           ["Draft", "FlagDraft"],
           query,
-          limit,
+          LIMIT,
           offset
         );
         const contentList = (response?.content || []).concat(

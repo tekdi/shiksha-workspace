@@ -74,9 +74,8 @@ const PublishPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const limit = LIMIT;
         const offset = page * LIMIT;
-        const response = await getContent(["Live"], query, limit, offset);
+        const response = await getContent(["Live"], query, LIMIT, offset);
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
