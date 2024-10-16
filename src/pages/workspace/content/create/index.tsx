@@ -1,39 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../../../components/Layout";
 import { Typography, Box, useTheme } from "@mui/material";
 import ContentCard from "../../../../components/ContentCard";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import UploadIcon from "@mui/icons-material/Upload";
 import { useRouter } from "next/router";
 import { createQuestionSet } from "@/services/ContentService";
+import axios from "axios";
 
 const CreatePage = () => {
   const theme = useTheme<any>();
   const [selectedKey, setSelectedKey] = useState("create");
   const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
 
+  const sendTokenToProxy = async (storedToken: string) => {
+    try {
+      const response = await axios.post(
+        "/api/proxy",
+        { token: storedToken },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    const fetchData = async () => {
-      try {
-        const response = await createQuestionSet();
-        console.log('Question set created successfully:', response);
-        const identifier = response?.result?.identifier;
- 
-        router.push({
-          pathname: `/editor`,
-          query: { identifier },
-        });
-      
-      } catch (error) {
-        console.error('Error creating question set:', error);
+      if (response.status === 200) {
+        console.log("Token sent successfully to proxy:", storedToken);
+        return true;
+      } else {
+        console.error("Failed to send token to proxy");
+        return false;
       }
-    };
+    } catch (error) {
+      console.error("Error sending token to proxy:", error);
+      return false;
+    }
+  };
 
+  const fetchData = async () => {
+    try {
+      const storedToken = localStorage.getItem("token");
 
+      if (storedToken) {
+        setToken(storedToken);
+        const proxySuccess = await sendTokenToProxy(storedToken);
+
+        if (!proxySuccess) {
+          console.error("Proxy request failed. Stopping execution.");
+          return;
+        }
+      } else {
+        console.warn("No token found. Proceeding without token.");
+      }
+
+      // Call createQuestionSet regardless of token presence
+      const response = await createQuestionSet();
+      console.log("Question set created successfully:", response);
+
+      const identifier = response?.result?.identifier;
+      router.push({
+        pathname: `/editor`,
+        query: { identifier },
+      });
+    } catch (error) {
+      console.error("Error creating question set:", error);
+    }
+  };
 
   const openEditor = () => {
-       fetchData();
+    fetchData();
   };
 
   const cardData = [
@@ -41,10 +74,7 @@ const CreatePage = () => {
       title: "Upload Content",
       description: "You can upload content here.",
       icon: <UploadIcon fontSize="large" />,
-      onClick: () => {
-        console.log("Uploading content");
-        router.push("/upload-editor");
-      },
+      onClick: () => router.push("/upload-editor"),
     },
     {
       title: "Question Set",
