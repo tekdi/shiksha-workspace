@@ -6,23 +6,27 @@ import {
     CardContent,
     CardActions,
     Typography,
-    IconButton,
-    useTheme,
+    IconButton
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { fetchContent } from "@/services/PlayerService";
-import { useRouter } from "next/router"; // Import useRouter
+import { useRouter } from "next/router";
+import ConfirmActionPopup from '../../../../components/ConfirmActionPopup';
+import axios from 'axios';
 
 const ReviewContentSubmissions = () => {
-    const theme = useTheme();
-    const router = useRouter(); // Initialize the router
-    const { identifier } = router.query; 
+    const router = useRouter();
+    const { identifier } = router.query;
+
     const [contentDetails, setContentDetails] = useState({
         name: "Sample Content",
         createdBy: "John Doe",
         createdOn: "2024-10-16",
         description: "This is a description of the content.",
     });
+
+    const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
+    const [confirmationActionType, setConfirmationActionType] = useState<'publish' | ''>('');
 
     useEffect(() => {
         const loadContent = async () => {
@@ -41,29 +45,45 @@ const ReviewContentSubmissions = () => {
             }
         };
 
-        loadContent();
+        if (identifier) {
+            loadContent();
+        }
     }, [identifier]);
 
-    const handleClose = () => {
-        console.log("Close button clicked");
+    const redirectToReviewPage = () => {
         router.push({ pathname: `/workspace/content/submitted` });
+    }
+
+    const handleClosePopup = () => {
+        setOpenConfirmationPopup(false);
     };
 
     const handleReject = () => {
         console.log("Reject button clicked");
-        router.push({ pathname: `/workspace/content/submitted` });
     };
 
     const handlePublish = () => {
         console.log("Publish button clicked");
-        router.push({ pathname: `/workspace/content/submitted` });
+        setConfirmationActionType('publish');
+        setOpenConfirmationPopup(true);
+    };
+
+    const confirmPublishContent = async () => {
+        try {
+            const response = await axios.post('/api/publish', { id: identifier });
+            console.log('Published:', response.data);
+            setOpenConfirmationPopup(false);
+            router.push({ pathname: `/workspace/content/submitted` });
+        } catch (error) {
+            console.error('Error during publishing:', error);
+        }
     };
 
     return (
         <Card sx={{ padding: 2, backgroundColor: 'white' }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Typography variant="h5" color="primary">Review Content Submissions</Typography>
-                <IconButton onClick={handleClose}>
+                <IconButton onClick={redirectToReviewPage}>
                     <CloseIcon />
                 </IconButton>
             </Box>
@@ -80,10 +100,10 @@ const ReviewContentSubmissions = () => {
             </Box>
 
             <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-                <Button variant="contained" color="primary" onClick={handleReject} sx={{ marginRight: 1 }}>
+                <Button variant="contained" color="primary" onClick={handlePublish} sx={{ marginRight: 1 }}>
                     Publish
                 </Button>
-                <Button variant="contained" color="primary" onClick={handlePublish}>
+                <Button variant="contained" color="primary" onClick={handleReject}>
                     Request Changes
                 </Button>
             </CardActions>
@@ -95,6 +115,13 @@ const ReviewContentSubmissions = () => {
                 <Typography>Created On: {contentDetails.createdOn}</Typography>
                 <Typography>Description: {contentDetails.description}</Typography>
             </CardContent>
+
+            <ConfirmActionPopup
+                open={openConfirmationPopup}
+                onClose={handleClosePopup}
+                actionType={confirmationActionType}
+                onConfirm={confirmPublishContent}
+            />
         </Card>
     );
 };

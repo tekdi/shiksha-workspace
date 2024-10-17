@@ -1,7 +1,7 @@
 import { URL_CONFIG } from "../utils/url.config";
 import axios from "axios";
 
-export const fetchContent = async (identifier: string) => {
+export const fetchContent = async (identifier: any) => {
     try {
         const API_URL = URL_CONFIG.API.CONTENT_READ + identifier;
         const FIELDS = URL_CONFIG.PARAMS.CONTENT_GET;
