@@ -12,7 +12,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { fetchContent } from "@/services/PlayerService";
 import { useRouter } from "next/router";
 import ConfirmActionPopup from '../../../../components/ConfirmActionPopup';
-import axios from 'axios';
+import ReviewCommentPopup from '../../../../components/ReviewCommentPopup';
+import { publishContent, submitComment } from "@/services/ContentService";
 
 const ReviewContentSubmissions = () => {
     const router = useRouter();
@@ -27,6 +28,8 @@ const ReviewContentSubmissions = () => {
 
     const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
     const [confirmationActionType, setConfirmationActionType] = useState<'publish' | ''>('');
+
+    const [openCommentPopup, setOpenCommentPopup] = useState<boolean>(false);
 
     useEffect(() => {
         const loadContent = async () => {
@@ -54,12 +57,17 @@ const ReviewContentSubmissions = () => {
         router.push({ pathname: `/workspace/content/submitted` });
     }
 
-    const handleClosePopup = () => {
+    const closePublishPopup = () => {
         setOpenConfirmationPopup(false);
     };
 
+    const closeCommentPopup = () => {
+        setOpenCommentPopup(false);
+    }
+
     const handleReject = () => {
         console.log("Reject button clicked");
+        setOpenCommentPopup(true);
     };
 
     const handlePublish = () => {
@@ -70,12 +78,26 @@ const ReviewContentSubmissions = () => {
 
     const confirmPublishContent = async () => {
         try {
-            const response = await axios.post('/api/publish', { id: identifier });
-            console.log('Published:', response.data);
+            const response = await publishContent(identifier);
+            console.log('Published successfully:', response);
+            // Add toaster success message here
             setOpenConfirmationPopup(false);
             router.push({ pathname: `/workspace/content/submitted` });
         } catch (error) {
             console.error('Error during publishing:', error);
+            // Add toaster error message here
+        }
+    };
+
+    const handleSubmitComment = async (comment: string) => {
+        try {
+            const response = await submitComment(identifier, comment);
+            console.log('Comment submitted successfully:', response);
+            // Add toaster success message here
+            setOpenCommentPopup(false);
+        } catch (error) {
+            console.error('Error submitting comment:', error);
+            // Add toaster error message here
         }
     };
 
@@ -118,9 +140,16 @@ const ReviewContentSubmissions = () => {
 
             <ConfirmActionPopup
                 open={openConfirmationPopup}
-                onClose={handleClosePopup}
+                onClose={closePublishPopup}
                 actionType={confirmationActionType}
                 onConfirm={confirmPublishContent}
+            />
+
+            <ReviewCommentPopup
+                open={openCommentPopup}
+                onClose={closeCommentPopup}
+                onSubmit={handleSubmitComment}
+                title="Submit Your Comment"
             />
         </Card>
     );
