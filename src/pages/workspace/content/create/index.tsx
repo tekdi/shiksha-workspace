@@ -12,46 +12,14 @@ const CreatePage = () => {
   const theme = useTheme<any>();
   const [selectedKey, setSelectedKey] = useState("create");
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
-
-  const sendTokenToProxy = async (storedToken: string) => {
-    try {
-      const response = await axios.post(
-        "/api/proxy",
-        { token: storedToken },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      if (response.status === 200) {
-        console.log("Token sent successfully to proxy:", storedToken);
-        return true;
-      } else {
-        console.error("Failed to send token to proxy");
-        return false;
-      }
-    } catch (error) {
-      console.error("Error sending token to proxy:", error);
-      return false;
-    }
-  };
 
   const fetchData = async () => {
     try {
-      const storedToken = localStorage.getItem("token");
-
-      if (storedToken) {
-        setToken(storedToken);
-        const proxySuccess = await sendTokenToProxy(storedToken);
-
-        if (!proxySuccess) {
-          console.error("Proxy request failed. Stopping execution.");
-          return;
-        }
-      } else {
-        console.warn("No token found. Proceeding without token.");
+      const token = localStorage.getItem("token");
+      if (token) {
+        document.cookie = `authToken=${token}; path=/; secure; SameSite=Strict`;
       }
 
-      // Call createQuestionSet regardless of token presence
       const response = await createQuestionSet();
       console.log("Question set created successfully:", response);
 
