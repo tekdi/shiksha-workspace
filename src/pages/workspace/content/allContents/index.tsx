@@ -21,6 +21,8 @@ import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
 import { MIME_TYPE } from "@/utils/app.config";
 import router from "next/router";
+import PaginationComponent from "@/components/PaginationComponent";
+import { LIMIT } from "@/utils/app.constant";
 
 const AllContentsPage = () => {
   const theme = useTheme<any>();
@@ -36,9 +38,10 @@ const AllContentsPage = () => {
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
+  const [totalCount, setTotalCount] = useState(0);
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    setPage(newPage - 1);
   };
 
   const handleChangeRowsPerPage = (
@@ -97,18 +100,20 @@ const AllContentsPage = () => {
           "FlagReview",
         ];
         const query = debouncedSearchTerm || "";
-        const response = await getContent(status, query);
+        const offset = page * LIMIT;
+        const response = await getContent(status, query, LIMIT, offset);
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
         setContentList(contentList);
+        setTotalCount(response?.count);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, contentDeleted]);
+  }, [debouncedSearchTerm, contentDeleted, page]);
 
   const handleDeleteClick = async (content: any) => {
     if (content?.identifier && content?.mimeType) {
@@ -204,19 +209,18 @@ const AllContentsPage = () => {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination
-                component="div"
-                count={contentList.length}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                rowsPerPageOptions={[10, 25, 50]}
-              />
             </>
           )
         ) : (
           <NoDataFound />
+        )}
+
+        {totalCount > LIMIT && (
+          <PaginationComponent
+            count={Math.ceil(totalCount / LIMIT)}
+            page={page}
+            onPageChange={handleChangePage}
+          />
         )}
       </Box>
     </Layout>

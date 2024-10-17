@@ -35,7 +35,12 @@ const defaultReqBody = {
   },
 };
 
-const getReqBodyWithStatus = (status: string[], query: string) => {
+const getReqBodyWithStatus = (
+  status: string[],
+  query: string,
+  limit: number,
+  offset: number
+) => {
   return {
     ...defaultReqBody,
     request: {
@@ -45,14 +50,21 @@ const getReqBodyWithStatus = (status: string[], query: string) => {
         status,
       },
       query,
+      limit,
+      offset,
     },
   };
 };
 
-export const getContent = async (status: string[], query: string) => {
+export const getContent = async (
+  status: string[],
+  query: string,
+  limit: number,
+  offset: number
+) => {
   const apiURL = "/action/composite/v3/search";
   try {
-    const reqBody = getReqBodyWithStatus(status, query);
+    const reqBody = getReqBodyWithStatus(status, query, limit, offset);
     const response = await post(apiURL, reqBody);
     return response?.data?.result;
   } catch (error) {

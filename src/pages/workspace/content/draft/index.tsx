@@ -6,6 +6,8 @@ import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "@/services/ContentService";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
+import PaginationComponent from "@/components/PaginationComponent";
+import { LIMIT } from "@/utils/app.constant";
 
 const DraftPage = () => {
   const [selectedKey, setSelectedKey] = useState("draft");
@@ -17,11 +19,12 @@ const DraftPage = () => {
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [loading, setLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    setPage(newPage - 1);
   };
 
   const handleChangeRowsPerPage = (
@@ -78,18 +81,25 @@ const DraftPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const response = await getContent(["Draft", "FlagDraft"], query);
+        const offset = page * LIMIT;
+        const response = await getContent(
+          ["Draft", "FlagDraft"],
+          query,
+          LIMIT,
+          offset
+        );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
         setContentList(contentList);
+        setTotalCount(response?.count);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     getDraftContentList();
-  }, [debouncedSearchTerm, contentDeleted]);
+  }, [debouncedSearchTerm, contentDeleted, page]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -136,18 +146,13 @@ const DraftPage = () => {
             <NoDataFound />
           )}
         </Box>
-
-        {/* <Box display="flex" justifyContent="center" mt={3}>
-          <TablePagination
-            component="div"
-            count={contentList.length}
+        {totalCount > LIMIT && (
+          <PaginationComponent
+            count={Math.ceil(totalCount / LIMIT)}
             page={page}
             onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[4, 8, 12]}
           />
-        </Box> */}
+        )}
       </Box>
     </Layout>
   );
