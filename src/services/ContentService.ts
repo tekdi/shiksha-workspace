@@ -118,3 +118,24 @@ export const deleteContent = async (identifier: string, mimeType: string) => {
     throw error;
   }
 };
+
+
+export const publishContent = async (identifier: any) => {
+  try {
+      const response = await axios.post('/api/publish', { identifier });
+      return response.data;
+  } catch (error) {
+      console.error('Error during publishing:', error);
+      throw error;
+  }
+};
+
+export const submitComment = async (identifier: any, comment: any) => {
+  try {
+      const response = await axios.post('/api/submit-comment', {identifier, comment });
+      return response.data;
+  } catch (error) {
+      console.error('Error submitting comment:', error);
+      throw error;
+  }
+};
