@@ -42,10 +42,12 @@ const CourseCard: React.FC<ContentCardProps> = ({
 }) => {
   const theme = useTheme<any>();
 
-  const openEditor = () => {
+  const onContentClick = () => {
     if (mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
-    } else if (mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType)) {
+    } else if (mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType) && mode === 'review') {
+      router.push({pathname: `/workspace/content/review` , query: { identifier, mode } });
+    } else if (mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType) && mode !== 'review') {
       router.push({ pathname: `/upload-editor`, query: { identifier } });
     }
   };
@@ -73,7 +75,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
         width: "250px",
       }}
     >
-      <Box position="relative" onClick={openEditor}>
+      <Box position="relative" onClick={onContentClick}>
         <CardMedia
           component="div"
           sx={{
@@ -102,7 +104,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
           }}
         />
       </Box>
-      <CardContent sx={{ flex: 1 }} onClick={openEditor}>
+      <CardContent sx={{ flex: 1 }} onClick={onContentClick}>
         <Typography variant="h6">{title}</Typography>
         <Typography variant="body2" color="text.secondary">
           {description}
