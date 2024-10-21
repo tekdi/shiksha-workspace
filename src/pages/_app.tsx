@@ -4,7 +4,6 @@ import {
   useTheme,
 } from "@mui/material/styles";
 import "../styles/global.css";
-import "../../src/libs/sunbird-pdf-player/styles.css";
 
 import { AppProps } from "next/app";
 import customTheme from "@/styles/CustomTheme";
