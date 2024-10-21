@@ -45,6 +45,15 @@ const CreatePage = () => {
       onClick: () => router.push("/upload-editor"),
     },
     {
+      title: "Upload Large Videos(>50 MB)",
+      description: "You can upload content here.",
+      icon: <UploadIcon fontSize="large" />,
+      onClick: () => router.push({
+        pathname: '/upload-editor',
+        query: { editorforlargecontent: 'true' },
+      })
+    },
+    {
       title: "Question Set",
       description: "Create Questionsets",
       icon: <DescriptionIcon fontSize="large" />,
