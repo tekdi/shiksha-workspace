@@ -78,7 +78,7 @@ export const playerConfig = {
     primaryCategory: "Learning Resource",
     contentEncoding: "identity",
     artifactUrl:
-      "https://knowlg-public.s3-ap-south-1.amazonaws.com/content/assets/do_2141610327664312321258/sample.pdf",
+      "https://knowlg-public.s3-ap-south-1.amazonaws.com/content/assets/do_214168086108602368114/3-mb-sample-pdf-file.pdf",
     contentType: "Resource",
     trackable: {
       enabled: "No",

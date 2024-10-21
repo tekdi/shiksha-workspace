@@ -148,9 +148,7 @@ const ReviewContentSubmissions = () => {
               }}
             >
               <div style={{ height: "100%", width: "100%" }}>
-                Player will be loaded here! this is pdf player!
                 <Players playerConfig={playerConfig} />
-                {/* <SunbirdPdfPlayer playerConfig={playerConfig} /> */}
               </div>
             </Box>
           </Box>
