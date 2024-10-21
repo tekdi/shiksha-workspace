@@ -9,12 +9,16 @@ import { getLocalStoredUserData } from "@/services/LocalStorageService";
 
 const GenericEditor: React.FC = () => {
     const router = useRouter();
-    const { identifier } = router.query;
+    const { identifier, editorforlargecontent } = router.query;
     const [showLoader, setShowLoader] = useState(true);
     const buildNumber = '';
     const extContWhitelistedDomains = 'youtube.com,youtu.be';
     const videoMaxSize = "150";
     const defaultContentFileSize = "150";
+    let isLargeFileUpload = false;
+    if (editorforlargecontent) {
+        isLargeFileUpload = true;
+    }
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -94,6 +98,12 @@ const GenericEditor: React.FC = () => {
             }
             window['context'].user.id = getLocalStoredUserData() ?? "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
             window['context'].uid = getLocalStoredUserData() ?? "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
+
+            if (isLargeFileUpload || (_.get(data, 'contentDisposition') === 'online-only')) {
+                window.context['uploadInfo'] = {
+                    isLargeFileUpload: true
+                };
+            }
         }
     };
 
