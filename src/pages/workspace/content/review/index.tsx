@@ -19,6 +19,7 @@ import { playerConfig } from "../../../../components/players/PlayerConfig";
 import {
   pdfMetadata,
   videoMetadata,
+  quMLMetadata,
 } from "../../../../components/players/playerMetadata";
 import $ from "jquery";
 
@@ -44,7 +45,8 @@ const ReviewContentSubmissions = () => {
         if (identifier) {
           const data = await fetchContent(identifier);
           // playerConfig.metadata = videoMetadata;
-          playerConfig.metadata = pdfMetadata;
+          // playerConfig.metadata = pdfMetadata;
+          playerConfig.metadata = quMLMetadata;
           console.log(playerConfig);
           console.log("data ==>", data);
           setContentDetails(data);

@@ -12,7 +12,7 @@ const SunbirdQuMLPlayer = ({ playerConfig }: PlayerConfigProps) => {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             window.$ = window.jQuery = $;
-            window.questionListUrl = "https://staging.sunbirded.org/api/question/v2/list";
+            window.questionListUrl = "/action/question/v2/list";
         }
 
         const script = document.createElement("script");
@@ -24,7 +24,7 @@ const SunbirdQuMLPlayer = ({ playerConfig }: PlayerConfigProps) => {
         const link = document.createElement("link");
         link.rel = "stylesheet";
         link.href =
-            "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-quml-player-web-component@3.0.0/style.css";
+            "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-quml-player-web-component@3.0.0/styles.css";
         document.head.appendChild(link);
 
         const playerElement = SunbirdQuMLPlayerRef.current;
