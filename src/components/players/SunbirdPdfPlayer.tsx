@@ -13,14 +13,14 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
     // Dynamically load the Sunbird PDF Player script from CDN
     const script = document.createElement("script");
     script.src =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.0.0/sunbird-pdf-player.js";
+      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/sunbird-pdf-player.js";
     script.async = true;
     document.body.appendChild(script);
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.0.0/styles.css";
+      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
     document.head.appendChild(link);
 
     const playerElement = sunbirdPdfPlayerRef.current;
