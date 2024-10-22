@@ -15,10 +15,14 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpReviewTinyImage from "@mui/icons-material/LibraryBooks";
 import SearchBox from "../../../../components/SearchBox";
-import { getContent } from "../../../../services/ContentService";
+import { deleteContent, getContent } from "../../../../services/ContentService";
 import { timeAgo } from "@/utils/Helper";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
+import { MIME_TYPE } from "@/utils/app.config";
+import router from "next/router";
+import PaginationComponent from "@/components/PaginationComponent";
+import { LIMIT } from "@/utils/app.constant";
 
 const AllContentsPage = () => {
   const theme = useTheme<any>();
@@ -31,11 +35,13 @@ const AllContentsPage = () => {
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [loading, setLoading] = useState(false);
+  const [contentDeleted, setContentDeleted] = React.useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
+  const [totalCount, setTotalCount] = useState(0);
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    setPage(newPage - 1);
   };
 
   const handleChangeRowsPerPage = (
@@ -67,6 +73,19 @@ const AllContentsPage = () => {
     setSortBy(sortBy);
   };
 
+  const openEditor = (content: any) => {
+    const identifier = content?.identifier;
+    const mode = content?.mode;
+    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+      router.push({ pathname: `/editor`, query: { identifier, mode } });
+    } else if (
+      content?.mimeType &&
+      MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
+    ) {
+      router.push({ pathname: `/upload-editor`, query: { identifier } });
+    }
+  };
+
   useEffect(() => {
     const getContentList = async () => {
       try {
@@ -81,16 +100,34 @@ const AllContentsPage = () => {
           "FlagReview",
         ];
         const query = debouncedSearchTerm || "";
-        const response = await getContent(status, query);
-        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
+        const offset = page * LIMIT;
+        const response = await getContent(status, query, LIMIT, offset);
+        const contentList = (response?.content || []).concat(
+          response?.QuestionSet || []
+        );
         setContentList(contentList);
+        setTotalCount(response?.count);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     getContentList();
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, contentDeleted, page]);
+
+  const handleDeleteClick = async (content: any) => {
+    if (content?.identifier && content?.mimeType) {
+      try {
+        await deleteContent(content?.identifier, content?.mimeType);
+        console.log(`Deleted item with identifier - ${content?.identifier}`);
+        setTimeout(() => {
+          setContentDeleted((prev) => !prev);
+        }, 1000);
+      } catch (error) {
+        console.error("Failed to delete content:", error);
+      }
+    }
+  };
 
   const filteredData = useMemo(
     () =>
@@ -132,8 +169,12 @@ const AllContentsPage = () => {
                 <TableBody>
                   {contentList?.map((content, index) => (
                     <TableRow key={index}>
-                      <TableCell>
-                        <Box display="flex" alignItems="center">
+                      <TableCell onClick={() => openEditor(content)}>
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          sx={{ cursor: "pointer" }}
+                        >
                           {content?.appIcon ? (
                             <img src={content?.appIcon} height={"25px"} />
                           ) : (
@@ -156,7 +197,10 @@ const AllContentsPage = () => {
                       <TableCell>{content?.status}</TableCell>
                       <TableCell>
                         {content?.status === "Draft" && (
-                          <IconButton aria-label="delete">
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => handleDeleteClick(content)}
+                          >
                             <DeleteIcon />
                           </IconButton>
                         )}
@@ -165,19 +209,18 @@ const AllContentsPage = () => {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination
-                component="div"
-                count={contentList.length}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                rowsPerPageOptions={[10, 25, 50]}
-              />
             </>
           )
         ) : (
           <NoDataFound />
+        )}
+
+        {totalCount > LIMIT && (
+          <PaginationComponent
+            count={Math.ceil(totalCount / LIMIT)}
+            page={page}
+            onPageChange={handleChangePage}
+          />
         )}
       </Box>
     </Layout>

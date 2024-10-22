@@ -7,7 +7,8 @@ const remotes = (isServer) => {
   };
 };
 
-const PORTAL_BASE_URL = "https://staging.sunbirded.org";
+const PORTAL_BASE_URL = 'https://sunbird-editor.tekdinext.com'
+
 
 const routes = {
   API: {
@@ -20,6 +21,7 @@ const routes = {
       ASSET_IMAGE: "/assets/images/:path*",
     },
   },
+
 };
 
 /** @type {import('next').NextConfig} */
@@ -72,20 +74,8 @@ const nextConfig = {
         destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_PLUGINS}`, // Proxy to portal
       },
       {
-        source: routes.API.GENERAL.ASSET_PUBLIC,
-        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.ASSET_PUBLIC}`, // Proxy to portal
-      },
-      {
         source: routes.API.GENERAL.GENERIC_EDITOR,
-        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.GENERIC_EDITOR}`, // Proxy to portal
-      },
-      {
-        source: routes.API.GENERAL.CONTENT_EDITOR,
-        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.CONTENT_EDITOR}`, // Proxy to portal
-      },
-      {
-        source: routes.API.GENERAL.ASSET_IMAGE,
-        destination: `${PORTAL_BASE_URL}${routes.API.GENERAL.ASSET_IMAGE}`, // Proxy to portal
+        destination: `${PORTAL_BASE_URL}/:path*`, // Proxy to generic editor portal
       },
       {
         source: "/app/telemetry", // Match telemetry route
