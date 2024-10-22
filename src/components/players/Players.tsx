@@ -15,6 +15,13 @@ const SunbirdVideoPlayer = dynamic(
   }
 );
 
+const SunbirdQuMLPlayer = dynamic(
+  () => import("@/components/players/SunbirdQuMLPlayer"),
+  {
+    ssr: false,
+  }
+);
+
 interface PlayerProps {
   playerConfig: any;
 }
@@ -26,6 +33,8 @@ const Players = ({ playerConfig }: PlayerProps) => {
       return <SunbirdPdfPlayer playerConfig={playerConfig} />;
     case "video/mp4":
       return <SunbirdVideoPlayer playerConfig={playerConfig} />;
+    case "application/vnd.sunbird.questionset":
+      return <SunbirdQuMLPlayer playerConfig={playerConfig} />;
     default:
       return <div>Unsupported media type</div>;
   }
