@@ -2,14 +2,14 @@ import dynamic from "next/dynamic";
 import React from "react";
 
 const SunbirdPdfPlayer = dynamic(
-  () => import("@/components/SunbirdPdfPlayer"),
+  () => import("@/components/players/SunbirdPdfPlayer"),
   {
     ssr: false,
   }
 );
 
 const SunbirdVideoPlayer = dynamic(
-  () => import("@/components/SunbirdVideoPlayer"),
+  () => import("@/components/players/SunbirdVideoPlayer"),
   {
     ssr: false,
   }
