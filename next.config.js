@@ -15,10 +15,7 @@ const routes = {
     GENERAL: {
       CONTENT_PREVIEW: "/content/preview/:path*",
       CONTENT_PLUGINS: "/content-plugins/:path*",
-      ASSET_PUBLIC: "/assets/public/:path*",
       GENERIC_EDITOR: "/generic-editor/:path*",
-      CONTENT_EDITOR: "/editor/content/:path*",
-      ASSET_IMAGE: "/assets/images/:path*",
     },
   },
 
@@ -64,6 +61,10 @@ const nextConfig = {
       {
         source: "/assets/public/:path*", // Match any URL starting with /assets/public/
         destination: `${process.env.CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
+      },
+      {
+        source: "/workspace/content/assets/:path*", // Match any URL starting with /workspace/content/assets/
+        destination: "/assets/:path*", // Serve the assets from the public folder
       },
       {
         source: routes.API.GENERAL.CONTENT_PREVIEW,
