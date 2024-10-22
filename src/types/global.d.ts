@@ -10,5 +10,11 @@ declare namespace JSX {
     > & {
       "player-config"?: string;
     };
+    "sunbird-quml-player": React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLElement>,
+    HTMLElement
+  > & {
+    "player-config"?: string;
+  };
   }
 }
