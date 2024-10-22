@@ -140,6 +140,8 @@ const QuestionSetEditor: React.FC = () => {
 
       if (!document.getElementById("sunbird-editor-js")) {
         const script = document.createElement("script");
+        console.log("QUESTIONSET EDITOR");
+
         script.id = "sunbird-editor-js";
         script.src =
           "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.1/sunbird-questionset-editor.js";
@@ -180,10 +182,16 @@ const QuestionSetEditor: React.FC = () => {
           console.log("Editor event:", event);
           if (event.detail?.action === "backContent") {
             window.history.back();
+            window.addEventListener(
+              "popstate",
+              () => {
+                window.location.reload();
+              },
+              { once: true }
+            );
           }
         }
       );
-
       editorRef.current.appendChild(questionsetEditorElement);
       isAppendedRef.current = true;
     }
