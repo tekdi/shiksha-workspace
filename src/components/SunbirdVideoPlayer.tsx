@@ -1,29 +1,28 @@
-import "reflect-metadata";
-import React, { useEffect } from "react";
-import { useRef } from "react";
+import { Height } from "@mui/icons-material";
+import React, { useEffect, useRef } from "react";
 
 interface PlayerConfigProps {
   playerConfig: any;
 }
-
-const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
-  const sunbirdPdfPlayerRef = useRef<HTMLDivElement | null>(null);
+const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
+  const sunbirdVideoPlayerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Dynamically load the Sunbird PDF Player script from CDN
+
     const script = document.createElement("script");
     script.src =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/sunbird-pdf-player.js";
+      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/sunbird-video-player.js";
     script.async = true;
     document.body.appendChild(script);
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
+      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/styles.css";
     document.head.appendChild(link);
 
-    const playerElement = sunbirdPdfPlayerRef.current;
+    const playerElement = sunbirdVideoPlayerRef.current;
 
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
@@ -32,7 +31,7 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
       console.log("Telemetry Event", event.detail);
     };
 
-    // Ensure the script has loaded before adding event listeners
+    // Ensure the script ha s loaded before adding event listeners
     script.onload = () => {
       playerElement?.addEventListener("playerEvent", handlePlayerEvent);
       playerElement?.addEventListener("telemetryEvent", handleTelemetryEvent);
@@ -49,13 +48,13 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
   }, []);
 
   return (
-    <div className="player-grid">
-      <sunbird-pdf-player
+    <div className="player" style={{ height: "auto" }}>
+      <sunbird-video-player
         player-config={JSON.stringify(playerConfig)}
-        ref={sunbirdPdfPlayerRef}
-      ></sunbird-pdf-player>
+        ref={sunbirdVideoPlayerRef}
+      ></sunbird-video-player>
     </div>
   );
 };
 
-export default SunbirdPdfPlayer;
+export default SunbirdVideoPlayer;

@@ -16,7 +16,7 @@ import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import { publishContent, submitComment } from "@/services/ContentService";
 import Players from "@/components/Players";
 import { playerConfig } from "../../../../components/PlayerConfig";
-import SunbirdPdfPlayer from "@/components/SunbirdPdfPlayer";
+import $ from "jquery";
 
 const ReviewContentSubmissions = () => {
   const router = useRouter();
@@ -25,17 +25,24 @@ const ReviewContentSubmissions = () => {
 
   const [contentDetails, setContentDetails] = useState<any>(undefined);
   const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
+  const [mimeType, setMimeType] = useState("");
   const [confirmationActionType, setConfirmationActionType] = useState<
     "publish" | ""
   >("");
   const [openCommentPopup, setOpenCommentPopup] = useState<boolean>(false);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.$ = window.jQuery = $;
+    }
+
     const loadContent = async () => {
       try {
         if (identifier) {
           const data = await fetchContent(identifier);
-          // playerConfig.metadata = data;
+          playerConfig.metadata = data;
+          setMimeType(data.mimeType);
+          // setMimeType("application/pdf");
           console.log(playerConfig);
           console.log("data ==>", data);
           setContentDetails(data);
@@ -148,7 +155,7 @@ const ReviewContentSubmissions = () => {
               }}
             >
               <div style={{ height: "100%", width: "100%" }}>
-                <Players playerConfig={playerConfig} />
+                <Players playerConfig={playerConfig} mimeType={mimeType} />
               </div>
             </Box>
           </Box>
