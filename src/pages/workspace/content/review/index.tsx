@@ -149,7 +149,6 @@ const ReviewContentSubmissions = () => {
             <Box
               sx={{
                 border: "1px solid #000",
-                height: "500px",
                 marginBottom: "16px",
                 display: "flex",
                 alignItems: "center",
