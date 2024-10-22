@@ -17,10 +17,10 @@ const SunbirdVideoPlayer = dynamic(
 
 interface PlayerProps {
   playerConfig: any;
-  mimeType: string;
 }
 
-const Players = ({ playerConfig, mimeType }: PlayerProps) => {
+const Players = ({ playerConfig }: PlayerProps) => {
+  const mimeType = playerConfig.metadata.mimeType;
   switch (mimeType) {
     case "application/pdf":
       return <SunbirdPdfPlayer playerConfig={playerConfig} />;

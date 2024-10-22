@@ -14,8 +14,12 @@ import { useRouter } from "next/router";
 import ConfirmActionPopup from "../../../../components/ConfirmActionPopup";
 import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import { publishContent, submitComment } from "@/services/ContentService";
-import Players from "@/components/Players";
-import { playerConfig } from "../../../../components/PlayerConfig";
+import Players from "@/components/players/Players";
+import { playerConfig } from "../../../../components/players/PlayerConfig";
+import {
+  pdfMetadata,
+  videoMetadata,
+} from "../../../../components/players/playerMetadata";
 import $ from "jquery";
 
 const ReviewContentSubmissions = () => {
@@ -25,7 +29,6 @@ const ReviewContentSubmissions = () => {
 
   const [contentDetails, setContentDetails] = useState<any>(undefined);
   const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
-  const [mimeType, setMimeType] = useState("");
   const [confirmationActionType, setConfirmationActionType] = useState<
     "publish" | ""
   >("");
@@ -40,9 +43,8 @@ const ReviewContentSubmissions = () => {
       try {
         if (identifier) {
           const data = await fetchContent(identifier);
-          playerConfig.metadata = data;
-          setMimeType(data.mimeType);
-          // setMimeType("application/pdf");
+          // playerConfig.metadata = videoMetadata;
+          playerConfig.metadata = pdfMetadata;
           console.log(playerConfig);
           console.log("data ==>", data);
           setContentDetails(data);
@@ -155,7 +157,7 @@ const ReviewContentSubmissions = () => {
               }}
             >
               <div style={{ height: "100%", width: "100%" }}>
-                <Players playerConfig={playerConfig} mimeType={mimeType} />
+                <Players playerConfig={playerConfig} />
               </div>
             </Box>
           </Box>

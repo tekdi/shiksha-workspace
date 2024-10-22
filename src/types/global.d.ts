@@ -15,7 +15,7 @@ declare namespace JSX {
       React.HTMLAttributes<HTMLElement>,
       HTMLElement
     > & {
-      playerConfig?: string;
+      "player-config"?: string;
       onEvent?: any;
       onTelemetry?: any;
     };
