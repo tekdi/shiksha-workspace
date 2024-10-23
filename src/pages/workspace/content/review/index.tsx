@@ -20,6 +20,7 @@ import {
   pdfMetadata,
   videoMetadata,
   quMLMetadata,
+  epubMetadata,
 } from "../../../../components/players/playerMetadata";
 import $ from "jquery";
 
@@ -46,7 +47,8 @@ const ReviewContentSubmissions = () => {
           const data = await fetchContent(identifier);
           // playerConfig.metadata = videoMetadata;
           // playerConfig.metadata = pdfMetadata;
-          playerConfig.metadata = quMLMetadata;
+          // playerConfig.metadata = quMLMetadata;
+          playerConfig.metadata = epubMetadata;
           console.log(playerConfig);
           console.log("data ==>", data);
           setContentDetails(data);
