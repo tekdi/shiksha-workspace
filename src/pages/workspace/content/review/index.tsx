@@ -15,9 +15,15 @@ import { useRouter } from "next/router";
 import ConfirmActionPopup from "../../../../components/ConfirmActionPopup";
 import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import { publishContent, submitComment } from "@/services/ContentService";
-import Players from "@/components/Players";
-import { playerConfig } from "../../../../components/PlayerConfig";
-import SunbirdPdfPlayer from "@/components/SunbirdPdfPlayer";
+import Players from "@/components/players/Players";
+import { playerConfig } from "../../../../components/players/PlayerConfig";
+import {
+  pdfMetadata,
+  videoMetadata,
+  quMLMetadata,
+  epubMetadata,
+} from "../../../../components/players/playerMetadata";
+import $ from "jquery";
 
 const ReviewContentSubmissions = () => {
   const router = useRouter();
@@ -32,11 +38,18 @@ const ReviewContentSubmissions = () => {
   const [openCommentPopup, setOpenCommentPopup] = useState<boolean>(false);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.$ = window.jQuery = $;
+    }
+
     const loadContent = async () => {
       try {
         if (identifier) {
           const data = await fetchContent(identifier);
-          // playerConfig.metadata = data;
+          // playerConfig.metadata = videoMetadata;
+          // playerConfig.metadata = pdfMetadata;
+          // playerConfig.metadata = quMLMetadata;
+          playerConfig.metadata = epubMetadata;
           console.log(playerConfig);
           console.log("data ==>", data);
           setContentDetails(data);

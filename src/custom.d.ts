@@ -4,6 +4,7 @@ interface Window {
     redirectUrl: any;
     $: typeof import('jquery');
     jQuery: typeof import('jquery');
+    questionListUrl: string;
   }
   
   declare module '*.json' {
