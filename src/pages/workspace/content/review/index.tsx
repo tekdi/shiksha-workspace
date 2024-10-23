@@ -202,6 +202,8 @@ const ReviewContentSubmissions = () => {
                   border: "1px solid #ccc",
                   borderRadius: "16px",
                   backgroundColor: "white",
+                  height: "607px",
+                  overflow: "auto",
                 }}
               >
                 <Typography
