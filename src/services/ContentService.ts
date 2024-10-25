@@ -14,7 +14,7 @@ const userId = getLocalStoredUserData();
 const defaultReqBody = {
   request: {
     filters: {
-      createdBy: userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9",
+      createdBy: "5afb0c71-5e85-46f6-8780-3059cbb7bbf9",
       primaryCategory: [
         "Course Assessment",
         "eTextbook",
@@ -82,7 +82,7 @@ export const createQuestionSet = async () => {
         mimeType: "application/vnd.sunbird.questionset",
         primaryCategory: "Practice Question Set",
         code: "de1508e3-cd30-48ba-b4de-25a98d8cfdd2",
-        createdBy: userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9",
+        createdBy: "5afb0c71-5e85-46f6-8780-3059cbb7bbf9",
       },
     },
   };
@@ -129,7 +129,7 @@ export const createCourse = async (userId: any) => {
         code: uuidv4(), // Generate a unique ID for 'code'
         name: "Untitled Course",
         description: "Enter description for Course",
-        createdBy: userId || "bcb1050b-1967-4a04-8da2-df3ed9d282d4",
+        createdBy: userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9",
         createdFor: ["test-k12-channel"],
         mimeType: MIME_TYPE.COURSE_MIME_TYPE,
 
