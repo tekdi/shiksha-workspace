@@ -7,8 +7,7 @@ const remotes = (isServer) => {
   };
 };
 
-const PORTAL_BASE_URL = 'https://sunbird-editor.tekdinext.com'
-
+const PORTAL_BASE_URL = "https://sunbird-editor.tekdinext.com";
 
 const routes = {
   API: {
@@ -18,7 +17,6 @@ const routes = {
       GENERIC_EDITOR: "/generic-editor/:path*",
     },
   },
-
 };
 
 /** @type {import('next').NextConfig} */
@@ -126,6 +124,7 @@ const nextConfig = {
           "./Editor": "/src/pages/editor.tsx",
           "./UploadEditor": "/src/pages/upload-editor.tsx",
           "./Collection": "/src/pages/collection.tsx",
+          "./SunbirdPlayers": "/src/pages/sunbirdPlayers.tsx",
         },
       })
     );

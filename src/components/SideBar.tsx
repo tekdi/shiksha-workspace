@@ -66,9 +66,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             <IconButton onClick={goBack}>
               <ArrowBackIcon sx={{ color: theme.palette.warning["100"] }} />
             </IconButton>
-            <IconButton>
-              <MenuIcon sx={{ color: theme.palette.warning["100"] }} />
-            </IconButton>
           </ListItemIcon>
           <Typography
             variant="h2"

@@ -106,6 +106,7 @@ const ReviewContentSubmissions = () => {
       console.log("Comment submitted successfully:", response);
       // Add toaster success message here
       setOpenCommentPopup(false);
+      router.push({ pathname: `/workspace/content/submitted` });
     } catch (error) {
       console.error("Error submitting comment:", error);
       // Add toaster error message here

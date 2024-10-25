@@ -40,7 +40,7 @@ const CreatePage = () => {
 
   const fetchCollectionData = async () => {
     try {
-      const userId = "bcb1050b-1967-4a04-8da2-df3ed9d282d4";
+      const userId = "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
       const response = await createCourse(userId);
       console.log("Course set created successfully:", response);
 
@@ -69,10 +69,11 @@ const CreatePage = () => {
       title: "Upload Large Videos(>50 MB)",
       description: "You can upload content here.",
       icon: <UploadIcon fontSize="large" />,
-      onClick: () => router.push({
-        pathname: '/upload-editor',
-        query: { editorforlargecontent: 'true' },
-      })
+      onClick: () =>
+        router.push({
+          pathname: "/upload-editor",
+          query: { editorforlargecontent: "true" },
+        }),
     },
     {
       title: "Question Set",

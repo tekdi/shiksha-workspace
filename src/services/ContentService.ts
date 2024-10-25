@@ -8,13 +8,12 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 import { v4 as uuidv4 } from "uuid";
 
 const userId = getLocalStoredUserData();
-// const userInfo = JSON.parse(userData);
-// console.log(userInfo?.userId);
+console.log("userId ==>", userId);
 
 const defaultReqBody = {
   request: {
     filters: {
-      createdBy: userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9",
+      createdBy: userId,
       primaryCategory: [
         "Course Assessment",
         "eTextbook",
@@ -82,7 +81,7 @@ export const createQuestionSet = async () => {
         mimeType: "application/vnd.sunbird.questionset",
         primaryCategory: "Practice Question Set",
         code: "de1508e3-cd30-48ba-b4de-25a98d8cfdd2",
-        createdBy: userId || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9",
+        createdBy: userId,
       },
     },
   };
@@ -129,7 +128,7 @@ export const createCourse = async (userId: any) => {
         code: uuidv4(), // Generate a unique ID for 'code'
         name: "Untitled Course",
         description: "Enter description for Course",
-        createdBy: userId || "bcb1050b-1967-4a04-8da2-df3ed9d282d4",
+        createdBy: userId,
         createdFor: ["test-k12-channel"],
         mimeType: MIME_TYPE.COURSE_MIME_TYPE,
 
@@ -150,8 +149,16 @@ export const createCourse = async (userId: any) => {
 };
 
 export const publishContent = async (identifier: any) => {
+  const requestBody = {
+    request: {
+      content: {
+        lastPublishedBy: userId
+      }
+    }
+  };
+
   try {
-    const response = await axios.post("/api/publish", { identifier });
+    const response = await axios.post(`/action/content/v3/publish/${identifier}`, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error during publishing:", error);
@@ -160,11 +167,16 @@ export const publishContent = async (identifier: any) => {
 };
 
 export const submitComment = async (identifier: any, comment: any) => {
+  const requestBody = {
+    request: {
+      content: {
+        rejectComment: comment
+      }
+    }
+  };
+
   try {
-    const response = await axios.post("/api/submit-comment", {
-      identifier,
-      comment,
-    });
+    const response = await axios.post(`/action/content/v3/reject/${identifier}`, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error submitting comment:", error);
