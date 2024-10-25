@@ -4,6 +4,7 @@ import {
   telemetryResponse,
   creatLockResponse,
   genericEditorReviewFormResponse,
+  genericEditorRequestForChangesFormResponse
 } from "./mocked-response";
 const cookie = require("cookie");
 
@@ -46,6 +47,9 @@ export default async function handler(
     if (action === "review" && subType === "resource") {
       return res.status(200).json(genericEditorReviewFormResponse);
     }
+    if (action === "requestforchanges" && subType === "resource") {
+      return res.status(200).json(genericEditorRequestForChangesFormResponse);
+    }
   }
 
   if (pathString === "/action/lock/v1/create") {
@@ -63,6 +67,8 @@ export default async function handler(
   const targetUrl = `${BASE_URL}${pathString}${
     queryString ? `?${queryString}` : ""
   }`;
+
+  console.log('targetUrl =====>', targetUrl);
 
   try {
     const options: RequestInit = {
