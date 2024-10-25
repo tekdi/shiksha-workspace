@@ -18,7 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const menuItems = [
-  { text: "Create", key: "create" },
+  { text: "Create Content", key: "create" },
   { text: "All My Contents", key: "allContents" },
   { text: "Draft", key: "draft" },
   { text: "Submitted for Review", key: "submitted" },
