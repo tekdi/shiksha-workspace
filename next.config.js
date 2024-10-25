@@ -125,6 +125,7 @@ const nextConfig = {
           "./UploadEditor": "/src/pages/upload-editor.tsx",
           "./Collection": "/src/pages/collection.tsx",
           "./SunbirdPlayers": "/src/pages/sunbirdPlayers.tsx",
+          "./Review": "/src/pages/workspace/content/review/index.tsx",
         },
       })
     );
