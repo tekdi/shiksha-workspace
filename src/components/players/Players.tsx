@@ -33,7 +33,7 @@ interface PlayerProps {
 }
 
 const Players = ({ playerConfig }: PlayerProps) => {
-  const mimeType = playerConfig.metadata.mimeType;
+  const mimeType = playerConfig?.metadata?.mimeType;
   switch (mimeType) {
     case "application/pdf":
       return <SunbirdPdfPlayer playerConfig={playerConfig} />;

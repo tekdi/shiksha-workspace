@@ -36,7 +36,7 @@ interface PlayerProps {
 const SunbirdPlayers = ({ playerConfig }: PlayerProps) => {
   console.log("workspace playerconfig", playerConfig);
 
-  const mimeType = playerConfig.metadata.mimeType;
+  const mimeType = playerConfig?.metadata?.mimeType;
   switch (mimeType) {
     case "application/pdf":
       return <SunbirdPdfPlayer playerConfig={playerConfig} />;
