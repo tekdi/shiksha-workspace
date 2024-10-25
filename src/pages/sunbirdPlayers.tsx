@@ -29,11 +29,11 @@ const SunbirdQuMLPlayer = dynamic(
 );
 
 interface PlayerProps {
-  playerConfig: any;
+  "player-config": any;
   identifier: string;
 }
 
-const SunbirdPlayers = ({ playerConfig }: PlayerProps) => {
+const SunbirdPlayers = ({ "player-config": playerConfig }: PlayerProps) => {
   console.log("workspace playerconfig", playerConfig);
 
   const mimeType = playerConfig?.metadata?.mimeType;
