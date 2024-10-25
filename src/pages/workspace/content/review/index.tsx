@@ -49,9 +49,10 @@ const ReviewContentSubmissions = () => {
           // playerConfig.metadata = videoMetadata;
           // playerConfig.metadata = pdfMetadata;
           // playerConfig.metadata = quMLMetadata;
-          playerConfig.metadata = epubMetadata;
-          console.log(playerConfig);
+          // playerConfig.metadata = epubMetadata;
           console.log("data ==>", data);
+          playerConfig.metadata = data;
+          console.log('playerConfig ==>', playerConfig);
           setContentDetails(data);
         }
       } catch (error) {
