@@ -96,8 +96,8 @@ const GenericEditor: React.FC = () => {
             if (identifier) {
                 window['context'].contentId = identifier;
             }
-            window['context'].user.id = getLocalStoredUserData() ?? "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
-            window['context'].uid = getLocalStoredUserData() ?? "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
+            window['context'].user.id = getLocalStoredUserData();
+            window['context'].uid = getLocalStoredUserData();
 
             if (isLargeFileUpload || (_.get(data, 'contentDisposition') === 'online-only')) {
                 window.context['uploadInfo'] = {
