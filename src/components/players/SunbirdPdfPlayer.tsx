@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import React, { useEffect } from "react";
 import { useRef } from "react";
+import { handleExitEvent } from "@/utils/Helper";
 
 interface PlayerConfigProps {
   playerConfig: any;
@@ -28,14 +29,7 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
       if (event?.detail?.edata?.type === "EXIT") {
-        const previousPage = sessionStorage.getItem("previousPage");
-        if (previousPage) {
-          window.location.href = previousPage;
-          console.log("exited prev page");
-        } else {
-          window.history.go(-1);
-          console.log("exited history");
-        }
+        handleExitEvent();
       }
     };
     const handleTelemetryEvent = (event: any) => {

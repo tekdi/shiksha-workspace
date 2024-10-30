@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import React, { useEffect } from "react";
 import { useRef } from "react";
+import { handleExitEvent } from "@/utils/Helper";
 
 interface PlayerConfigProps {
   playerConfig: any;
@@ -28,12 +29,7 @@ const SunbirdEpubPlayer = ({ playerConfig }: PlayerConfigProps) => {
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
       if (event?.detail?.type === "EXIT") {
-        const previousPage = sessionStorage.getItem("previousPage");
-        if (previousPage) {
-          window.location.href = previousPage;
-        } else {
-          window.history.go(-1);
-        }
+        handleExitEvent();
       }
     };
     const handleTelemetryEvent = (event: any) => {

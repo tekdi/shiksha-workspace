@@ -1,3 +1,4 @@
+import { handleExitEvent } from "@/utils/Helper";
 import { Height } from "@mui/icons-material";
 import React, { useEffect, useRef } from "react";
 
@@ -27,12 +28,7 @@ const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
       if (event?.detail?.type === "EXIT") {
-        const previousPage = sessionStorage.getItem("previousPage");
-        if (previousPage) {
-          window.location.href = previousPage;
-        } else {
-          window.history.go(-1);
-        }
+        handleExitEvent();
       }
     };
 

@@ -39,3 +39,12 @@ export const debounce = <T extends (...args: any[]) => any>(
     }, wait);
   };
 };
+
+export const handleExitEvent = () => {
+  const previousPage = sessionStorage.getItem("previousPage");
+  if (previousPage) {
+    window.location.href = previousPage;
+  } else {
+    window.history.go(-1);
+  }
+};
