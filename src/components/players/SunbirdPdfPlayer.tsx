@@ -27,6 +27,16 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
+      if (event?.detail?.edata?.type === "EXIT") {
+        const previousPage = sessionStorage.getItem("previousPage");
+        if (previousPage) {
+          window.location.href = previousPage;
+          console.log("exited prev page");
+        } else {
+          window.history.go(-1);
+          console.log("exited history");
+        }
+      }
     };
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);

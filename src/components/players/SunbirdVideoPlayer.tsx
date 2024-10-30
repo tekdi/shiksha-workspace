@@ -26,7 +26,16 @@ const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
+      if (event?.detail?.type === "EXIT") {
+        const previousPage = sessionStorage.getItem("previousPage");
+        if (previousPage) {
+          window.location.href = previousPage;
+        } else {
+          window.history.go(-1);
+        }
+      }
     };
+
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
     };
