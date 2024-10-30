@@ -2,6 +2,7 @@ import "reflect-metadata";
 import React, { useEffect } from "react";
 import { useRef } from "react";
 import $ from "jquery";
+import { handleExitEvent } from "@/utils/Helper";
 interface PlayerConfigProps {
   playerConfig: any;
 }
@@ -31,6 +32,9 @@ const SunbirdQuMLPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
+      if (event?.detail?.edata?.type === "EXIT") {
+        handleExitEvent();
+      }
     };
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
