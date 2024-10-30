@@ -6,8 +6,7 @@ env:
   EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME_DEV }}
   AWS_REGION: ${{ secrets.AWS_REGION_NAME }}
 jobs:
-  build:
-
+  build_dev:
     name: Deployment
     runs-on: ubuntu-latest
     steps:
