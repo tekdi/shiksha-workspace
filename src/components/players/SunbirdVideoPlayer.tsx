@@ -1,3 +1,4 @@
+import { handleExitEvent } from "@/utils/Helper";
 import { Height } from "@mui/icons-material";
 import React, { useEffect, useRef } from "react";
 
@@ -26,7 +27,11 @@ const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
+      if (event?.detail?.type === "EXIT") {
+        handleExitEvent();
+      }
     };
+
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
     };

@@ -41,10 +41,10 @@ export const playerConfig = {
       { id: "org.sunbird.player.endpage", ver: 1.1, type: "plugin" },
     ],
     sideMenu: {
-      showShare: true,
+      showShare: false,
       showDownload: true,
       showExit: true,
-      showPrint: true,
+      showPrint: false,
       showReplay: true,
     },
   },
