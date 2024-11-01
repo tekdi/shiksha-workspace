@@ -16,7 +16,8 @@ import ConfirmActionPopup from "../../../../components/ConfirmActionPopup";
 import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import { publishContent, submitComment } from "@/services/ContentService";
 import Players from "@/components/players/Players";
-import { playerConfig } from "../../../../components/players/PlayerConfig";
+import V1Player from "@/components/V1-Player/V1Player";
+import { playerConfig, V1PlayerConfig } from "../../../../components/players/PlayerConfig";
 import {
   pdfMetadata,
   videoMetadata,
@@ -26,9 +27,10 @@ import {
 import $ from "jquery";
 
 const ReviewContentSubmissions = () => {
+  const interactiveMimeTypes = ["application/vnd.ekstep.h5p-archive", "application/vnd.ekstep.html-archive"];
+  const [isContentInteractiveType, setIsContentInteractiveType] = useState(false);
   const router = useRouter();
   const { identifier } = router.query;
-  // const identifier = "do_2141610327664312321258";
 
   const [contentDetails, setContentDetails] = useState<any>(undefined);
   const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
@@ -51,8 +53,14 @@ const ReviewContentSubmissions = () => {
           // playerConfig.metadata = quMLMetadata;
           // playerConfig.metadata = epubMetadata;
           console.log("data ==>", data);
-          playerConfig.metadata = data;
-          console.log('playerConfig ==>', playerConfig);
+          if (interactiveMimeTypes.includes(data?.mimeType)) {
+            V1PlayerConfig.metadata = data;
+            V1PlayerConfig.context.contentId = data.identifier
+            setIsContentInteractiveType(true);
+          } else {
+            setIsContentInteractiveType(false);
+            playerConfig.metadata = data;
+          }
           setContentDetails(data);
         }
       } catch (error) {
@@ -193,7 +201,11 @@ const ReviewContentSubmissions = () => {
                   }}
                 >
                   <div style={{ height: "100%", width: "100%" }}>
-                    <Players playerConfig={playerConfig} />
+                  {isContentInteractiveType ? (
+                      <V1Player playerConfig={V1PlayerConfig} />
+                    ) : (
+                      <Players playerConfig={playerConfig} />
+                    )}
                   </div>
                 </Box>
               </Box>
