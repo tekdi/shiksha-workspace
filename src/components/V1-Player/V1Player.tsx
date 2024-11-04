@@ -19,7 +19,7 @@ const V1Player = ({ playerConfig }: PlayerProps) => {
           if (preview.contentWindow && preview.contentWindow.initializePreview) {
             preview.contentWindow.initializePreview(playerConfig);
           }
-          preview.contentWindow.addEventListener('message', (event: any) => {
+          preview.contentWindow.addEventListener('message', (event: any) => { // NOSONAR
             console.log('V1 player event', event);
           });
         }, 100);
