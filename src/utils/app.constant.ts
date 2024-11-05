@@ -8,4 +8,7 @@ export enum ContentType {
   QUESTION_SET = "QuestionSet",
 }
 
+export const SortOptions = ["Modified On", "Created On"];
+
 export const LIMIT = 6;
+export const ChannelID = "test-k12-channel";

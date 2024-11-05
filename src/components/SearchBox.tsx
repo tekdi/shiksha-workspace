@@ -1,30 +1,69 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
+  Checkbox,
+  FormControl,
   Grid,
   IconButton,
   InputBase,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
   Paper,
+  Select,
   useTheme,
+  SelectChangeEvent,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { debounce } from "@/utils/Helper";
+import { getPrimaryCategory } from "@/services/ContentService";
+import { SortOptions } from "@/utils/app.constant";
 
 export interface SearchBarProps {
   onSearch: (value: string) => void;
   value?: string;
   onClear?: () => void;
   placeholder: string;
+  onFilterChange?: (selectedFilters: string[]) => void;
+  onSortChange?: (sortBy: string) => void;
 }
+
+const sortOptions = SortOptions;
 
 const SearchBox: React.FC<SearchBarProps> = ({
   onSearch,
   value = "",
   placeholder = "Search...",
+  onFilterChange,
+  onSortChange,
 }) => {
   const theme = useTheme<any>();
   const [searchTerm, setSearchTerm] = useState(value);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<string>("");
+  const [primaryCategory, setPrimaryCategory] = useState<string[]>();
+
+  useEffect(() => {
+    const PrimaryCategoryData = async () => {
+      const response = await getPrimaryCategory();
+      const collectionPrimaryCategories =
+        response?.channel?.collectionPrimaryCategories;
+      const contentPrimaryCategories =
+        response?.channel?.contentPrimaryCategories;
+
+      const PrimaryCategory = [
+        ...collectionPrimaryCategories,
+        ...contentPrimaryCategories,
+      ];
+      setPrimaryCategory(PrimaryCategory);
+      localStorage.setItem("PrimaryCategory", JSON.stringify(PrimaryCategory));
+    };
+    PrimaryCategoryData();
+  }, []);
+
+  const filterOptions = primaryCategory;
 
   const handleSearchClear = () => {
     onSearch("");
@@ -44,9 +83,21 @@ const SearchBox: React.FC<SearchBarProps> = ({
     handleSearch(searchTerm);
   };
 
+  const handleFilterChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    setSelectedFilters(value);
+    onFilterChange && onFilterChange(value);
+  };
+
+  const handleSortChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value as string;
+    setSortBy(value);
+    onSortChange && onSortChange(value);
+  };
+
   return (
-    <Grid container>
-      <Grid item xs={12} md={6}>
+    <Grid container gap={"1rem"}>
+      <Grid item xs={12} md={5}>
         <Box sx={{ mt: 2, px: theme.spacing(2.5) }}>
           <Paper
             component="form"
@@ -75,6 +126,43 @@ const SearchBox: React.FC<SearchBarProps> = ({
             </IconButton>
           </Paper>
         </Box>
+      </Grid>
+
+      <Grid item xs={12} md={3}>
+        <FormControl sx={{ width: "100%", mt: 2 }}>
+          <InputLabel>Filter By</InputLabel>
+          <Select
+            multiple
+            value={selectedFilters}
+            onChange={handleFilterChange}
+            input={<OutlinedInput label="Filter By" />}
+            renderValue={(selected) => (selected as string[]).join(", ")}
+          >
+            {filterOptions?.map((option) => (
+              <MenuItem key={option} value={option}>
+                <Checkbox checked={selectedFilters.indexOf(option) > -1} />
+                <ListItemText primary={option} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={12} md={3}>
+        <FormControl sx={{ width: "100%", mt: 2 }}>
+          <InputLabel>Sort By</InputLabel>
+          <Select
+            value={sortBy}
+            onChange={handleSortChange}
+            input={<OutlinedInput label="Sort By" />}
+          >
+            {sortOptions?.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Grid>
     </Grid>
   );
