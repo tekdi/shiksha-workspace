@@ -25,9 +25,9 @@ import {
   epubMetadata,
 } from "../../../../components/players/playerMetadata";
 import $ from "jquery";
+import { MIME_TYPE } from "@/utils/app.config";
 
 const ReviewContentSubmissions = () => {
-  const interactiveMimeTypes = ["application/vnd.ekstep.h5p-archive", "application/vnd.ekstep.html-archive"];
   const [isContentInteractiveType, setIsContentInteractiveType] = useState(false);
   const router = useRouter();
   const { identifier } = router.query;
@@ -53,7 +53,7 @@ const ReviewContentSubmissions = () => {
           // playerConfig.metadata = quMLMetadata;
           // playerConfig.metadata = epubMetadata;
           console.log("data ==>", data);
-          if (interactiveMimeTypes.includes(data?.mimeType)) {
+          if (MIME_TYPE.INTERACTIVE_MIME_TYPE.includes(data?.mimeType)) {
             V1PlayerConfig.metadata = data;
             V1PlayerConfig.context.contentId = data.identifier
             setIsContentInteractiveType(true);
