@@ -14,4 +14,5 @@ export const MIME_TYPE = {
   ],
   QUESTIONSET_MIME_TYPE: "application/vnd.sunbird.questionset",
   COURSE_MIME_TYPE: "application/vnd.ekstep.content-collection",
+  INTERACTIVE_MIME_TYPE: ["application/vnd.ekstep.h5p-archive", "application/vnd.ekstep.html-archive"]
 };
