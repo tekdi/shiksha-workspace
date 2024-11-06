@@ -28,7 +28,7 @@ const SunbirdEpubPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
-      if (event?.detail?.type === "EXIT") {
+      if (event?.detail?.edata?.type === "EXIT") {
         handleExitEvent();
       }
     };
