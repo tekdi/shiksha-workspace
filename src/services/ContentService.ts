@@ -2,7 +2,7 @@ import { stringify } from "json5";
 import { getLocalStoredUserData } from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE } from "@/utils/app.config";
+import { MIME_TYPE, TENANTID } from "@/utils/app.config";
 const authToken = process.env.NEXT_PUBLIC_AUTH_API_TOKEN;
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 import { v4 as uuidv4 } from "uuid";
@@ -111,7 +111,7 @@ export const createQuestionSet = async () => {
         name: "Untitled QuestionSet",
         mimeType: "application/vnd.sunbird.questionset",
         primaryCategory: "Practice Question Set",
-        code: "de1508e3-cd30-48ba-b4de-25a98d8cfdd2",
+        code: uuidv4(),
         createdBy: userId,
       },
     },
@@ -121,7 +121,7 @@ export const createQuestionSet = async () => {
     const response = await axios.post(apiURL, reqBody, {
       headers: {
         "Content-Type": "application/json",
-        tenantId: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+        tenantId: TENANTID.ID,
       },
     });
     return response?.data;
