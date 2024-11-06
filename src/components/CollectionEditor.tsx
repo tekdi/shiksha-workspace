@@ -190,6 +190,24 @@ const CollectionEditor: React.FC = () => {
           "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
         document.head.appendChild(pdfLink);
       }
+
+      if (!document.getElementById("sunbird-video-player.js")) {
+        const videoScript = document.createElement("script");
+        videoScript.id = "sunbird-video-player.js";
+        videoScript.src =
+          "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/sunbird-video-player.js";
+        videoScript.async = true;
+        document.body.appendChild(videoScript);
+      }
+
+      if (!document.getElementById("sunbird-video-player-css")) {
+        const videoLink = document.createElement("link");
+        videoLink.id = "sunbird-video-player-css";
+        videoLink.rel = "stylesheet";
+        videoLink.href =
+          "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/styles.css";
+        document.head.appendChild(videoLink);
+      }
     };
 
     loadAssets();

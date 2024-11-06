@@ -15,3 +15,7 @@ export const MIME_TYPE = {
   QUESTIONSET_MIME_TYPE: "application/vnd.sunbird.questionset",
   COURSE_MIME_TYPE: "application/vnd.ekstep.content-collection",
 };
+
+export const TENANTID = {
+  ID: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+};
