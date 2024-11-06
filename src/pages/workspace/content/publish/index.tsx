@@ -12,7 +12,7 @@ import { LIMIT } from "@/utils/app.constant";
 const PublishPage = () => {
   const [selectedKey, setSelectedKey] = useState("publish");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState<string[]>();
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ const PublishPage = () => {
     setSearchTerm(search.toLowerCase());
   };
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: string[]) => {
     setFilter(filter);
   };
 
@@ -75,7 +75,19 @@ const PublishPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const offset = page * LIMIT;
-        const response = await getContent(["Live"], query, LIMIT, offset);
+        const primaryCategory = filter?.length ? filter : [];
+        const order = sortBy === "Modified On" ? "desc" : "asc";
+        const sort_by = {
+          lastUpdatedOn: order,
+        };
+        const response = await getContent(
+          ["Live"],
+          query,
+          LIMIT,
+          offset,
+          primaryCategory,
+          sort_by
+        );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
@@ -87,7 +99,7 @@ const PublishPage = () => {
       }
     };
     getPublishContentList();
-  }, [debouncedSearchTerm, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -99,8 +111,8 @@ const PublishPage = () => {
           <SearchBox
             placeholder="Search by title..."
             onSearch={handleSearch}
-            // onFilterChange={handleFilterChange}
-            // onSortChange={handleSortChange}
+            onFilterChange={handleFilterChange}
+            onSortChange={handleSortChange}
           />
         </Box>
 

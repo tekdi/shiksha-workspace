@@ -1,34 +1,44 @@
 import { stringify } from "json5";
 import { getLocalStoredUserData } from "./LocalStorageService";
-import { delApi, deleteApi, post } from "./RestClient";
+import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE } from "@/utils/app.config";
+import { MIME_TYPE, TENANTID } from "@/utils/app.config";
 const authToken = process.env.NEXT_PUBLIC_AUTH_API_TOKEN;
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 import { v4 as uuidv4 } from "uuid";
+import { ChannelID } from "@/utils/app.constant";
 
 const userId = getLocalStoredUserData();
 console.log("userId ==>", userId);
+
+export const getPrimaryCategory = async () => {
+  const apiURL = `/api/channel/v1/read/${ChannelID}`;
+  try {
+    const response = await get(apiURL);
+    return response?.data?.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// const PrimaryCategoryData = async () => {
+//   const response = await getPrimaryCategory();
+//   const collectionPrimaryCategories =
+//     response?.channel?.collectionPrimaryCategories;
+//   const contentPrimaryCategories = response?.channel?.contentPrimaryCategories;
+
+//   const PrimaryCategory = [
+//     ...collectionPrimaryCategories,
+//     ...contentPrimaryCategories,
+//   ];
+//   return PrimaryCategory;
+// };
 
 const defaultReqBody = {
   request: {
     filters: {
       createdBy: userId,
-      primaryCategory: [
-        "Course Assessment",
-        "eTextbook",
-        "Explanation Content",
-        "Learning Resource",
-        "Practice Question Set",
-        "Teacher Resource",
-        "Exam Question",
-        "Content Playlist",
-        "Course",
-        "Digital Textbook",
-        "Question paper",
-      ],
     },
-    // query: "",
     sort_by: {
       lastUpdatedOn: "desc",
     },
@@ -39,8 +49,18 @@ const getReqBodyWithStatus = (
   status: string[],
   query: string,
   limit: number,
-  offset: number
+  offset: number,
+  primaryCategory: any,
+  sort_by: any
 ) => {
+  if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+    var PrimaryCategory = JSON.parse(
+      localStorage.getItem("PrimaryCategory") || ""
+    );
+  }
+  primaryCategory =
+    primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;
+
   return {
     ...defaultReqBody,
     request: {
@@ -48,10 +68,12 @@ const getReqBodyWithStatus = (
       filters: {
         ...defaultReqBody.request.filters,
         status,
+        primaryCategory,
       },
       query,
       limit,
       offset,
+      sort_by,
     },
   };
 };
@@ -60,11 +82,20 @@ export const getContent = async (
   status: string[],
   query: string,
   limit: number,
-  offset: number
+  offset: number,
+  primaryCategory: string[],
+  sort_by: any
 ) => {
   const apiURL = "/action/composite/v3/search";
   try {
-    const reqBody = getReqBodyWithStatus(status, query, limit, offset);
+    const reqBody = getReqBodyWithStatus(
+      status,
+      query,
+      limit,
+      offset,
+      primaryCategory,
+      sort_by
+    );
     const response = await post(apiURL, reqBody);
     return response?.data?.result;
   } catch (error) {
@@ -80,7 +111,7 @@ export const createQuestionSet = async () => {
         name: "Untitled QuestionSet",
         mimeType: "application/vnd.sunbird.questionset",
         primaryCategory: "Practice Question Set",
-        code: "de1508e3-cd30-48ba-b4de-25a98d8cfdd2",
+        code: uuidv4(),
         createdBy: userId,
       },
     },
@@ -90,7 +121,7 @@ export const createQuestionSet = async () => {
     const response = await axios.post(apiURL, reqBody, {
       headers: {
         "Content-Type": "application/json",
-        tenantId: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+        tenantId: TENANTID.ID,
       },
     });
     return response?.data;
@@ -152,13 +183,16 @@ export const publishContent = async (identifier: any) => {
   const requestBody = {
     request: {
       content: {
-        lastPublishedBy: userId
-      }
-    }
+        lastPublishedBy: userId,
+      },
+    },
   };
 
   try {
-    const response = await axios.post(`/action/content/v3/publish/${identifier}`, requestBody);
+    const response = await axios.post(
+      `/action/content/v3/publish/${identifier}`,
+      requestBody
+    );
     return response.data;
   } catch (error) {
     console.error("Error during publishing:", error);
@@ -170,13 +204,16 @@ export const submitComment = async (identifier: any, comment: any) => {
   const requestBody = {
     request: {
       content: {
-        rejectComment: comment
-      }
-    }
+        rejectComment: comment,
+      },
+    },
   };
 
   try {
-    const response = await axios.post(`/action/content/v3/reject/${identifier}`, requestBody);
+    const response = await axios.post(
+      `/action/content/v3/reject/${identifier}`,
+      requestBody
+    );
     return response.data;
   } catch (error) {
     console.error("Error submitting comment:", error);

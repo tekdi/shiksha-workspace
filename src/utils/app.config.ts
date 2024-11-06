@@ -16,3 +16,7 @@ export const MIME_TYPE = {
   COURSE_MIME_TYPE: "application/vnd.ekstep.content-collection",
   INTERACTIVE_MIME_TYPE: ["application/vnd.ekstep.h5p-archive", "application/vnd.ekstep.html-archive"]
 };
+
+export const TENANTID = {
+  ID: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+};

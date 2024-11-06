@@ -4,11 +4,9 @@ import {
   telemetryResponse,
   creatLockResponse,
   genericEditorReviewFormResponse,
-  genericEditorRequestForChangesFormResponse
+  genericEditorRequestForChangesFormResponse,
 } from "./mocked-response";
 const cookie = require("cookie");
-
-let storedToken: string | null = null;
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,9 +20,10 @@ export default async function handler(
   const API_KEY = process.env.AUTH_API_TOKEN as string;
 
   const cookies = cookie.parse(req.headers.cookie || "");
-  const tokenFromCookie = cookies.authToken;
 
-  const token = API_KEY;
+  console.log(cookies.authToken);
+
+  const token = cookies.authToken || API_KEY;
 
   if (!token) {
     console.error("No valid token available");
@@ -34,6 +33,7 @@ export default async function handler(
   console.log("Using token:", token);
 
   let pathString = Array.isArray(path) ? path.join("/") : (path as string);
+
   // Handle mocked responses
   if (pathString === "/action/data/v3/telemetry") {
     return res.status(200).json(telemetryResponse);
@@ -68,7 +68,7 @@ export default async function handler(
     queryString ? `?${queryString}` : ""
   }`;
 
-  console.log('targetUrl =====>', targetUrl);
+  console.log("targetUrl =====>", targetUrl);
 
   try {
     const options: RequestInit = {

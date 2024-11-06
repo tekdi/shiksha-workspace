@@ -14,7 +14,7 @@ const DraftPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
@@ -48,7 +48,7 @@ const DraftPage = () => {
     setSearchTerm(search.toLowerCase());
   };
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: string[]) => {
     setFilter(filter);
   };
 
@@ -82,11 +82,18 @@ const DraftPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const offset = page * LIMIT;
+        const primaryCategory = filter.length ? filter : [];
+        const order = sortBy === "Modified On" ? "desc" : "asc";
+        const sort_by = {
+          lastUpdatedOn: order,
+        };
         const response = await getContent(
           ["Draft", "FlagDraft"],
           query,
           LIMIT,
-          offset
+          offset,
+          primaryCategory,
+          sort_by
         );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
@@ -99,7 +106,7 @@ const DraftPage = () => {
       }
     };
     getDraftContentList();
-  }, [debouncedSearchTerm, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
@@ -111,8 +118,8 @@ const DraftPage = () => {
           <SearchBox
             placeholder="Search by title..."
             onSearch={handleSearch}
-            // onFilterChange={handleFilterChange}
-            // onSortChange={handleSortChange}
+            onFilterChange={handleFilterChange}
+            onSortChange={handleSortChange}
           />
         </Box>
 

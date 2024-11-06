@@ -31,7 +31,7 @@ const AllContentsPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("updated");
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [loading, setLoading] = useState(false);
@@ -65,7 +65,7 @@ const AllContentsPage = () => {
     setSearchTerm(term);
   };
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: string[]) => {
     setFilter(filter);
   };
 
@@ -100,8 +100,20 @@ const AllContentsPage = () => {
           "FlagReview",
         ];
         const query = debouncedSearchTerm || "";
+        const primaryCategory = filter.length ? filter : [];
+        const order = sortBy === "Modified On" ? "desc" : "asc";
+        const sort_by = {
+          lastUpdatedOn: order,
+        };
         const offset = page * LIMIT;
-        const response = await getContent(status, query, LIMIT, offset);
+        const response = await getContent(
+          status,
+          query,
+          LIMIT,
+          offset,
+          primaryCategory,
+          sort_by
+        );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
@@ -113,7 +125,7 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
 
   const handleDeleteClick = async (content: any) => {
     if (content?.identifier && content?.mimeType) {
@@ -149,7 +161,12 @@ const AllContentsPage = () => {
         <Typography mb={2}>Here you see all your content.</Typography>
 
         <Box mb={3}>
-          <SearchBox placeholder="Search by title..." onSearch={handleSearch} />
+          <SearchBox
+            placeholder="Search by title..."
+            onSearch={handleSearch}
+            onFilterChange={handleFilterChange}
+            onSortChange={handleSortChange}
+          />
         </Box>
         {loading ? (
           <Loader showBackdrop={true} loadingText={"Loading"} />
