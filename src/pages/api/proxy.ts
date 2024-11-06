@@ -6,7 +6,7 @@ import {
   genericEditorReviewFormResponse,
   genericEditorRequestForChangesFormResponse,
 } from "./mocked-response";
-import cookie from "cookie";
+const cookie = require("cookie");
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +21,7 @@ export default async function handler(
 
   const cookies = cookie.parse(req.headers.cookie || "");
 
-  console.log(cookies);
+  console.log(cookies.authToken);
 
   const token = cookies.authToken || API_KEY;
 
