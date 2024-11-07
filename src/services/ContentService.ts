@@ -55,7 +55,7 @@ const getReqBodyWithStatus = (
 ) => {
   if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
     var PrimaryCategory = JSON.parse(
-      localStorage.getItem("PrimaryCategory") || ""
+      localStorage.getItem("PrimaryCategory") as string
     );
   }
   primaryCategory =
