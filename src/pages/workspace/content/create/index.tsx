@@ -7,20 +7,24 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import UploadIcon from "@mui/icons-material/Upload";
 import { useRouter } from "next/router";
 import { createCourse, createQuestionSet } from "@/services/ContentService";
-import axios from "axios";
 
 const CreatePage = () => {
   const theme = useTheme<any>();
   const [selectedKey, setSelectedKey] = useState("create");
   const router = useRouter();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    if (token && userId) {
+      document.cookie = `authToken=${token}; path=/; secure; SameSite=Strict`;
+      document.cookie = `userId=${userId}; path=/; secure; SameSite=Strict`;
+    }
+  }, []);
+
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        document.cookie = `authToken=${token}; path=/; secure; SameSite=Strict`;
-      }
-
       const response = await createQuestionSet();
       console.log("Question set created successfully:", response);
 
