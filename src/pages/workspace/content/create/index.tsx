@@ -97,7 +97,7 @@ const CreatePage = () => {
           fontSize={"16px"}
           sx={{ color: theme.palette.warning["100"] }}
         >
-          Here you can create new content.
+          Here you can create new content....
         </Typography>
       </Box>
 
