@@ -2,6 +2,7 @@ import multer, { MulterError } from 'multer';
 import FormData from 'form-data';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
+const cookie = require("cookie");
 
 const upload = multer({
   limits: {
@@ -46,6 +47,7 @@ const uploadPromise = (req: NextApiRequest, res: NextApiResponse) => {
 
 // Main handler function for Next.js API route
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+
   // Handle only POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -79,10 +81,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
 
+      const cookies = cookie.parse(req.headers.cookie || "");
+
       // Set your base URL
       const baseURL = process.env.BASE_URL as string;
-      const authApiToken = process.env.AUTH_API_TOKEN as string;
+      const authApiToken = cookies?.authToken || process.env.AUTH_API_TOKEN;
       const tenantId = process.env.TENANT_ID as string;
+
+      console.log("Using token for file upload:", authApiToken);
 
       // Extract the relative URL from the incoming request (after /action)
       const relativePath = req.url?.replace('/api/fileUpload', '') ?? '';
