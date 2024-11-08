@@ -1,17 +1,35 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { v4 as uuidv4 } from "uuid";
 
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
 
+  const [fullName, setFullName] = useState("Anonymous");
+  const [userId, setUserId] = useState("ef99949b-7f3a-4a5f-806a-e67e683e38f3");
+  const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
+
+  const [firstName, lastName] = fullName.split(" ");
+
+  useEffect(() => {
+    const storedFullName = localStorage.getItem("name") || "Anonymous";
+    const storedUserId =
+      localStorage.getItem("userId") || "ef99949b-7f3a-4a5f-806a-e67e683e38f3";
+    setFullName(storedFullName);
+    setUserId(storedUserId);
+
+    const generatedDeviceId = uuidv4();
+    setDeviceId(generatedDeviceId);
+  }, []);
+
   const editorConfig = {
     context: {
       user: {
-        id: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
-        fullName: "Rahul",
-        firstName: "Tekdi",
-        lastName: "Rahul Tekdi",
+        id: userId,
+        fullName: fullName,
+        firstName: firstName || "Anonymous",
+        lastName: lastName || "Anonymous",
         orgIds: ["01309282781705830427"],
       },
       identifier: identifier,
@@ -19,7 +37,7 @@ const CollectionEditor: React.FC = () => {
       framework: "test_k12_framework",
       authToken: " ",
       sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",
-      did: "7e85b4967aebd6704ba1f604f20056b6",
+      did: deviceId,
       uid: "bf020396-0d7b-436f-ae9f-869c6780fc45",
       additionalCategories: [
         {
