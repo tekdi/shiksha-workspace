@@ -1,25 +1,43 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { v4 as uuidv4 } from "uuid";
 
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier, mode } = router.query;
+
+  const [fullName, setFullName] = useState("Anonymous");
+  const [userId, setUserId] = useState("ef99949b-7f3a-4a5f-806a-e67e683e38f3");
+  const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
+
+  const [firstName, lastName] = fullName.split(" ");
+
+  useEffect(() => {
+    const storedFullName = localStorage.getItem("name") || "Anonymous";
+    const storedUserId =
+      localStorage.getItem("userId") || "ef99949b-7f3a-4a5f-806a-e67e683e38f3";
+    setFullName(storedFullName);
+    setUserId(storedUserId);
+
+    const generatedDeviceId = uuidv4();
+    setDeviceId(generatedDeviceId);
+  }, []);
 
   const questionSetEditorConfig = {
     context: {
       programId: "",
       contributionOrgId: "",
       user: {
-        id: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
-        fullName: "Rahul Tekdi",
-        firstName: "Rahul ",
-        lastName: "Tekdi",
+        id: userId,
+        fullName: fullName,
+        firstName: firstName || "Anonymous",
+        lastName: lastName || "Anonymous",
         orgIds: ["test-k12-channel"],
       },
       identifier: identifier,
       authToken: " ",
       sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",
-      did: "7e85b4967aebd6704ba1f604f20056b6",
+      did: deviceId,
       uid: "bf020396-0d7b-436f-ae9f-869c6780fc45",
       channel: "test-k12-channel",
       pdata: {
@@ -140,8 +158,6 @@ const QuestionSetEditor: React.FC = () => {
 
       if (!document.getElementById("sunbird-editor-js")) {
         const script = document.createElement("script");
-        console.log("QUESTIONSET EDITOR");
-
         script.id = "sunbird-editor-js";
         script.src =
           "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.1/sunbird-questionset-editor.js";
@@ -164,7 +180,6 @@ const QuestionSetEditor: React.FC = () => {
     };
   }, []);
 
-  // Initialize the editor only after assets are loaded
   useEffect(() => {
     if (assetsLoaded && editorRef.current && !isAppendedRef.current) {
       const questionsetEditorElement = document.createElement(

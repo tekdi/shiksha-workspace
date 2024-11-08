@@ -44,7 +44,9 @@ const CreatePage = () => {
 
   const fetchCollectionData = async () => {
     try {
-      const userId = "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
+      const userId =
+        localStorage.getItem("userId") ||
+        "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
       const response = await createCourse(userId);
       console.log("Course set created successfully:", response);
 
