@@ -84,8 +84,11 @@ export default async function handler(
         : {}),
     };
 
+    console.log("options =====>", options);
     const response = await fetch(targetUrl, options);
+    console.log("response =====>", response);
     const data = await response.json();
+    console.log("data =====>", data);
     res.status(response.status).json(data);
   } catch (error: any) {
     console.error("Error in proxy:", error.message);
