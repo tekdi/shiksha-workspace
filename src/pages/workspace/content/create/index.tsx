@@ -120,7 +120,7 @@ const CreatePage = () => {
         >
 
           Create, organize, and manage all types of content in one place.
-          Whether it's courses, assessments, or any other type of content.
+          Whether it&apos;s courses, assessments, or any other type of content.
 
           Here you can create new content....
 
