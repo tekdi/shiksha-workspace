@@ -10,6 +10,9 @@ import { createCourse, createQuestionSet } from "@/services/ContentService";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
+import largeVideoIcon from '../../../../../public/150+.png';
+import Image from "next/image";
+import WorkspaceText from '../../../../components/WorkspaceText'
 
 const CreatePage = () => {
   const theme = useTheme();
@@ -90,7 +93,7 @@ const CreatePage = () => {
     {
       title: "New Large Content",
       description: "Videos and documents larger than 150 MB",
-      icon: <VideoLibraryOutlinedIcon fontSize="large" />,
+      icon: <Image src={largeVideoIcon} alt="large-video" height={35} width={70} />,
       onClick: () =>
         router.push({
           pathname: "/upload-editor",
@@ -101,31 +104,7 @@ const CreatePage = () => {
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
-      <Box p={3} display={"flex"} flexDirection={"row"}>
-        <Typography
-          variant="h1"
-          sx={{
-            color: theme.palette.text.primary,
-            marginRight: "10px",
-          }}
-        >
-          Workspace
-        </Typography>
-
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          width={500}
-          fontSize={15}
-        >
-
-          Create, organize, and manage all types of content in one place.
-          Whether it&apos;s courses, assessments, or any other type of content.
-
-          Here you can create new content....
-
-        </Typography>
-      </Box>
+      <WorkspaceText />
 
       {/* Outer box for "Create new content" heading and cards */}
       <Box
@@ -137,13 +116,13 @@ const CreatePage = () => {
         }}
         m={3} // Margin around the box for spacing
       >
-        <Typography variant="h4" sx={{ mb: 2 }}>
+        <Typography variant="h4" sx={{ mb: 2 }} fontSize={'16px'} fontWeight={500}>
           Create new content
         </Typography>
 
         <Box
           display="flex"
-          gap="1.5rem"
+          gap="1rem"
           justifyContent="flex-start"
           flexWrap="wrap"
         >
@@ -159,8 +138,9 @@ const CreatePage = () => {
                 cursor: "pointer",
                 flex: "1 1 180px",
                 maxWidth: "220px",
+                border: "solid 1px #D0C5B4",
+                boxShadow: 'none',
                 "&:hover": {
-                  boxShadow: theme.shadows[5],
                   backgroundColor: theme.palette.action.hover,
                 },
               }}
@@ -169,7 +149,7 @@ const CreatePage = () => {
               <Typography variant="h5" sx={{ mt: 1, fontWeight: "bold" }}>
                 {card.title}
               </Typography>
-              <Typography variant="body2" color="textSecondary">
+              <Typography variant="body2" color="textSecondary" sx={{mt: 1, mb: 0}}>
                 {card.description}
               </Typography>
             </Paper>

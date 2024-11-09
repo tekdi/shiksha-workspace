@@ -20,6 +20,7 @@ import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
 import { useRouter } from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
+import WorkspaceText from "@/components/WorkspaceText";
 
 const PublishPage = () => {
   const [selectedKey, setSelectedKey] = useState("publish");
@@ -115,6 +116,7 @@ const PublishPage = () => {
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
+      <WorkspaceText />
       <Box p={3}>
         <Typography variant="h4">Content Publish</Typography>
         <Typography mb={2}>Here you see all your published content.</Typography>

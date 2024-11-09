@@ -23,6 +23,7 @@ import { MIME_TYPE } from "@/utils/app.config";
 import router from "next/router";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/utils/app.constant";
+import WorkspaceText from "@/components/WorkspaceText";
 
 const AllContentsPage = () => {
   const theme = useTheme<any>();
@@ -156,6 +157,7 @@ const AllContentsPage = () => {
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
+      <WorkspaceText />
       <Box p={3}>
         <Typography variant="h4">Show all Content</Typography>
         <Typography mb={2}>Here you see all your content.</Typography>

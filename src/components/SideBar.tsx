@@ -1,30 +1,28 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import MenuIcon from "@mui/icons-material/Menu";
+import OutlinedFlagOutlinedIcon from "@mui/icons-material/OutlinedFlagOutlined";
+import PreviewOutlinedIcon from "@mui/icons-material/PreviewOutlined";
 import {
   Box,
+  Drawer,
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Typography,
-  IconButton,
-  Drawer,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import StorageIcon from "@mui/icons-material/Storage";
-import CreateIcon from "@mui/icons-material/Create";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import PublishIcon from "@mui/icons-material/Publish";
-import FolderIcon from "@mui/icons-material/Folder";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import CloseIcon from "@mui/icons-material/Close";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
-import PreviewOutlinedIcon from "@mui/icons-material/PreviewOutlined";
-import OutlinedFlagOutlinedIcon from "@mui/icons-material/OutlinedFlagOutlined";
-import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+
+import logo from "../../public/logo.png";
 
 // Updated menu items with icons
 const menuItems = [
@@ -68,13 +66,15 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   };
 
   const drawerContent = (
-    <Box margin={"1rem"} width={"100%"} height={"100%"}>
+    <Box margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"100%"} height={"100%"} sx={{ fontSize: '14px' }}>
+      <Image src={logo} alt="logo" height={60} />
       <Box
-        p={2}
+        p={'2rem 2rem 2rem 0'}
         display="flex"
         alignItems="center"
         justifyContent="space-between"
       >
+
         <Box display="flex" alignItems="center">
           <ListItemIcon>
             <IconButton onClick={goBack}>
@@ -99,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
         {menuItems.map((item) => (
           <ListItemButton
             sx={{
-              gap: "10px",
+              gap: "4px",
               width: "100%",
               display: "flex",
               justifyContent: "flex-start",
@@ -120,20 +120,23 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
                     : "transparent",
               },
             }}
-            key={item.key}
-            onClick={() => handleNavigation(item.key)}
+            key={item?.key}
+            onClick={() => handleNavigation(item?.key)}
           >
             <ListItemIcon
               sx={{
                 color:
-                  selectedKey === item.key
+                  selectedKey === item?.key
                     ? "#2E1500"
                     : theme.palette.warning.A200,
+                minWidth: '40px',
+                fontWeight: selectedKey === item?.key ? '600' : 'normal',
+                fontSize: '14px !important'
               }}
             >
-              {item.icon}
+              {item?.icon}
             </ListItemIcon>
-            <ListItemText primary={item.text} />
+            <ListItemText primaryTypographyProps={{fontSize: '14px', fontWeight: selectedKey === item?.key ? '600' : 'normal'}}  primary={item?.text} />
           </ListItemButton>
         ))}
       </List>

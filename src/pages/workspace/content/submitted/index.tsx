@@ -20,6 +20,7 @@ import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
 import { MIME_TYPE } from "@/utils/app.config";
 import router from "next/router";
+import WorkspaceText from "@/components/WorkspaceText";
 
 const SubmittedForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("submitted");
@@ -111,6 +112,7 @@ const SubmittedForReviewPage = () => {
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
+      <WorkspaceText />
       <Box p={3}>
         <Typography variant="h4">Submitted For Review</Typography>
         <Typography mb={2}>

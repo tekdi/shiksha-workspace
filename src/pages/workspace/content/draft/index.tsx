@@ -20,6 +20,7 @@ import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
 import { useRouter } from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
+import WorkspaceText from "@/components/WorkspaceText";
 
 const DraftPage = () => {
   const [selectedKey, setSelectedKey] = useState("draft");
@@ -115,6 +116,7 @@ const DraftPage = () => {
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
+      <WorkspaceText />
       <Box p={3}>
         <Typography variant="h4">Drafts</Typography>
         <Typography mb={2}>
