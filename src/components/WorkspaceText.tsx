@@ -11,6 +11,7 @@ const WorkspaceText: React.FC<any> = () => {
             sx={{
                 color: theme.palette.text.primary,
                 marginRight: "10px",
+                fontSize: "22px"
             }}
         >
             Workspace

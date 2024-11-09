@@ -145,12 +145,12 @@ const CreatePage = () => {
                 },
               }}
             >
-              {card.icon}
-              <Typography variant="h5" sx={{ mt: 1, fontWeight: "bold" }}>
-                {card.title}
+              {card?.icon}
+              <Typography variant="h3" sx={{ mt: 1, fontWeight: "bold", fontSize: '14px' }}>
+                {card?.title}
               </Typography>
               <Typography variant="body2" color="textSecondary" sx={{mt: 1, mb: 0}}>
-                {card.description}
+                {card?.description}
               </Typography>
             </Paper>
           ))}
