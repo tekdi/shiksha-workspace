@@ -13,16 +13,30 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import DatabaseIcon from "@mui/icons-material/Storage";
-import CloseIcon from "@mui/icons-material/Close";
+import StorageIcon from "@mui/icons-material/Storage";
+import CreateIcon from "@mui/icons-material/Create";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import PublishIcon from "@mui/icons-material/Publish";
+import FolderIcon from "@mui/icons-material/Folder";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import PreviewOutlinedIcon from "@mui/icons-material/PreviewOutlined";
+import OutlinedFlagOutlinedIcon from "@mui/icons-material/OutlinedFlagOutlined";
+import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
 
+// Updated menu items with icons
 const menuItems = [
-  { text: "Create Content", key: "create" },
-  { text: "All My Contents", key: "allContents" },
-  { text: "Draft", key: "draft" },
-  { text: "Submitted for Review", key: "submitted" },
-  { text: "Publish", key: "publish" },
+  { text: "Create", key: "create", icon: <AddOutlinedIcon /> },
+  { text: "Draft", key: "draft", icon: <CreateOutlinedIcon /> },
+  {
+    text: "Submitted for Review",
+    key: "submitted",
+    icon: <PreviewOutlinedIcon />,
+  },
+  { text: "Publish", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
+  { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
 ];
 
 interface SidebarProps {
@@ -69,10 +83,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
           </ListItemIcon>
           <Typography
             variant="h2"
-            fontSize={"16px"}
+            fontSize={"14px"}
             sx={{ color: theme.palette.warning["100"] }}
           >
-            Workspace
+            Back to Main Page
           </Typography>
         </Box>
         {isMobile && (
@@ -109,6 +123,16 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             key={item.key}
             onClick={() => handleNavigation(item.key)}
           >
+            <ListItemIcon
+              sx={{
+                color:
+                  selectedKey === item.key
+                    ? "#2E1500"
+                    : theme.palette.warning.A200,
+              }}
+            >
+              {item.icon}
+            </ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItemButton>
         ))}

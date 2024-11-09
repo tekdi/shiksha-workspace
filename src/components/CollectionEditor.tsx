@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
-  const { identifier } = router.query;
+  const { identifier, mode } = router.query;
 
   const [fullName, setFullName] = useState("Anonymous");
   const [userId, setUserId] = useState("ef99949b-7f3a-4a5f-806a-e67e683e38f3");
@@ -84,7 +84,7 @@ const CollectionEditor: React.FC = () => {
       cloudStorageUrls: ["https://knowlg-public.s3-ap-south-1.amazonaws.com/"],
     },
     config: {
-      mode: "edit", // edit / review / read / sourcingReview
+      mode: mode || "edit", // edit / review / read / sourcingReview
       maxDepth: 4,
       objectType: "Collection",
       primaryCategory: "Course", // Professional Development Course, Curriculum Course

@@ -45,9 +45,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
           <CardContent>
             <Box display={"flex"} gap="1rem">
               {icon}
-              <Typography variant="h5" component="div">
-                {title}
-              </Typography>
+              <Typography component="div">{title}</Typography>
             </Box>
           </CardContent>
           {/* <CardActions>
