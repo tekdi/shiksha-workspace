@@ -118,8 +118,12 @@ const CreatePage = () => {
           width={500}
           fontSize={15}
         >
+
           Create, organize, and manage all types of content in one place.
           Whether it's courses, assessments, or any other type of content.
+
+          Here you can create new content....
+
         </Typography>
       </Box>
 
