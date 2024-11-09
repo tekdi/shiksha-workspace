@@ -1,30 +1,41 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../../../../components/Layout";
-import { Typography, Box } from "@mui/material";
-import CourseCard from "../../../../components/CourseCard";
-import SearchBox from "../../../../components/SearchBox";
+import {
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getContent } from "@/services/ContentService";
-import Loader from "@/components/Loader";
-import NoDataFound from "@/components/NoDataFound";
+import SearchBox from "../../../../components/SearchBox";
 import PaginationComponent from "@/components/PaginationComponent";
+import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
+import { useRouter } from "next/router";
+import { MIME_TYPE } from "@/utils/app.config";
 
 const PublishPage = () => {
   const [selectedKey, setSelectedKey] = useState("publish");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<string[]>();
+  const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("updated");
-  const [contentList, setContentList] = React.useState<content[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [contentList, setContentList] = React.useState([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
-  const [page, setPage] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage - 1);
-  };
+  const router = useRouter();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -48,25 +59,27 @@ const PublishPage = () => {
     setSortBy(sortBy);
   };
 
-  const filteredData = useMemo(
-    () =>
-      contentList?.filter((content) =>
-        content.name.toLowerCase().includes(searchTerm)
-      ),
-    [searchTerm]
-  );
-
-  const displayedCards = filteredData
-    ?.slice
-    // page * rowsPerPage,
-    // page * rowsPerPage + rowsPerPage
-    ();
-
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
-    setTimeout(() => {
-      setContentDeleted((prev) => !prev);
-    }, 1000);
+    setContentDeleted((prev) => !prev);
+  };
+
+  const openEditor = (content: any) => {
+    const identifier = content?.identifier;
+    const mode = "read";
+    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+      router.push({ pathname: `/editor`, query: { identifier, mode } });
+    } else if (
+      content?.mimeType &&
+      MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
+    ) {
+      router.push({ pathname: `/upload-editor`, query: { identifier } });
+    } else if (
+      content?.mimeType &&
+      MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
+    ) {
+      router.push({ pathname: `/collection`, query: { identifier, mode } });
+    }
   };
 
   useEffect(() => {
@@ -75,11 +88,9 @@ const PublishPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const offset = page * LIMIT;
-        const primaryCategory = filter?.length ? filter : [];
+        const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Modified On" ? "desc" : "asc";
-        const sort_by = {
-          lastUpdatedOn: order,
-        };
+        const sort_by = { lastUpdatedOn: order };
         const response = await getContent(
           ["Live"],
           query,
@@ -93,9 +104,10 @@ const PublishPage = () => {
         );
         setContentList(contentList);
         setTotalCount(response?.count);
-        setLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     getPublishContentList();
@@ -104,10 +116,10 @@ const PublishPage = () => {
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <Box p={3}>
-        <Typography variant="h4"> Content Publish</Typography>
-        <Typography>Here you see all your Publish content.</Typography>
+        <Typography variant="h4">Content Publish</Typography>
+        <Typography mb={2}>Here you see all your published content.</Typography>
 
-        <Box m={3}>
+        <Box mb={3}>
           <SearchBox
             placeholder="Search by title..."
             onSearch={handleSearch}
@@ -116,42 +128,89 @@ const PublishPage = () => {
           />
         </Box>
 
-        <Box display="flex" flexWrap="wrap" gap={3} padding={2}>
-          {loading ? (
-            <Loader showBackdrop={true} loadingText={"Loading"} />
-          ) : contentList && contentList.length > 0 ? (
-            contentList?.map((content, index) => (
-              <Box
-                key={index}
-                sx={{
-                  minWidth: "250px",
-                  maxWidth: "250px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <CourseCard
-                  title={content?.name}
-                  description={content?.description}
-                  type={content?.primaryCategory}
-                  imageUrl={content.appIcon}
-                  status={content.status}
-                  identifier={content?.identifier}
-                  mimeType={content?.mimeType}
-                  mode={"read"}
-                  onDelete={() => handleDelete(index)}
-                />
-              </Box>
-            ))
-          ) : (
-            <NoDataFound />
-          )}
-        </Box>
+        {loading ? (
+          <Box display="flex" justifyContent="center" my={5}>
+            <CircularProgress />
+          </Box>
+        ) : contentList && contentList.length > 0 ? (
+          <TableContainer>
+            <Table>
+              <TableHead sx={{ backgroundColor: "#F8EFE7" }}>
+                <TableRow>
+                  <TableCell>Title & Description</TableCell>
+                  <TableCell>Content Type</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Last Modified</TableCell>
+                  <TableCell align="center">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {contentList.map((content: any, index) => (
+                  <TableRow
+                    key={content.identifier}
+                    hover
+                    style={{ cursor: "pointer" }}
+                  >
+                    <TableCell onClick={() => openEditor(content)}>
+                      <Box display="flex" alignItems="center">
+                        <img
+                          src={content.appIcon}
+                          alt={content.name}
+                          style={{
+                            width: 60,
+                            height: 40,
+                            borderRadius: "8px",
+                            marginRight: "10px",
+                          }}
+                        />
+                        <Box>
+                          <Typography
+                            variant="subtitle1"
+                            noWrap
+                            fontWeight={"bold"}
+                            fontSize={"14px"}
+                          >
+                            {content.name}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            noWrap
+                          >
+                            {content.description}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{content.primaryCategory}</TableCell>
+                    <TableCell sx={{ color: "#06A816" }}>
+                      {content.status}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(content.lastUpdatedOn).toLocaleString()}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        onClick={() => handleDelete(index)}
+                        color="error"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <NoDataFound />
+        )}
+
         {totalCount > LIMIT && (
           <PaginationComponent
             count={Math.ceil(totalCount / LIMIT)}
             page={page}
-            onPageChange={handleChangePage}
+            onPageChange={(event, newPage) => setPage(newPage)}
           />
         )}
       </Box>
