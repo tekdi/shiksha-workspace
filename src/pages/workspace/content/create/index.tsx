@@ -93,7 +93,7 @@ const CreatePage = () => {
     {
       title: "New Large Content",
       description: "Videos and documents larger than 150 MB",
-      icon: <Image src={largeVideoIcon} alt="large-video" height={35} width={70} />,
+      icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />,
       onClick: () =>
         router.push({
           pathname: "/upload-editor",

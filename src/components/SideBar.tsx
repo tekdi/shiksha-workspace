@@ -67,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
 
   const drawerContent = (
     <Box margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"100%"} height={"100%"} sx={{ fontSize: '14px' }}>
-      <Image src={logo} alt="logo" height={60} />
+      <img src={'/logo.png'} alt="logo" height={60} />
       <Box
         p={'2rem 2rem 2rem 0'}
         display="flex"
