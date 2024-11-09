@@ -10,7 +10,7 @@ import { createCourse, createQuestionSet } from "@/services/ContentService";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
-import largeVideoIcon from '../../../../../public/150+.png';
+import largeVideoIcon from '/public/150+.png';
 import Image from "next/image";
 import WorkspaceText from '../../../../components/WorkspaceText'
 

@@ -22,7 +22,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import logo from "../../public/logo.png";
+import logo from "/public/logo.png";
 
 // Updated menu items with icons
 const menuItems = [
