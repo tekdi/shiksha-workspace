@@ -173,7 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             display: "flex",
             justifyContent: "flex-start",
             width: 250,
-            height: "100vh",
+            // height: "100vh",
             bgcolor: theme.palette.background.paper,
             borderRight: 1,
             borderColor: theme.palette.divider,

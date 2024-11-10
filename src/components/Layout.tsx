@@ -10,7 +10,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, selectedKey, onSelect }) => {
   return (
-    <Box display="flex">
+    <Box display="flex" minHeight={"100vh"}>
       <Sidebar selectedKey={selectedKey} onSelect={onSelect} />
       <Box sx={{ flex: 1, background: 'rgb(243, 245, 248)'}}>{children}</Box>
     </Box>

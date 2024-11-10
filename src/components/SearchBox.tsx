@@ -96,8 +96,8 @@ const SearchBox: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <Grid container gap={"1rem"}>
-      <Grid item xs={12} md={5}>
+    <Grid container gap={1} alignItems={"center"}>
+      <Grid item xs={5} md={5}>
         <Box sx={{ mt: 2, px: theme.spacing(2.5) }}>
           <Paper
             component="form"
@@ -128,7 +128,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
         </Box>
       </Grid>
 
-      <Grid item xs={12} md={3}>
+      <Grid item xs={3} md={3}>
         <FormControl sx={{ width: "100%", mt: 2 }}>
           <InputLabel>Filter By</InputLabel>
           <Select
@@ -148,7 +148,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
         </FormControl>
       </Grid>
 
-      <Grid item xs={12} md={3}>
+      <Grid item xs={3} md={3} justifySelf={"end"}>
         <FormControl sx={{ width: "100%", mt: 2 }}>
           <InputLabel>Sort By</InputLabel>
           <Select

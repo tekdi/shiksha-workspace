@@ -197,7 +197,7 @@ const AllContentsPage = () => {
                           sx={{ cursor: "pointer" }}
                         >
                           {content?.appIcon ? (
-                            <img src={content?.appIcon} height={"25px"} />
+                            <img src={content?.appIcon || '/logo.png'} height={"25px"} />
                           ) : (
                             <UpReviewTinyImage fontSize="small" />
                           )}

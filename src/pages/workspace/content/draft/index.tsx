@@ -160,7 +160,7 @@ const DraftPage = () => {
                     <TableCell onClick={() => openEditor(content)}>
                       <Box display="flex" alignItems="center">
                         <img
-                          src={content.appIcon}
+                          src={content?.appIcon || '/logo.png'}
                           alt={content.name}
                           style={{
                             width: 60,

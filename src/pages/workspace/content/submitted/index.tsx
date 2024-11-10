@@ -101,7 +101,7 @@ const SubmittedForReviewPage = () => {
       content?.mimeType &&
       MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
     ) {
-      router.push({ pathname: `/upload-editor`, query: { identifier } });
+      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
     } else if (
       content?.mimeType &&
       MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
@@ -157,8 +157,8 @@ const SubmittedForReviewPage = () => {
                     <TableCell onClick={() => openEditor(content)}>
                       <Box display="flex" alignItems="center">
                         <img
-                          src={content.appIcon}
-                          alt={content.name}
+                          src={content?.appIcon || '/logo.png'}
+                          alt={content?.name}
                           style={{
                             width: 60,
                             height: 40,
