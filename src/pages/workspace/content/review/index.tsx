@@ -147,7 +147,7 @@ const ReviewContentSubmissions = () => {
           variant="h5"
           sx={{
             fontFamily: "inherit",
-            fontWeight: 400,
+            fontWeight: "bold",
             fontSize: "22px",
             lineHeight: "24px",
             letterSpacing: "0.5px",

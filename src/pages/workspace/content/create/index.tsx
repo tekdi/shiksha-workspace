@@ -116,7 +116,7 @@ const CreatePage = () => {
         }}
         m={3} // Margin around the box for spacing
       >
-        <Typography variant="h4" sx={{ mb: 2 }} fontSize={'16px'} fontWeight={500}>
+        <Typography variant="h4" sx={{ mb: 2 }} fontSize={'16px'} fontWeight={600}>
           Create new content
         </Typography>
 

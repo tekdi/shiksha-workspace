@@ -114,10 +114,13 @@ const SubmittedForReviewPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-        <Typography variant="h4">Submitted For Review</Typography>
-        <Typography mb={2}>
+
+        <Box sx={{background: "#FFFFFF"}} p={2}>
+        <Typography variant="h4" sx={{fontWeight: "bold", fontSize: "16px"}}>Submitted For Review</Typography>
+        </Box>
+        {/* <Typography mb={2}>
           Here you can see all your content submitted for review.
-        </Typography>
+        </Typography> */}
 
         <Box mb={3}>
           <SearchBox

@@ -118,10 +118,12 @@ const DraftPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-        <Typography variant="h4">Drafts</Typography>
-        <Typography mb={2}>
+      <Box sx={{background: "#FFFFFF"}} p={2}>
+        <Typography variant="h4" sx={{fontWeight: "bold", fontSize: "16px"}}>Drafts</Typography>
+        </Box>
+        {/* <Typography mb={2}>
           Create, organize, and manage all types of content in one place.
-        </Typography>
+        </Typography> */}
 
         <Box mb={3}>
           <SearchBox

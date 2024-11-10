@@ -118,8 +118,10 @@ const PublishPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-        <Typography variant="h4">Content Publish</Typography>
-        <Typography mb={2}>Here you see all your published content.</Typography>
+        <Box sx={{ background: "#FFFFFF" }} p={2}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "16px" }}>Published</Typography>
+        </Box>
+        {/* <Typography mb={2}>Here you see all your published content.</Typography> */}
 
         <Box mb={3}>
           <SearchBox

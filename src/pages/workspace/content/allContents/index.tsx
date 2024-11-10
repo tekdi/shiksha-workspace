@@ -159,8 +159,10 @@ const AllContentsPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-        <Typography variant="h4">Show all Content</Typography>
-        <Typography mb={2}>Here you see all your content.</Typography>
+      <Box sx={{background: "#FFFFFF"}} p={2}>
+        <Typography variant="h4" sx={{fontWeight:"bold", fontSize: "16px"}}>All My Contents</Typography>
+        </Box>
+        {/* <Typography mb={2}>Here you see all your content.</Typography> */}
 
         <Box mb={3}>
           <SearchBox
