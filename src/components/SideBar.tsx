@@ -147,15 +147,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
     <>
       {isMobile ? (
         <>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer}
-            sx={{ marginLeft: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+        
+            <MenuIcon sx={{ margin: 2, cursor: "pointer" }}  onClick={toggleDrawer}/>
+         
           <Drawer
             anchor="left"
             open={drawerOpen}
