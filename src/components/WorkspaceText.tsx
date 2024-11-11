@@ -3,15 +3,16 @@ import React from "react";
 
 
 const WorkspaceText: React.FC<any> = () => {
-  const theme = useTheme();
+  const theme = useTheme<any>();
 
     return (<Box p={3} display={"flex"} flexDirection={"row"} gap={2}>
         <Typography
             variant="h1"
             sx={{
-                color: theme.palette.text.primary,
+                color: theme.palette.warning['300'],
                 marginRight: "10px",
-                fontSize: "22px"
+                fontSize: "22px",
+                fontWeight: 400,
             }}
         >
             Workspace
@@ -19,9 +20,10 @@ const WorkspaceText: React.FC<any> = () => {
 
         <Typography
             variant="body1"
-            color="textSecondary"
-            width={500}
+            color="#635E57"
+            width={'70%'}
             fontSize={15}
+            sx={{lineHeight:'20px', fontSize:'14px'}}
         >
             Create, organize, and manage all types of content in one place.
             Whether it&apos;s courses, assessments, or any other type of content.

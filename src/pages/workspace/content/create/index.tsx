@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../../../components/Layout";
-import { Typography, Box, useTheme, Paper } from "@mui/material";
+import { Typography, Box, useTheme, Paper, Grid } from "@mui/material";
 import ContentCard from "../../../../components/ContentCard";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -126,34 +126,39 @@ const CreatePage = () => {
           justifyContent="flex-start"
           flexWrap="wrap"
         >
-          {cardData.map((card, index) => (
-            <Paper
-              key={index}
-              elevation={3}
-              onClick={card.onClick}
-              sx={{
-                padding: "1rem",
-                borderRadius: "8px",
-                textAlign: "left",
-                cursor: "pointer",
-                flex: "1 1 180px",
-                maxWidth: "220px",
-                border: "solid 1px #D0C5B4",
-                boxShadow: 'none',
-                "&:hover": {
-                  backgroundColor: theme.palette.action.hover,
-                },
-              }}
-            >
-              {card?.icon}
-              <Typography variant="h3" sx={{ mt: 1, fontWeight: "bold", fontSize: '14px' }}>
-                {card?.title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{mt: 1, mb: 0}}>
-                {card?.description}
-              </Typography>
-            </Paper>
-          ))}
+          <Grid container spacing={2}>
+              {cardData.map((card, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Paper
+                    key={index}
+                    elevation={3}
+                    onClick={card.onClick}
+                    sx={{
+                      padding: "1rem",
+                      borderRadius: "8px",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      flex: "1 1 180px",
+                      // maxWidth: "220px",
+                      border: "solid 1px #D0C5B4",
+                      boxShadow: 'none',
+                      "&:hover": {
+                        backgroundColor: theme.palette.action.hover,
+                      },
+                    }}
+                  >
+                    {card?.icon}
+                    <Typography variant="h3" sx={{ mt: 1, fontWeight: "bold", fontSize: '14px' }}>
+                      {card?.title}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" sx={{mt: 1, mb: 0}}>
+                      {card?.description}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              ))}
+          </Grid>
+          
         </Box>
       </Box>
     </Layout>
