@@ -174,7 +174,7 @@ const ReviewContentSubmissions = () => {
                   borderRadius: "16px",
                   padding: 2,
                   backgroundColor: "white",
-                  mb: 2,
+                  // mb: 2,
                 }}
               >
                 <Typography
@@ -196,7 +196,7 @@ const ReviewContentSubmissions = () => {
                 <Box
                   sx={{
                     // border: "1px solid #D0C5B4",
-                    height: "500px",
+                    height: "100%",
                     marginBottom: "16px",
                     display: "flex",
                     alignItems: "center",
@@ -220,7 +220,7 @@ const ReviewContentSubmissions = () => {
                   border: "1px solid #ccc",
                   borderRadius: "16px",
                   backgroundColor: "white",
-                  height: "607px",
+                  height: "100%",
                   overflow: "auto",
                 }}
               >
@@ -369,7 +369,7 @@ const ReviewContentSubmissions = () => {
 
           <CardActions
             disableSpacing
-            sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}
+            sx={{ display: "flex", justifyContent: "flex-end", mt:2, mb: 2 }}
           >
             <Button
               variant="contained"

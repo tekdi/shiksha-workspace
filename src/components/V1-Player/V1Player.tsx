@@ -41,7 +41,7 @@ const V1Player = ({ playerConfig }: PlayerProps) => {
         title="Content Player"
         src="/content/preview/preview.html?webview=true"
         aria-label="Content Player"
-        style={{ width: '100%', height: '600px', border: 'none' }}
+        style={{ width: '100%', height: '100%', border: 'none' }}
       ></iframe>
     </div>
   );
