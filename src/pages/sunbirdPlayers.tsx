@@ -54,9 +54,11 @@ const SunbirdPlayers = ({ "player-config": playerConfig }: PlayerProps) => {
     case "application/epub":
       return <SunbirdEpubPlayer playerConfig={playerConfig} />;
     case "application/vnd.ekstep.h5p-archive":
-      return <SunbirdV1Player playerConfig={playerConfig} />;
     case "application/vnd.ekstep.html-archive":
-        return <SunbirdV1Player playerConfig={playerConfig} />;
+    case "video/youtube":
+    case "video/x-youtube":
+      // return <SunbirdV1Player playerConfig={playerConfig} />;
+      return <SunbirdV1Player playerConfig={playerConfig} />;
     default:
       return <div>Unsupported media type</div>;
   }
