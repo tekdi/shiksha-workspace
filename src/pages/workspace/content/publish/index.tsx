@@ -214,7 +214,7 @@ const PublishPage = () => {
           <PaginationComponent
             count={Math.ceil(totalCount / LIMIT)}
             page={page}
-            onPageChange={(event, newPage) => setPage(newPage)}
+            onPageChange={(event, newPage) => setPage(newPage-1)}
           />
         )}
       </Box>
