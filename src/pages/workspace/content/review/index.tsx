@@ -174,7 +174,7 @@ const ReviewContentSubmissions = () => {
                   borderRadius: "16px",
                   padding: 2,
                   backgroundColor: "white",
-                  // mb: 2,
+                  
                 }}
               >
                 <Typography
@@ -215,7 +215,7 @@ const ReviewContentSubmissions = () => {
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <CardContent
+              <Box
                 sx={{
                   border: "1px solid #ccc",
                   borderRadius: "16px",
@@ -363,26 +363,37 @@ const ReviewContentSubmissions = () => {
                     {formatDate(contentDetails.lastUpdatedOn)}
                   </Box>
                 </Box>
-              </CardContent>
+              </Box>
             </Grid>
           </Grid>
 
-          <CardActions
-            disableSpacing
-            sx={{ display: "flex", justifyContent: "flex-end", mt:2, mb: 2 }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handlePublish}
-              sx={{ marginRight: 1 }}
-            >
-              Publish
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleReject}>
-              Request Changes
-            </Button>
-          </CardActions>
+          <Box
+  sx={{
+    display: "flex",
+    justifyContent: "flex-end",
+    mt: 2,
+    mb: 2,
+    padding: "8px", // Add padding to avoid overlap
+    borderRadius: "16px", // Match the surrounding box's border radius
+  }}
+>
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={handlePublish}
+    sx={{ marginRight: 1, minWidth: "120px" }} // Ensure the button has enough width
+  >
+    Publish
+  </Button>
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={handleReject}
+    sx={{ minWidth: "120px" }} // Ensure the button has enough width
+  >
+    Request Changes
+  </Button>
+</Box>
         </>
       ) : (
         <Typography>No content details available</Typography>
