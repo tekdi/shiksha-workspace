@@ -102,7 +102,7 @@ const AllContentsPage = () => {
         ];
         const query = debouncedSearchTerm || "";
         const primaryCategory = filter.length ? filter : [];
-        const order = sortBy === "Modified On" ? "desc" : "asc";
+        const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = {
           lastUpdatedOn: order,
         };
@@ -159,8 +159,13 @@ const AllContentsPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-      <Box sx={{background: "#FFFFFF"}} p={2}>
-        <Typography variant="h4" sx={{fontWeight:"bold", fontSize: "16px"}}>All My Contents</Typography>
+        <Box sx={{ background: "#FFFFFF" }} p={2}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "bold", fontSize: "16px" }}
+          >
+            All My Contents
+          </Typography>
         </Box>
         {/* <Typography mb={2}>Here you see all your content.</Typography> */}
 
@@ -197,7 +202,10 @@ const AllContentsPage = () => {
                           sx={{ cursor: "pointer" }}
                         >
                           {content?.appIcon ? (
-                            <img src={content?.appIcon || '/logo.png'} height={"25px"} />
+                            <img
+                              src={content?.appIcon || "/logo.png"}
+                              height={"25px"}
+                            />
                           ) : (
                             <UpReviewTinyImage fontSize="small" />
                           )}

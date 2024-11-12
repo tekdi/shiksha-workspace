@@ -12,3 +12,14 @@ export const SortOptions = ["Modified On", "Created On"];
 
 export const LIMIT = 6;
 export const ChannelID = "test-k12-channel";
+
+export const PrimaryCategoryValue = [
+  "Course",
+  "Course Assessment",
+  "eTextbook",
+  "Explanation Content",
+  "Learning Resource",
+  "Practice Question Set",
+  "Teacher Resource",
+  "Exam Question",
+];

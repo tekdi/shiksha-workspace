@@ -68,7 +68,7 @@ const SubmittedForReviewPage = () => {
         const query = debouncedSearchTerm || "";
         const offset = page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
-        const order = sortBy === "Modified On" ? "desc" : "asc";
+        const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const response = await getContent(
           ["Review", "FlagReview"],
@@ -101,7 +101,10 @@ const SubmittedForReviewPage = () => {
       content?.mimeType &&
       MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
     ) {
-      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
+      router.push({
+        pathname: `/workspace/content/review`,
+        query: { identifier, mode },
+      });
     } else if (
       content?.mimeType &&
       MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
@@ -114,9 +117,13 @@ const SubmittedForReviewPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-
-        <Box sx={{background: "#FFFFFF"}} p={2}>
-        <Typography variant="h4" sx={{fontWeight: "bold", fontSize: "16px"}}>Submitted For Review</Typography>
+        <Box sx={{ background: "#FFFFFF" }} p={2}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "bold", fontSize: "16px" }}
+          >
+            Submitted For Review
+          </Typography>
         </Box>
         {/* <Typography mb={2}>
           Here you can see all your content submitted for review.
@@ -157,7 +164,7 @@ const SubmittedForReviewPage = () => {
                     <TableCell onClick={() => openEditor(content)}>
                       <Box display="flex" alignItems="center">
                         <img
-                          src={content?.appIcon || '/logo.png'}
+                          src={content?.appIcon || "/logo.png"}
                           alt={content?.name}
                           style={{
                             width: 60,
