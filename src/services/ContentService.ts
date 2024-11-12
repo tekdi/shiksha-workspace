@@ -6,7 +6,7 @@ import { MIME_TYPE, TENANTID } from "@/utils/app.config";
 const authToken = process.env.NEXT_PUBLIC_AUTH_API_TOKEN;
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 import { v4 as uuidv4 } from "uuid";
-import { ChannelID } from "@/utils/app.constant";
+import { ChannelID, PrimaryCategoryValue } from "@/utils/app.constant";
 
 const userId = getLocalStoredUserData();
 console.log("userId ==>", userId);
@@ -54,9 +54,9 @@ const getReqBodyWithStatus = (
   sort_by: any
 ) => {
   if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
-    var PrimaryCategory = JSON.parse(
-      localStorage.getItem("PrimaryCategory") as string
-    );
+    var PrimaryCategory =
+      JSON.parse(localStorage.getItem("PrimaryCategory") as string) ||
+      PrimaryCategoryValue;
   }
   primaryCategory =
     primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;

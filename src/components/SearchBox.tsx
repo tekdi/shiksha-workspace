@@ -101,6 +101,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
         <Box sx={{ mt: 2, px: theme.spacing(2.5) }}>
           <Paper
             component="form"
+            onSubmit={(e) => e.preventDefault()}
             sx={{
               display: "flex",
               alignItems: "center",

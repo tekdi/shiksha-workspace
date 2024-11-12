@@ -90,7 +90,7 @@ const DraftPage = () => {
         const query = debouncedSearchTerm || "";
         const offset = page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
-        const order = sortBy === "Modified On" ? "desc" : "asc";
+        const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const response = await getContent(
           ["Draft", "FlagDraft"],
@@ -118,8 +118,13 @@ const DraftPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-      <Box sx={{background: "#FFFFFF"}} p={2}>
-        <Typography variant="h4" sx={{fontWeight: "bold", fontSize: "16px"}}>Drafts</Typography>
+        <Box sx={{ background: "#FFFFFF" }} p={2}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "bold", fontSize: "16px" }}
+          >
+            Drafts
+          </Typography>
         </Box>
         {/* <Typography mb={2}>
           Create, organize, and manage all types of content in one place.
@@ -160,7 +165,7 @@ const DraftPage = () => {
                     <TableCell onClick={() => openEditor(content)}>
                       <Box display="flex" alignItems="center">
                         <img
-                          src={content?.appIcon || '/logo.png'}
+                          src={content?.appIcon || "/logo.png"}
                           alt={content.name}
                           style={{
                             width: 60,
