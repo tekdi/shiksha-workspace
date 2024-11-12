@@ -159,98 +159,138 @@ const AllContentsPage = () => {
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-        <Box sx={{ background: "#FFFFFF" }} p={2}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: "bold", fontSize: "16px" }}
-          >
-            All My Contents
-          </Typography>
-        </Box>
-        {/* <Typography mb={2}>Here you see all your content.</Typography> */}
+        <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: '15px' }}>
+          <Box p={2}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", fontSize: "16px" }}
+            >
+              All My Contents
+            </Typography>
+          </Box>
+          {/* <Typography mb={2}>Here you see all your content.</Typography> */}
 
-        <Box mb={3}>
-          <SearchBox
-            placeholder="Search by title..."
-            onSearch={handleSearch}
-            onFilterChange={handleFilterChange}
-            onSortChange={handleSortChange}
-          />
-        </Box>
-        {loading ? (
-          <Loader showBackdrop={true} loadingText={"Loading"} />
-        ) : contentList && contentList.length > 0 ? (
-          contentList &&
-          contentList.length > 0 && (
-            <>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Content</TableCell>
-                    <TableCell>Last Updated</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {contentList?.map((content, index) => (
-                    <TableRow key={index}>
-                      <TableCell onClick={() => openEditor(content)}>
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          sx={{ cursor: "pointer" }}
-                        >
-                          {content?.appIcon ? (
-                            <img
-                              src={content?.appIcon || "/logo.png"}
-                              height={"25px"}
-                            />
-                          ) : (
-                            <UpReviewTinyImage fontSize="small" />
-                          )}
-                          <Box ml={2}>
-                            <Typography variant="body1">
-                              {content?.name}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color={theme.palette.warning["A200"]}
-                            >
-                              {content?.primaryCategory}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </TableCell>
-                      <TableCell>{timeAgo(content?.lastUpdatedOn)}</TableCell>
-                      <TableCell>{content?.status}</TableCell>
-                      <TableCell>
-                        {content?.status === "Draft" && (
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() => handleDeleteClick(content)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        )}
-                      </TableCell>
+          <Box mb={3}>
+            <SearchBox
+              placeholder="Search by title..."
+              onSearch={handleSearch}
+              onFilterChange={handleFilterChange}
+              onSortChange={handleSortChange}
+            />
+          </Box>
+          {loading ? (
+            <Loader showBackdrop={true} loadingText={"Loading"} />
+          ) : contentList && contentList.length > 0 ? (
+            contentList &&
+            contentList.length > 0 && (
+              <>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={
+                        {
+                          color: '#635E57',
+                          fontSize: '12px',
+                          fontWeight: "400"
+                        }
+                      }>Content</TableCell>
+                      <TableCell sx={
+                        {
+                          color: '#635E57',
+                          fontSize: '12px',
+                          fontWeight: "400"
+                        }
+                      }>Last Updated</TableCell>
+                      <TableCell sx={
+                        {
+                          color: '#635E57',
+                          fontSize: '12px',
+                          fontWeight: "400"
+                        }
+                      }>Status</TableCell>
+                      <TableCell sx={
+                        {
+                          color: '#635E57',
+                          fontSize: '12px',
+                          fontWeight: "400"
+                        }
+                      }></TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </>
-          )
-        ) : (
-          <NoDataFound />
-        )}
+                  </TableHead>
+                  <TableBody>
+                    {contentList?.map((content, index) => (
+                      <TableRow key={index}>
+                        <TableCell onClick={() => openEditor(content)}>
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            sx={{ cursor: "pointer" }}
+                          >
+                            {content?.appIcon ? (
+                              <img
+                                src={content?.appIcon || "/logo.png"}
+                                height={"25px"}
+                              />
+                            ) : (
+                              <UpReviewTinyImage fontSize="small" />
+                            )}
+                            <Box ml={2}>
+                              <Typography fontWeight={"500"}
+                                fontSize={"14px"}
+                                color={'#1F1B13'} variant="body1">
+                                {content?.name}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color={theme.palette.warning["A200"]}
+                              >
+                                {content?.primaryCategory}
+                              </Typography>
+                            </Box>
+                          </Box>
+                        </TableCell>
+                        <TableCell>{timeAgo(content?.lastUpdatedOn)}</TableCell>
+                        <TableCell>{content?.status}</TableCell>
+                        <TableCell>
+                          {content?.status === "Draft" && (
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => handleDeleteClick(content)}
+                              color="error"
+                            >
+                              <Box sx={{
+                                background: '#FAEEEC',
+                                height: '42px',
+                                width: '42px',
+                                borderRadius: '12px',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                              }}>
 
-        {totalCount > LIMIT && (
-          <PaginationComponent
-            count={Math.ceil(totalCount / LIMIT)}
-            page={page}
-            onPageChange={handleChangePage}
-          />
-        )}
+                                <DeleteIcon sx={{ fontSize: '18px' }} />
+                              </Box>
+                            </IconButton>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            )
+          ) : (
+            <NoDataFound />
+          )}
+
+          {totalCount > LIMIT && (
+            <PaginationComponent
+              count={Math.ceil(totalCount / LIMIT)}
+              page={page}
+              onPageChange={handleChangePage}
+            />
+          )}
+        </Box>
       </Box>
     </Layout>
   );

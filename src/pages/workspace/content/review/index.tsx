@@ -174,7 +174,7 @@ const ReviewContentSubmissions = () => {
                   borderRadius: "16px",
                   padding: 2,
                   backgroundColor: "white",
-                  
+
                 }}
               >
                 <Typography
@@ -222,17 +222,18 @@ const ReviewContentSubmissions = () => {
                   backgroundColor: "white",
                   height: "100%",
                   overflow: "auto",
+
                 }}
               >
                 <Typography
-                  sx={{ color: "#1F1B13", fontSize: "22px", mb: 2 }}
+                  sx={{ color: "#1F1B13", fontSize: "22px", padding: '16px' }}
                   variant="h6"
                   color="primary"
                 >
                   Content Details
                 </Typography>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -254,7 +255,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -276,7 +277,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -298,7 +299,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -320,7 +321,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -342,7 +343,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -368,32 +369,34 @@ const ReviewContentSubmissions = () => {
           </Grid>
 
           <Box
-  sx={{
-    display: "flex",
-    justifyContent: "flex-end",
-    mt: 2,
-    mb: 2,
-    padding: "8px", // Add padding to avoid overlap
-    borderRadius: "16px", // Match the surrounding box's border radius
-  }}
->
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={handlePublish}
-    sx={{ marginRight: 1, minWidth: "120px" }} // Ensure the button has enough width
-  >
-    Publish
-  </Button>
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={handleReject}
-    sx={{ minWidth: "120px" }} // Ensure the button has enough width
-  >
-    Request Changes
-  </Button>
-</Box>
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              mt: 2,
+              mb: 2,
+              padding: "8px",
+              borderRadius: "16px",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handlePublish}
+              sx={{ marginRight: 1, minWidth: "120px" }}
+              className="Request-btn"
+            >
+              Publish
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleReject}
+              sx={{ minWidth: "120px" }}
+              className="Request-btn"
+            >
+              Request Changes
+            </Button>
+          </Box>
         </>
       ) : (
         <Typography>No content details available</Typography>

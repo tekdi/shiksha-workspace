@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const router = useRouter();
   const theme = useTheme<any>();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleNavigation = (key: string) => {
     console.log(key);
@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   };
 
   const drawerContent = (
-    <Box margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"100%"} height={"100%"} sx={{ fontSize: '14px' }}>
+    <Box display={'inline-block'} margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"100%"} height={"100%"} sx={{ fontSize: '14px' }}>
       <img src={'/logo.png'} alt="logo" height={60} />
       <Box
         p={'2rem 2rem 2rem 0'}
@@ -136,7 +136,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             >
               {item?.icon}
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{fontSize: '14px', fontWeight: selectedKey === item?.key ? '600' : 'normal'}}  primary={item?.text} />
+            <ListItemText primaryTypographyProps={{ fontSize: '14px', fontWeight: selectedKey === item?.key ? '600' : 'normal' }} primary={item?.text} />
           </ListItemButton>
         ))}
       </List>
@@ -147,9 +147,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
     <>
       {isMobile ? (
         <>
-        
-            <MenuIcon sx={{ margin: 2, cursor: "pointer" }}  onClick={toggleDrawer}/>
-         
+
+          <MenuIcon sx={{ margin: 2, cursor: "pointer" }} onClick={toggleDrawer} />
+
           <Drawer
             anchor="left"
             open={drawerOpen}
