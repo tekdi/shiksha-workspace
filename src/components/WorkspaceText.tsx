@@ -3,9 +3,14 @@ import React from "react";
 
 
 const WorkspaceText: React.FC<any> = () => {
-  const theme = useTheme<any>();
+    const theme = useTheme<any>();
 
-    return (<Box p={3} display={"flex"} flexDirection={"row"} gap={2}>
+    return (<Box p={3} display={"flex"} sx={{
+        flexDirection: 'row',
+        '@media (max-width: 768px)': {
+            flexDirection: 'column',
+        },
+    }} gap={2}>
         <Typography
             variant="h1"
             sx={{
@@ -22,8 +27,13 @@ const WorkspaceText: React.FC<any> = () => {
             variant="body1"
             color="#635E57"
             width={'70%'}
+
             fontSize={15}
-            sx={{lineHeight:'20px', fontSize:'14px'}}
+            sx={{
+                lineHeight: '20px', fontSize: '14px', '@media (max-width: 768px)': {
+                    width: '100%'
+                }
+            }}
         >
             Create, organize, and manage all types of content in one place.
             Whether it&apos;s courses, assessments, or any other type of content.
