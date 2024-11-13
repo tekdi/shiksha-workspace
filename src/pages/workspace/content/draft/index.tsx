@@ -23,6 +23,7 @@ import { MIME_TYPE } from "@/utils/app.config";
 import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
+import Paper from '@mui/material/Paper';
 const columns = [
   { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String },
   { key: 'contentType', title: 'Content Type', dataType: DataType.String },
@@ -66,7 +67,10 @@ const DraftPage = () => {
 
       contentType: item.primaryCategory,
       lastUpdatedOn:new Date(item.lastUpdatedOn).toLocaleString(),
-      status: item.status
+      status: item.status,
+      identifier: item.identifier,
+      mimeType: item.mimeType,
+      mode: item.mode
   }));
   setData(filteredArray)
   console.log(filteredArray)
@@ -170,7 +174,7 @@ const DraftPage = () => {
             <CircularProgress />
           </Box>
         ) : contentList && contentList.length > 0 ? (
-          <KaTableComponent columns={columns} data={data}  handleDelete={handleDelete}/>
+          <KaTableComponent columns={columns} data={data} tableTitle="draft"  handleDelete={handleDelete}/>
           ) : (
           <NoDataFound />
         )}

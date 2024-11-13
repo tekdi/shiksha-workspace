@@ -5,6 +5,8 @@ import { Typography, useTheme, IconButton , Box} from '@mui/material';
 import UpReviewTinyImage from '@mui/icons-material/LibraryBooks';
 import "ka-table/style.css";
 import DeleteIcon from "@mui/icons-material/Delete";
+import router from "next/router";
+import { MIME_TYPE } from "@/utils/app.config";
 
 interface CustomTableProps {
   data: any[]; // Define a more specific type for your data if needed
@@ -13,17 +15,66 @@ interface CustomTableProps {
     title: string;
     dataType: DataType;
   }>;
-  handleDelete?:any
+  handleDelete?:any;
+  tableTitle?:string
 }
 
-const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDelete}) => {
+const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDelete, tableTitle}) => {
   const theme = useTheme<any>();
+  
 
+  const openEditor = (content: any) => {
+    const identifier = content?.identifier;
+    let mode = content?.mode; // default mode from content, can be overwritten by tableTitle
+    
+    switch (tableTitle) {
+      case 'draft':
+        // Use draft-specific routing
+        if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+          router.push({ pathname: `/editor`, query: { identifier, mode } });
+        } else if (
+          content?.mimeType &&
+          MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
+        ) {
+          router.push({ pathname: `/upload-editor`, query: { identifier } });
+        } else if (
+          content?.mimeType &&
+          MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
+        ) {
+          router.push({ pathname: `/collection`, query: { identifier, mode } });
+        }
+        return; // Exit early since draft has specific routing logic
+  
+      case 'publish':
+        mode = "read";
+        break;
+      case 'submitted':
+        mode = "review";
+        break;
+      // Default case for "all-content" or any other values if mode is already defined in content
+      default:
+        mode = mode || content?.mode;
+        break;
+    }
+  
+    // Generic routing for cases other than 'draft'
+    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+      router.push({ pathname: `/editor`, query: { identifier, mode } });
+    } else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
+      const pathname = tableTitle === 'submitted' ? `/workspace/content/review` : `/upload-editor`;
+      router.push({ pathname, query: { identifier, mode } });
+    } else if (content?.mimeType && MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)) {
+      router.push({ pathname: `/collection`, query: { identifier, mode } });
+    }
+  };
+  
+  
+  
   return (
     <KaTable
       columns={columns}
       data={data}
-      editingMode={EditingMode.Cell}
+     // editingMode={EditingMode.Cell}
       rowKeyField={'id'}
       sortingMode={SortingMode.Single}
       childComponents={{
@@ -31,7 +82,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDe
           content: (props) => {
             if (props.column.key === 'name' || props.column.key==="title_and_description") {
               return (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', cursor:"pointer" }} onClick={() => openEditor(props.rowData)} >
                   {props.rowData.image ? (
                     <img
                       src={props.rowData.image || '/logo.png'}

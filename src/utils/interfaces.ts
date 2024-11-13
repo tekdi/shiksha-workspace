@@ -17,4 +17,5 @@ interface content {
   identifier?: string;
   mimeType?: string;
   primaryCategory: string;
+  mode?: string;
 }
