@@ -30,6 +30,7 @@
     "jquery": "^3.7.1",
     "jquery-ui-dist": "^1.13.3",
     "jquery.fancytree": "^2.38.3",
+    "ka-table": "^11.3.0",
     "lodash": "^4.17.21",
     "mathjax-full": "^3.2.2",
     "multer": "^1.4.5-lts.1",

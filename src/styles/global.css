@@ -1,3 +1,5 @@
+
+
 .player-grid {
   height: 100%;
   width: 100%;
@@ -30,4 +32,19 @@ body {
 
   /* border: 1px solid #1f1b13 !important; */
   border-radius: 8px !important;
+}
+
+.ka-thead-cell {
+  font-weight: 600;
+}
+.ka-thead-cell-content {
+  font-weight: normal !important;
+}
+
+
+.ka-thead-background {
+  z-index: 1;
+  color: white;
+ background: #a8a6a6;
+  background-color: #F8EFE7 !important;;
 }
