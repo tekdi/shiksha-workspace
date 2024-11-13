@@ -108,6 +108,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
               borderRadius: "50px",
               background: theme.palette.warning.A700,
               boxShadow: "none",
+              border: "1px solid #000000DE !important",
             }}
           >
             <InputBase
@@ -130,7 +131,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
       </Grid>
 
       <Grid item xs={3} md={3}>
-        <FormControl sx={{ width: "100%", mt: 2 }}>
+        <FormControl className="drawer-select" sx={{ width: "100%", mt: 2 }}>
           <InputLabel>Filter By</InputLabel>
           <Select
             multiple
@@ -138,6 +139,13 @@ const SearchBox: React.FC<SearchBarProps> = ({
             onChange={handleFilterChange}
             input={<OutlinedInput label="Filter By" />}
             renderValue={(selected) => (selected as string[]).join(", ")}
+            sx={{
+              '& .MuiSelect-select': {
+                height: '20px',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           >
             {filterOptions?.map((option) => (
               <MenuItem key={option} value={option}>
