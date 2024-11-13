@@ -147,7 +147,11 @@ const AllContentsPage = () => {
       name: item.name,
       primaryCategory: item.primaryCategory,
       lastUpdatedOn: timeAgo(item.lastUpdatedOn),
-      status: item.status
+      status: item.status,
+      identifier: item.identifier,
+      mimeType: item.mimeType,
+      mode: item.mode
+
   }));
   setData(filteredArray)
   console.log(filteredArray)
@@ -196,6 +200,7 @@ console.log("contentList",contentList)
             onFilterChange={handleFilterChange}
             onSortChange={handleSortChange}
           />
+              </Box>
 
 
         {loading ? (
@@ -204,7 +209,7 @@ console.log("contentList",contentList)
           contentList &&
           contentList.length > 0 && (
             <>
-          <KaTableComponent    columns={columns}         data={data}/>
+          <KaTableComponent    columns={columns}     tableTitle="all-content"   data={data}/>
           </>
           )
         ) : (
@@ -212,15 +217,6 @@ console.log("contentList",contentList)
         )}
 
 
-
-        {totalCount > LIMIT && (
-          <PaginationComponent
-            count={Math.ceil(totalCount / LIMIT)}
-            page={page}
-            onPageChange={handleChangePage}
-          />
-        )}
-      </Box>
               </Box>
 
     </Layout>

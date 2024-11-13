@@ -69,7 +69,10 @@ const PublishPage = () => {
 
       contentType: item.primaryCategory,
       lastUpdatedOn:new Date(item.lastUpdatedOn).toLocaleString(),
-      status: item.status
+      status: item.status,
+      identifier: item.identifier,
+      mimeType: item.mimeType,
+      mode: item.mode
   }));
   setData(filteredArray)
   console.log(filteredArray)
@@ -161,7 +164,7 @@ const PublishPage = () => {
             <CircularProgress />
           </Box>
         ) : contentList && contentList.length > 0 ? (
-         <KaTableComponent columns={columns} data={data}  handleDelete={handleDelete}/>
+         <KaTableComponent columns={columns} data={data} tableTitle="publish" handleDelete={handleDelete}/>
         ) : (
           <NoDataFound />
         )}
