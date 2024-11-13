@@ -66,13 +66,15 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   };
 
   const drawerContent = (
-    <Box display={'inline-block'} margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"100%"} height={"100%"} sx={{ fontSize: '14px' }}>
-      <img src={'/logo.png'} alt="logo" height={60} />
+    <Box display={'inline-block'} margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"250px"} height={"100%"} sx={{ fontSize: '14px', }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <img src={'/logo.png'} alt="logo" height={60} />
+      </Box>
       <Box
-        p={'2rem 2rem 2rem 0'}
         display="flex"
         alignItems="center"
         justifyContent="space-between"
+        paddingTop={"1rem"}
       >
 
         <Box display="flex" alignItems="center">
@@ -119,6 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
                     ? "var(--mui-palette-primary-main)"
                     : "transparent",
               },
+              margin: selectedKey === item.key ? "10px 0" : "0",
             }}
             key={item?.key}
             onClick={() => handleNavigation(item?.key)}
