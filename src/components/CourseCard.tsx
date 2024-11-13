@@ -91,6 +91,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
         display: "flex",
         flexDirection: "column",
         width: "250px",
+        borderRight: 'unset !important'
       }}
     >
       <Box position="relative" onClick={onContentClick}>

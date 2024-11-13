@@ -10,6 +10,7 @@ const WorkspaceText: React.FC<any> = () => {
         '@media (max-width: 768px)': {
             flexDirection: 'column',
         },
+        '@media (max-width: 900px)': { padding: '18px 24px' }
     }} gap={2}>
         <Typography
             variant="h1"
@@ -18,6 +19,7 @@ const WorkspaceText: React.FC<any> = () => {
                 marginRight: "10px",
                 fontSize: "22px",
                 fontWeight: 400,
+                '@media (max-width: 900px)': { paddingLeft: '34px' }
             }}
         >
             Workspace
