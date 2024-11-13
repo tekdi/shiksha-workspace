@@ -37,6 +37,8 @@ const Players = ({ playerConfig }: PlayerProps) => {
   switch (mimeType) {
     case "application/pdf":
       return <SunbirdPdfPlayer playerConfig={playerConfig} />;
+    case "video/webm":
+      return <SunbirdVideoPlayer playerConfig={playerConfig} />;
     case "video/mp4":
       return <SunbirdVideoPlayer playerConfig={playerConfig} />;
     case "application/vnd.sunbird.questionset":
