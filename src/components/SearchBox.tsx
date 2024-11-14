@@ -140,6 +140,11 @@ const SearchBox: React.FC<SearchBarProps> = ({
             input={<OutlinedInput label="Filter By" />}
             renderValue={(selected) => (selected as string[]).join(", ")}
             sx={{
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#000', // Set focus border color to black
+                },
+              },
               '& .MuiSelect-select': {
                 height: '20px',
                 display: 'flex',
@@ -148,13 +153,41 @@ const SearchBox: React.FC<SearchBarProps> = ({
             }}
           >
             {filterOptions?.map((option) => (
-              <MenuItem key={option} value={option}>
-                <Checkbox checked={selectedFilters.indexOf(option) > -1} />
+              <MenuItem
+                sx={{
+                  color: '#000',
+                  '& .MuiCheckbox-root': {
+                    color: '#000',
+                    '&.Mui-checked, &.MuiCheckbox-indeterminate': {
+                      color: '#000'
+                    }
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '20px'
+                  }
+                }}
+                key={option}
+                value={option}
+              >
+                <Checkbox
+                  sx={{
+                    color: '#000',
+                    '&.Mui-checked, &.MuiCheckbox-indeterminate': {
+                      color: '#000'
+                    },
+                    '& .MuiSvgIcon-root': {
+                      fontSize: '20px'
+                    }
+                  }}
+                  checked={selectedFilters.indexOf(option) > -1}
+                />
                 <ListItemText primary={option} />
               </MenuItem>
+
             ))}
           </Select>
         </FormControl>
+
       </Grid>
 
       <Grid item xs={3} md={3} justifySelf={"end"}>

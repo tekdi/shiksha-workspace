@@ -23,6 +23,7 @@ import router from "next/router";
 import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
+import { timeAgo } from "@/utils/Helper";
 const columns = [
   { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String },
   { key: 'contentType', title: 'Content Type', dataType: DataType.String },
@@ -56,20 +57,20 @@ const SubmittedForReviewPage = () => {
   }, [searchTerm]);
   useEffect(() => {
     const filteredArray = contentList.map((item: any) => ({
-      image: item?.appIcon ,
+      image: item?.appIcon,
 
       name: item?.name,
-      description: item?.description ,
+      description: item?.description,
 
       contentType: item.primaryCategory,
-      lastUpdatedOn:new Date(item.lastUpdatedOn).toLocaleString(),
+      lastUpdatedOn: timeAgo(item.lastUpdatedOn),
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
       mode: item.mode
-  }));
-  setData(filteredArray)
-  console.log(filteredArray)
+    }));
+    setData(filteredArray)
+    console.log(filteredArray)
   }, [contentList]);
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -157,38 +158,40 @@ const SubmittedForReviewPage = () => {
           Here you can see all your content submitted for review.
         </Typography> */}
 
-        <Box mb={3}>
-          <SearchBox
-            placeholder="Search by title..."
-            onSearch={handleSearch}
-            onFilterChange={handleFilterChange}
-            onSortChange={handleSortChange}
-          />
-        </Box>
-
-
-        {loading ? (
-          <Box display="flex" justifyContent="center" my={5}>
-            <CircularProgress />
+          <Box mb={3}>
+            <SearchBox
+              placeholder="Search by title..."
+              onSearch={handleSearch}
+              onFilterChange={handleFilterChange}
+              onSortChange={handleSortChange}
+            />
           </Box>
-        ) : contentList && contentList.length > 0 ? (
-          <KaTableComponent columns={columns} data={data} tableTitle="submitted" handleDelete={handleDelete}/>
+
+
+          {loading ? (
+            <Box display="flex" justifyContent="center" my={5}>
+              <CircularProgress />
+            </Box>
+          ) : contentList && contentList.length > 0 ? (
+            <Box className="table-ka-container">
+              <KaTableComponent columns={columns} data={data} tableTitle="submitted" handleDelete={handleDelete} />
+            </Box>
           ) : (
-          <NoDataFound />
-        )}
+            <NoDataFound />
+          )}
 
 
 
-       
 
-        {totalCount > LIMIT && (
-          <PaginationComponent
-            count={Math.ceil(totalCount / LIMIT)}
-            page={page}
-            onPageChange={(event, newPage) => setPage(newPage-1)}
-          />
-        )}
-      </Box>
+
+          {totalCount > LIMIT && (
+            <PaginationComponent
+              count={Math.ceil(totalCount / LIMIT)}
+              page={page}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
+            />
+          )}
+        </Box>
       </Box>
     </Layout>
   );

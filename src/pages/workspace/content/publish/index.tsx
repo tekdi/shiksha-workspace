@@ -23,6 +23,7 @@ import { MIME_TYPE } from "@/utils/app.config";
 import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
+import { timeAgo } from "@/utils/Helper";
 
 const columns = [
   { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String },
@@ -62,20 +63,20 @@ const PublishPage = () => {
   }, [searchTerm]);
   useEffect(() => {
     const filteredArray = contentList.map((item: any) => ({
-      image: item?.appIcon ,
+      image: item?.appIcon,
 
       name: item?.name,
-      description: item?.description ,
+      description: item?.description,
 
       contentType: item.primaryCategory,
-      lastUpdatedOn:new Date(item.lastUpdatedOn).toLocaleString(),
+      lastUpdatedOn: timeAgo(item.lastUpdatedOn),
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
       mode: item.mode
-  }));
-  setData(filteredArray)
-  console.log(filteredArray)
+    }));
+    setData(filteredArray)
+    console.log(filteredArray)
   }, [contentList]);
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -159,25 +160,27 @@ const PublishPage = () => {
           {/* <Typography mb={2}>Here you see all your published content.</Typography> */}
 
 
-        {loading ? (
-          <Box display="flex" justifyContent="center" my={5}>
-            <CircularProgress />
-          </Box>
-        ) : contentList && contentList.length > 0 ? (
-         <KaTableComponent columns={columns} data={data} tableTitle="publish" handleDelete={handleDelete}/>
-        ) : (
-          <NoDataFound />
-        )}
- 
+          {loading ? (
+            <Box display="flex" justifyContent="center" my={5}>
+              <CircularProgress />
+            </Box>
+          ) : contentList && contentList.length > 0 ? (
+            <Box className="table-ka-container">
+              <KaTableComponent columns={columns} data={data} tableTitle="publish" handleDelete={handleDelete} />
+            </Box>
+          ) : (
+            <NoDataFound />
+          )}
 
-        {totalCount > LIMIT && (
-          <PaginationComponent
-            count={Math.ceil(totalCount / LIMIT)}
-            page={page}
-            onPageChange={(event, newPage) => setPage(newPage-1)}
-          />
-        )}
-      </Box>
+
+          {totalCount > LIMIT && (
+            <PaginationComponent
+              count={Math.ceil(totalCount / LIMIT)}
+              page={page}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
+            />
+          )}
+        </Box>
       </Box>
     </Layout>
   );

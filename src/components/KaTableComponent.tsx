@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table as KaTable } from 'ka-table';
 import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
-import { Typography, useTheme, IconButton , Box} from '@mui/material';
+import { Typography, useTheme, IconButton, Box } from '@mui/material';
 import UpReviewTinyImage from '@mui/icons-material/LibraryBooks';
 import "ka-table/style.css";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,18 +15,17 @@ interface CustomTableProps {
     title: string;
     dataType: DataType;
   }>;
-  handleDelete?:any;
-  tableTitle?:string
+  handleDelete?: any;
+  tableTitle?: string
 }
 
-const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDelete, tableTitle}) => {
+const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDelete, tableTitle }) => {
   const theme = useTheme<any>();
-  
+
 
   const openEditor = (content: any) => {
     const identifier = content?.identifier;
     let mode = content?.mode; // default mode from content, can be overwritten by tableTitle
-    
     switch (tableTitle) {
       case 'draft':
         // Use draft-specific routing
@@ -44,7 +43,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDe
           router.push({ pathname: `/collection`, query: { identifier, mode } });
         }
         return; // Exit early since draft has specific routing logic
-  
+
       case 'publish':
         mode = "read";
         break;
@@ -56,7 +55,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDe
         mode = mode || content?.mode;
         break;
     }
-  
+
     // Generic routing for cases other than 'draft'
     if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
@@ -67,47 +66,49 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDe
       router.push({ pathname: `/collection`, query: { identifier, mode } });
     }
   };
-  
-  
-  
+
+
+
   return (
     <KaTable
       columns={columns}
       data={data}
-     // editingMode={EditingMode.Cell}
+      // editingMode={EditingMode.Cell}
       rowKeyField={'id'}
       sortingMode={SortingMode.Single}
       childComponents={{
         cellText: {
           content: (props) => {
-            if (props.column.key === 'name' || props.column.key==="title_and_description") {
+            if (props.column.key === 'name' || props.column.key === "title_and_description") {
               return (
-                <div style={{ display: 'flex', alignItems: 'center', cursor:"pointer" }} onClick={() => openEditor(props.rowData)} >
+                <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }} onClick={() => openEditor(props.rowData)} >
                   {props.rowData.image ? (
                     <img
                       src={props.rowData.image || '/logo.png'}
                       height="25px"
                       alt="Image"
-                      style={props.column.key === 'name'?{ marginRight: '8px' }: {width: 60,
-                      height: 40,
-                      borderRadius: "8px",
-                      marginRight: "10px",}}
+                      style={props.column.key === 'name' ? { marginRight: '8px' } : {
+                        width: 60,
+                        height: 40,
+                        borderRadius: "8px",
+                        marginRight: "10px",
+                      }}
                     />
-                  ) :props.column.key === 'name'? (
+                  ) : props.column.key === 'name' ? (
                     <UpReviewTinyImage fontSize="small" style={{ marginRight: '20px' }} />
-                  ):(
+                  ) : (
                     <img
-                    src={'/logo.png'}
-                    height="25px"
-                    alt="Image"
-                  style={{
-                    width: 60,
-                      height: 40,
-                      borderRadius: "8px",
-                      marginRight: "10px"
-                  }}
-                      
-                      />
+                      src={'/logo.png'}
+                      height="25px"
+                      alt="Image"
+                      style={{
+                        width: 60,
+                        height: 40,
+                        borderRadius: "8px",
+                        marginRight: "10px"
+                      }}
+
+                    />
                   )}
                   <div>
                     <div>
@@ -115,59 +116,80 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns , handleDe
                     </div>
                     <div>
                       <Typography variant="body2" color={theme.palette.warning['A200']}>
-                        {props.column.key === 'name'?props.rowData.primaryCategory:props.rowData.description}
+                        {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
                       </Typography>
                     </div>
                   </div>
                 </div>
               );
             }
-            if(props.column.key === 'contentAction'){
-console.log(props.rowData.status)
-              if(props.rowData.status === "Draft")
-              {
+            else if (props.column.key === "status") {
+              if (props.rowData.status === "Draft") {
+                return (
+                  <Typography variant="body2" color={'#987100'}>
+                    {props.rowData.status}
+                  </Typography>
+                )
+              }
+              if (props.rowData.status === "Review") {
+                return (
+                  <Typography variant="body2" color={'#BA1A1A'}>
+                    {props.rowData.status}
+                  </Typography>
+                )
+              }
+              if (props.rowData.status === "Live") {
+                return (
+                  <Typography variant="body2" color={'#06A816'}>
+                    {props.rowData.status}
+                  </Typography>
+                )
+              }
+            }
+            else if (props.column.key === 'contentAction') {
+              if (props.rowData.status === "Draft") {
                 return (
                   <IconButton
-                  onClick={ handleDelete}
-                  color="error"
-                >
-                  <Box sx={{
-                                  background: '#FAEEEC',
-                                  height: '42px',
-                                  width: '42px',
-                                  borderRadius: '12px',
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  alignItems: 'center'
-                                }}>
-  
-                                  <DeleteIcon sx={{ fontSize: '18px' }} />
-                                </Box>
-                </IconButton>
+                    onClick={handleDelete}
+                    color="error"
+                  >
+                    <Box sx={{
+                      background: '#FAEEEC',
+                      height: '42px',
+                      width: '42px',
+                      borderRadius: '12px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}>
+
+                      <DeleteIcon sx={{ fontSize: '18px' }} />
+                    </Box>
+                  </IconButton>
                 );
               }
             }
-            if(props.column.key === 'action'){
+            else if (props.column.key === 'action') {
 
-              
+
               return (
                 <IconButton
-                onClick={ handleDelete}
-                color="error"
-              >
-                <Box sx={{
-                                background: '#FAEEEC',
-                                height: '42px',
-                                width: '42px',
-                                borderRadius: '12px',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                              }}>
+                  onClick={handleDelete}
+                  color="error"
+                >
+                  <Box sx={{
+                    background: '#FAEEEC',
+                    height: '42px',
+                    width: '42px',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
 
-                                <DeleteIcon sx={{ fontSize: '18px' }} />
-                              </Box>
-              </IconButton>
+                    <DeleteIcon sx={{ fontSize: '18px' }} />
+                  </Box>
+                </IconButton>
               );
             }
             return props.children; // Default content for other columns
