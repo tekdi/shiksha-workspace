@@ -7,6 +7,7 @@ import "ka-table/style.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import router from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
+import Image from "next/image";
 
 interface CustomTableProps {
   data: any[]; // Define a more specific type for your data if needed
@@ -149,9 +150,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
             else if (props.column.key === 'contentAction') {
               if (props.rowData.status === "Draft") {
                 return (
-                  <IconButton
+                  <Box
                     onClick={handleDelete}
-                    color="error"
+
                   >
                     <Box sx={{
                       background: '#FAEEEC',
@@ -163,9 +164,16 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                       alignItems: 'center'
                     }}>
 
-                      <DeleteIcon sx={{ fontSize: '18px' }} />
+                      {/* <Image src={'/logo.png'} alt="" /> */}
+                      <img
+                        src={'/delete.png'}
+                        height="25px"
+                        alt="Image"
+
+                      />
+
                     </Box>
-                  </IconButton>
+                  </Box>
                 );
               }
             }
@@ -173,9 +181,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
 
 
               return (
-                <IconButton
+                <Box
                   onClick={handleDelete}
-                  color="error"
+
                 >
                   <Box sx={{
                     background: '#FAEEEC',
@@ -187,9 +195,14 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                     alignItems: 'center'
                   }}>
 
-                    <DeleteIcon sx={{ fontSize: '18px' }} />
+                    <img
+                      src={'/delete.png'}
+                      height="25px"
+                      alt="Image"
+
+                    />
                   </Box>
-                </IconButton>
+                </Box>
               );
             }
             return props.children; // Default content for other columns
