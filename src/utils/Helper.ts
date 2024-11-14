@@ -48,8 +48,3 @@ export const handleExitEvent = () => {
     window.history.go(-1);
   }
 };
-
-
-
-
-
