@@ -1,5 +1,3 @@
-
-
 .player-grid {
   height: 100%;
   width: 100%;
@@ -37,6 +35,7 @@ body {
 .ka-thead-cell {
   font-weight: 600;
 }
+
 .ka-thead-cell-content {
   font-weight: normal !important;
 }
@@ -45,6 +44,11 @@ body {
 .ka-thead-background {
   z-index: 1;
   color: white;
- background: #a8a6a6;
-  background-color: #F8EFE7 !important;;
+  background: #a8a6a6;
+  background-color: #F8EFE7 !important;
+  ;
+}
+
+.ka-table-wrapper {
+  height: 50vh !important;
 }

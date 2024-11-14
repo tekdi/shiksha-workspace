@@ -24,12 +24,14 @@ import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
 import Paper from '@mui/material/Paper';
+import { timeAgo } from "@/utils/Helper";
+
 const columns = [
-  { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String },
-  { key: 'contentType', title: 'Content Type', dataType: DataType.String },
-  { key: 'status', title: 'Status', dataType: DataType.String },
-  { key: 'lastUpdatedOn', title: 'Last Modified', dataType: DataType.String },
-  { key: 'action', title: 'Action', dataType: DataType.String },
+  { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String, },
+  { key: 'contentType', title: 'Content Type', dataType: DataType.String, },
+  { key: 'status', title: 'Status', dataType: DataType.String, },
+  { key: 'lastUpdatedOn', title: 'Last Modified', dataType: DataType.String, },
+  { key: 'action', title: 'Action', dataType: DataType.String, },
 
 
 ]
@@ -60,20 +62,20 @@ const DraftPage = () => {
 
   useEffect(() => {
     const filteredArray = contentList.map((item: any) => ({
-      image: item?.appIcon ,
+      image: item?.appIcon,
 
       name: item?.name,
-      description: item?.description ,
+      description: item?.description,
 
       contentType: item.primaryCategory,
-      lastUpdatedOn:new Date(item.lastUpdatedOn).toLocaleString(),
+      lastUpdatedOn: timeAgo(item.lastUpdatedOn),
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
       mode: item.mode
-  }));
-  setData(filteredArray)
-  console.log(filteredArray)
+    }));
+    setData(filteredArray)
+    console.log(filteredArray)
   }, [contentList]);
 
   const handleSearch = (search: string) => {
@@ -144,6 +146,7 @@ const DraftPage = () => {
     getDraftContentList();
   }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
 
+
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
@@ -170,23 +173,26 @@ const DraftPage = () => {
             />
           </Box>
           {loading ? (
-          <Box display="flex" justifyContent="center" my={5}>
-            <CircularProgress />
-          </Box>
-        ) : contentList && contentList.length > 0 ? (
-          <KaTableComponent columns={columns} data={data} tableTitle="draft"  handleDelete={handleDelete}/>
-          ) : (
-          <NoDataFound />
-        )}
+            <Box display="flex" justifyContent="center" my={5}>
+              <CircularProgress />
+            </Box>
+          ) : contentList && contentList.length > 0 ? (
+            <Box className="table-ka-container">
+              <KaTableComponent columns={columns} data={data} tableTitle="draft" handleDelete={handleDelete} />
+            </Box>
 
-        {totalCount > LIMIT && (
-          <PaginationComponent
-            count={Math.ceil(totalCount / LIMIT)}
-            page={page}
-            onPageChange={(event, newPage) => setPage(newPage-1)}
-          />
-        )}
-      </Box>
+          ) : (
+            <NoDataFound />
+          )}
+
+          {totalCount > LIMIT && (
+            <PaginationComponent
+              count={Math.ceil(totalCount / LIMIT)}
+              page={page}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
+            />
+          )}
+        </Box>
       </Box>
 
     </Layout>

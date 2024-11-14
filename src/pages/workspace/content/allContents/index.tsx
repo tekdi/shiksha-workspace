@@ -140,9 +140,9 @@ const AllContentsPage = () => {
     getContentList();
   }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
 
- useEffect(() => {
+  useEffect(() => {
     const filteredArray = contentList.map(item => ({
-      image: item?.appIcon ,
+      image: item?.appIcon,
 
       name: item.name,
       primaryCategory: item.primaryCategory,
@@ -152,12 +152,12 @@ const AllContentsPage = () => {
       mimeType: item.mimeType,
       mode: item.mode
 
-  }));
-  setData(filteredArray)
-  console.log(filteredArray)
+    }));
+    setData(filteredArray)
+    console.log(filteredArray)
   }, [contentList]);
 
- const handleDeleteClick = async (content: any) => {
+  const handleDeleteClick = async (content: any) => {
     if (content?.identifier && content?.mimeType) {
       try {
         await deleteContent(content?.identifier, content?.mimeType);
@@ -183,13 +183,13 @@ const AllContentsPage = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-console.log("contentList",contentList)
+  console.log("contentList", contentList)
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-      <Box sx={{background: "#FFFFFF"}} p={2}>
-        <Typography variant="h4" sx={{fontWeight:"bold", fontSize: "16px"}}>All My Contents</Typography>
+        <Box sx={{ background: "#FFFFFF" }} p={2}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "16px" }}>All My Contents</Typography>
         </Box>
         {/* <Typography mb={2}>Here you see all your content.</Typography> */}
 
@@ -200,7 +200,7 @@ console.log("contentList",contentList)
             onFilterChange={handleFilterChange}
             onSortChange={handleSortChange}
           />
-              </Box>
+        </Box>
 
 
         {loading ? (
@@ -209,15 +209,17 @@ console.log("contentList",contentList)
           contentList &&
           contentList.length > 0 && (
             <>
-          <KaTableComponent    columns={columns}     tableTitle="all-content"   data={data}/>
-          </>
+              <Box className="table-ka-container">
+                <KaTableComponent columns={columns} tableTitle="all-content" data={data} />
+              </Box>
+            </>
           )
         ) : (
           <NoDataFound />
         )}
 
 
-              </Box>
+      </Box>
 
     </Layout>
   );

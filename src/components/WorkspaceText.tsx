@@ -7,8 +7,10 @@ const WorkspaceText: React.FC<any> = () => {
 
     return (<Box p={3} display={"flex"} sx={{
         flexDirection: 'row',
+        alignItems: 'center',
         '@media (max-width: 768px)': {
             flexDirection: 'column',
+            alignItems: 'flex-start'
         },
         '@media (max-width: 900px)': { padding: '18px 24px' }
     }} gap={2}>
