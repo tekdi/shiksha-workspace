@@ -178,7 +178,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                       {/* <Image src={'/logo.png'} alt="" /> */}
                       <img
                         src={'/delete.png'}
-                        height="25px"
+                        height="20px"
                         alt="Image"
 
                       />
@@ -208,7 +208,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
 
                     <img
                       src={'/delete.png'}
-                      height="25px"
+                      height="20px"
                       alt="Image"
 
                     />
