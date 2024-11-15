@@ -16,7 +16,7 @@ export default async function handler(
   const { path } = query;
 
   const BASE_URL = process.env.BASE_URL as string;
-  const TENANT_ID = process.env.TENANT_ID as string;
+  const NEXT_PUBLIC_TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID as string;
   const API_KEY = process.env.AUTH_API_TOKEN as string;
 
   const cookies = cookie.parse(req.headers.cookie || "");
@@ -76,7 +76,7 @@ export default async function handler(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        tenantId: TENANT_ID,
+        tenantId: NEXT_PUBLIC_TENANT_ID,
         "X-Channel-Id": "test-k12-channel",
       },
       ...(method === "POST" || method === "PATCH"
