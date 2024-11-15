@@ -6,6 +6,7 @@ import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
 import { getLocalStoredUserData } from "@/services/LocalStorageService";
+import { CHANNEL_ID } from "@/utils/app.config";
 
 const GenericEditor: React.FC = () => {
     const router = useRouter();
@@ -96,9 +97,18 @@ const GenericEditor: React.FC = () => {
             if (identifier) {
                 window['context'].contentId = identifier;
             }
-            window['context'].user.id = getLocalStoredUserData();
+            window['context'].user = {
+                id: getLocalStoredUserData(),
+                name: localStorage.getItem("name") || "Anonymous",
+                orgIds: [CHANNEL_ID],
+                organisations: {
+                    [CHANNEL_ID] : CHANNEL_ID + " Channel"
+                }
+            }
             window['context'].uid = getLocalStoredUserData();
-
+            window['context'].contextRollUp.l1 = CHANNEL_ID;
+            window['context'].tags = [CHANNEL_ID];
+            window['context'].channel = CHANNEL_ID;
             if (isLargeFileUpload || (_.get(data, 'contentDisposition') === 'online-only')) {
                 window.context['uploadInfo'] = {
                     isLargeFileUpload: true
