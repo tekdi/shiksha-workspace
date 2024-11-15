@@ -2,22 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 import { TENANT_ID, CHANNEL_ID } from "@/utils/app.config";
-
+import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier, mode } = router.query;
 
-  const [fullName, setFullName] = useState("Anonymous");
+  const [fullName, setFullName] = useState("Anonymous User");
   const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
 
   const [firstName, lastName] = fullName.split(" ");
 
   useEffect(() => {
-    const storedFullName = localStorage.getItem("name") || "Anonymous";
-    const storedUserId =
-      localStorage.getItem("userId") || TENANT_ID;
-    setFullName(storedFullName);
+    const storedFullName = getLocalStoredUserName();
+    const storedUserId = getLocalStoredUserId() || TENANT_ID;
+    setFullName(storedFullName ?? "Anonymous User");
     setUserId(storedUserId);
 
     const generatedDeviceId = uuidv4();

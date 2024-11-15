@@ -5,7 +5,7 @@ import _ from 'lodash';
 import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
-import { getLocalStoredUserData } from "@/services/LocalStorageService";
+import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
 import { CHANNEL_ID } from "@/utils/app.config";
 
 const GenericEditor: React.FC = () => {
@@ -98,14 +98,14 @@ const GenericEditor: React.FC = () => {
                 window['context'].contentId = identifier;
             }
             window['context'].user = {
-                id: getLocalStoredUserData(),
-                name: localStorage.getItem("name") || "Anonymous",
+                id: getLocalStoredUserId(),
+                name: getLocalStoredUserName() || "Anonymous User",
                 orgIds: [CHANNEL_ID],
                 organisations: {
                     [CHANNEL_ID] : CHANNEL_ID + " Channel"
                 }
             }
-            window['context'].uid = getLocalStoredUserData();
+            window['context'].uid = getLocalStoredUserId();
             window['context'].contextRollUp.l1 = CHANNEL_ID;
             window['context'].tags = [CHANNEL_ID];
             window['context'].channel = CHANNEL_ID;

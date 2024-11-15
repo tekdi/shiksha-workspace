@@ -1,11 +1,11 @@
-import { getLocalStoredUserData } from "./LocalStorageService";
+import { getLocalStoredUserId } from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
 import { MIME_TYPE, CHANNEL_ID, TENANT_ID } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryCategoryValue } from "@/utils/app.constant";
 
-const userId = getLocalStoredUserData();
+const userId = getLocalStoredUserId();
 console.log("userId ==>", userId);
 
 export const getPrimaryCategory = async () => {
