@@ -10,7 +10,7 @@ export enum ContentType {
 
 export const SortOptions = ["Modified On", "Created On"];
 
-export const LIMIT = 6;
+export const LIMIT = 10;
 export const ChannelID = "test-k12-channel";
 
 export const PrimaryCategoryValue = [
