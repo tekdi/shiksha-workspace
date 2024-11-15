@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
+import { TENANT_ID } from "@/utils/app.config";
 
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
   const { identifier, mode } = router.query;
 
   const [fullName, setFullName] = useState("Anonymous");
-  const [userId, setUserId] = useState("ef99949b-7f3a-4a5f-806a-e67e683e38f3");
+  const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
 
   const [firstName, lastName] = fullName.split(" ");
@@ -15,7 +16,7 @@ const CollectionEditor: React.FC = () => {
   useEffect(() => {
     const storedFullName = localStorage.getItem("name") || "Anonymous";
     const storedUserId =
-      localStorage.getItem("userId") || "ef99949b-7f3a-4a5f-806a-e67e683e38f3";
+      localStorage.getItem("userId") || TENANT_ID;
     setFullName(storedFullName);
     setUserId(storedUserId);
 
