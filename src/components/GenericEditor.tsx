@@ -6,7 +6,7 @@ import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
 import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
-import { CHANNEL_ID, TENANT_ID } from "@/utils/app.config";
+import { CHANNEL_ID, FRAMEWORK_ID, TENANT_ID } from "@/utils/app.config";
 
 const GenericEditor: React.FC = () => {
     const router = useRouter();
@@ -109,6 +109,7 @@ const GenericEditor: React.FC = () => {
             window['context'].contextRollUp.l1 = CHANNEL_ID;
             window['context'].tags = [CHANNEL_ID];
             window['context'].channel = CHANNEL_ID;
+            window['context'].framework = FRAMEWORK_ID;
             if (isLargeFileUpload || (_.get(data, 'contentDisposition') === 'online-only')) {
                 window.context['uploadInfo'] = {
                     isLargeFileUpload: true

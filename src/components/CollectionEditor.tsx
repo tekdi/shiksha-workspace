@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import { TENANT_ID, CHANNEL_ID } from "@/utils/app.config";
+import { TENANT_ID, CHANNEL_ID, FRAMEWORK_ID, CLOUD_STORAGE_URL } from "@/utils/app.config";
 import { getLocalStoredUserName, getLocalStoredUserId } from "@/services/LocalStorageService";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
@@ -34,7 +34,7 @@ const CollectionEditor: React.FC = () => {
       },
       identifier: identifier,
       channel: CHANNEL_ID,
-      framework: "test_k12_framework",
+      framework: FRAMEWORK_ID,
       sid: uuidv4(),
       did: deviceId,
       uid: getLocalStoredUserId() || TENANT_ID,
@@ -60,7 +60,7 @@ const CollectionEditor: React.FC = () => {
       defaultLicense: "CC BY 4.0",
       endpoint: "/data/v3/telemetry",
       env: "collection_editor",
-      cloudStorageUrls: ["https://knowlg-public.s3-ap-south-1.amazonaws.com/"],
+      cloudStorageUrls: [CLOUD_STORAGE_URL],
     },
     config: {
       mode: mode || "edit", // edit / review / read / sourcingReview

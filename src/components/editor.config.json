@@ -102,7 +102,7 @@
             ],
             "channel": "",
             "env": "generic-editor",
-            "framework": "test_k12_framework",
+            "framework": "",
             "ownershipType": [
                 "createdBy",
                 "createdFor"

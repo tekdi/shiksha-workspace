@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import { TENANT_ID, CHANNEL_ID } from "@/utils/app.config";
+import { TENANT_ID, CHANNEL_ID, FRAMEWORK_ID, CLOUD_STORAGE_URL } from "@/utils/app.config";
 import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
@@ -58,8 +58,8 @@ const QuestionSetEditor: React.FC = () => {
       defaultLicense: "CC BY 4.0",
       endpoint: "/data/v3/telemetry",
       env: "questionset_editor",
-      framework: "test_k12_framework",
-      cloudStorageUrls: ["https://knowlg-public.s3-ap-south-1.amazonaws.com/"],
+      framework: FRAMEWORK_ID,
+      cloudStorageUrls: [CLOUD_STORAGE_URL],
       labels: {
         save_collection_btn_label: "Save as Draft",
       },
