@@ -2,17 +2,17 @@ import { stringify } from "json5";
 import { getLocalStoredUserData } from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE, TENANTID } from "@/utils/app.config";
+import { MIME_TYPE, TENANT_ID, CHANNEL_ID } from "@/utils/app.config";
 const authToken = process.env.NEXT_PUBLIC_AUTH_API_TOKEN;
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 import { v4 as uuidv4 } from "uuid";
-import { ChannelID, PrimaryCategoryValue } from "@/utils/app.constant";
+import { PrimaryCategoryValue } from "@/utils/app.constant";
 
 const userId = getLocalStoredUserData();
 console.log("userId ==>", userId);
 
 export const getPrimaryCategory = async () => {
-  const apiURL = `/api/channel/v1/read/${ChannelID}`;
+  const apiURL = `/api/channel/v1/read/${CHANNEL_ID}`;
   try {
     const response = await get(apiURL);
     return response?.data?.result;
