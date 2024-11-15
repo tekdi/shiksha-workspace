@@ -28,7 +28,11 @@ import {
   epubMetadata,
 } from "../../../../components/players/playerMetadata";
 import $ from "jquery";
-import { MIME_TYPE } from "@/utils/app.config";
+import { MIME_TYPE, CHANNEL_ID } from "@/utils/app.config";
+import { getLocalStoredUserName } from "@/services/LocalStorageService";
+
+const userFullName = getLocalStoredUserName() || "Anonymous User";
+const [firstName, lastName] = userFullName.split(" ");
 
 const ReviewContentSubmissions = () => {
   const [isContentInteractiveType, setIsContentInteractiveType] =
@@ -60,10 +64,20 @@ const ReviewContentSubmissions = () => {
           if (MIME_TYPE.INTERACTIVE_MIME_TYPE.includes(data?.mimeType)) {
             V1PlayerConfig.metadata = data;
             V1PlayerConfig.context.contentId = data.identifier;
+            V1PlayerConfig.context.channel = CHANNEL_ID;
+            V1PlayerConfig.context.tags = [CHANNEL_ID];
+            V1PlayerConfig.context.app = [CHANNEL_ID];
+            V1PlayerConfig.context.userData.firstName = firstName;
+            V1PlayerConfig.context.userData.lastName = lastName;
             setIsContentInteractiveType(true);
           } else {
             setIsContentInteractiveType(false);
             playerConfig.metadata = data;
+            playerConfig.context.contentId = data.identifier;
+            playerConfig.context.channel = CHANNEL_ID;
+            playerConfig.context.tags = [CHANNEL_ID];
+            playerConfig.context.userData.firstName = firstName;
+            playerConfig.context.userData.lastName = lastName;
           }
           setContentDetails(data);
         }
