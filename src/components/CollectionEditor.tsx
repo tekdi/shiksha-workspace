@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import { TENANT_ID } from "@/utils/app.config";
+import { TENANT_ID, CHANNEL_ID } from "@/utils/app.config";
 
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
@@ -34,7 +34,7 @@ const CollectionEditor: React.FC = () => {
         orgIds: ["01309282781705830427"],
       },
       identifier: identifier,
-      channel: "test-k12-channel",
+      channel: CHANNEL_ID,
       framework: "test_k12_framework",
       authToken: " ",
       sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",

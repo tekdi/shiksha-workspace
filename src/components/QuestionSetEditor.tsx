@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import { TENANT_ID } from "@/utils/app.config";
+import { TENANT_ID, CHANNEL_ID } from "@/utils/app.config";
 
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
@@ -26,21 +26,18 @@ const QuestionSetEditor: React.FC = () => {
 
   const questionSetEditorConfig = {
     context: {
-      programId: "",
-      contributionOrgId: "",
       user: {
         id: userId,
         fullName: fullName,
         firstName: firstName || "Anonymous",
         lastName: lastName || "Anonymous",
-        orgIds: ["test-k12-channel"],
+        orgIds: [CHANNEL_ID],
       },
       identifier: identifier,
-      authToken: " ",
       sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",
       did: deviceId,
       uid: "bf020396-0d7b-436f-ae9f-869c6780fc45",
-      channel: "test-k12-channel",
+      channel: CHANNEL_ID,
       pdata: {
         id: "dev.dock.portal",
         ver: "2.8.0",
