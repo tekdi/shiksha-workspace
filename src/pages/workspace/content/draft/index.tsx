@@ -27,11 +27,11 @@ import Paper from '@mui/material/Paper';
 import { timeAgo } from "@/utils/Helper";
 
 const columns = [
-  { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String, },
-  { key: 'contentType', title: 'Content Type', dataType: DataType.String, },
-  { key: 'status', title: 'Status', dataType: DataType.String, },
-  { key: 'lastUpdatedOn', title: 'Last Modified', dataType: DataType.String, },
-  { key: 'action', title: 'Action', dataType: DataType.String, },
+  { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String, width: "450px" },
+  { key: 'contentType', title: 'Content Type', dataType: DataType.String, width: "300px" },
+  { key: 'status', title: 'Status', dataType: DataType.String, width: "300px" },
+  { key: 'lastUpdatedOn', title: 'Last Modified', dataType: DataType.String, width: "300px" },
+  { key: 'action', title: 'Action', dataType: DataType.String, width: "200px" },
 
 
 ]
