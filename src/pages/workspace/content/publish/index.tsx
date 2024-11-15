@@ -90,10 +90,7 @@ const PublishPage = () => {
     setSortBy(sortBy);
   };
 
-  const handleDelete = (index: number) => {
-    console.log(`Deleting item at index ${index}`);
-    setContentDeleted((prev) => !prev);
-  };
+ 
 
   const openEditor = (content: any) => {
     const identifier = content?.identifier;
@@ -166,7 +163,7 @@ const PublishPage = () => {
             </Box>
           ) : contentList && contentList.length > 0 ? (
             <Box className="table-ka-container">
-              <KaTableComponent columns={columns} data={data} tableTitle="publish" handleDelete={handleDelete} />
+              <KaTableComponent columns={columns} data={data} tableTitle="publish" />
             </Box>
           ) : (
             <NoDataFound />

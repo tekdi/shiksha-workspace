@@ -95,18 +95,6 @@ const AllContentsPage = () => {
     setSortBy(sortBy);
   };
 
-  const openEditor = (content: any) => {
-    const identifier = content?.identifier;
-    const mode = content?.mode;
-    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
-      router.push({ pathname: `/editor`, query: { identifier, mode } });
-    } else if (
-      content?.mimeType &&
-      MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
-    ) {
-      router.push({ pathname: `/upload-editor`, query: { identifier } });
-    }
-  };
 
   useEffect(() => {
     const getContentList = async () => {
@@ -166,19 +154,7 @@ const AllContentsPage = () => {
     console.log(filteredArray)
   }, [contentList]);
 
-  const handleDeleteClick = async (content: any) => {
-    if (content?.identifier && content?.mimeType) {
-      try {
-        await deleteContent(content?.identifier, content?.mimeType);
-        console.log(`Deleted item with identifier - ${content?.identifier}`);
-        setTimeout(() => {
-          setContentDeleted((prev) => !prev);
-        }, 1000);
-      } catch (error) {
-        console.error("Failed to delete content:", error);
-      }
-    }
-  };
+  
 
   const filteredData = useMemo(
     () =>

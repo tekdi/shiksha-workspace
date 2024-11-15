@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table as KaTable } from 'ka-table';
 import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
 import { Typography, useTheme, IconButton, Box } from '@mui/material';
@@ -8,7 +8,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import router from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
 import Image from "next/image";
-
+import ActionIcon from './ActionIcon';
+import { deleteContent } from '@/services/ContentService';
 interface CustomTableProps {
   data: any[]; // Define a more specific type for your data if needed
   columns: Array<{
@@ -20,9 +21,14 @@ interface CustomTableProps {
   tableTitle?: string
 }
 
-const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDelete, tableTitle }) => {
+const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitle }) => {
   const theme = useTheme<any>();
+  const [open, setOpen] = useState(false);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => setOpen(true);
 
   const openEditor = (content: any) => {
     const identifier = content?.identifier;
@@ -68,10 +74,24 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
     }
   };
 
+  const handleDelete = async(content: any) => {
+    console.log(`Deleting item at index`, content);
 
+    if (content?.identifier && content?.mimeType) {
+      try {
+        await deleteContent(content?.identifier, content?.mimeType);
+        console.log(`Deleted item with identifier - ${content?.identifier}`);
+      //  setContentDeleted((prev) => !prev);
+      } catch (error) {
+        console.error("Failed to delete content:", error);
+      }
+    }
+    handleClose();
+  };
 
   return (
-    <KaTable
+    <>
+     <KaTable
       columns={columns}
       data={data}
       // editingMode={EditingMode.Cell}
@@ -161,30 +181,14 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
             else if (props.column.key === 'contentAction') {
               if (props.rowData.status === "Draft") {
                 return (
-                  <Box
-                    onClick={handleDelete}
-
-                  >
-                    <Box sx={{
-                      background: '#FAEEEC',
-                      height: '42px',
-                      width: '42px',
-                      borderRadius: '12px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}>
-
-                      {/* <Image src={'/logo.png'} alt="" /> */}
-                      <img
-                        src={'/delete.png'}
-                        height="20px"
-                        alt="Image"
-
-                      />
-
-                    </Box>
-                  </Box>
+                  <>
+                  
+                  
+                  
+                   <ActionIcon
+                   rowData={props.rowData}
+                 /></>
+                  
                 );
               }
             }
@@ -193,34 +197,25 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
 
               return (
                 <Box
-                  onClick={handleDelete}
+                  onClick={handleOpen}
 
                 >
-                  <Box sx={{
-                    background: '#FAEEEC',
-                    height: '42px',
-                    width: '42px',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}>
+                  
+                         <ActionIcon
+                   rowData={props.rowData}
+                 
+                 />
 
-                    <img
-                      src={'/delete.png'}
-                      height="20px"
-                      alt="Image"
-
-                    />
-                  </Box>
                 </Box>
               );
             }
-            return props.children; // Default content for other columns
+            return props.children; 
           },
         },
       }}
     />
+    </>
+   
   );
 };
 
