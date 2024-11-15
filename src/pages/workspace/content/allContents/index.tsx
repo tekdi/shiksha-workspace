@@ -29,10 +29,10 @@ import { DataType } from 'ka-table/enums';
 import "ka-table/style.css";
 import KaTableComponent from "@/components/KaTableComponent";
 const columns = [
-  { key: 'name', title: 'Content', dataType: DataType.String },
-  { key: 'lastUpdatedOn', title: 'Last Updated', dataType: DataType.String },
-  { key: 'status', title: 'Status', dataType: DataType.String },
-  { key: 'contentAction', title: 'Action', dataType: DataType.String },
+  { key: 'name', title: 'Content', dataType: DataType.String, width: "450px" },
+  { key: 'lastUpdatedOn', title: 'Last Updated', dataType: DataType.String, width: "300px" },
+  { key: 'status', title: 'Status', dataType: DataType.String, width: "300px" },
+  { key: 'contentAction', title: 'Action', dataType: DataType.String, width: "200px" },
 
 ]
 const AllContentsPage = () => {
