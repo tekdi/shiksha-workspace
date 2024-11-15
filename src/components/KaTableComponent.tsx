@@ -86,7 +86,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                   {props.rowData.image ? (
                     <img
                       src={props.rowData.image || '/logo.png'}
-                      height="25px"
+                      height="50px"
                       alt="Image"
                       style={props.column.key === 'name' ? { marginRight: '8px' } : {
                         width: 60,
@@ -96,7 +96,18 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                       }}
                     />
                   ) : props.column.key === 'name' ? (
-                    <UpReviewTinyImage fontSize="small" style={{ marginRight: '20px' }} />
+                    <img
+                      src={'/logo.png'}
+                      height="25px"
+                      alt="Image"
+                      style={{
+                        width: 60,
+                        height: 40,
+                        borderRadius: "8px",
+                        marginRight: "10px"
+                      }}
+
+                    />
                   ) : (
                     <img
                       src={'/logo.png'}
@@ -113,10 +124,10 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                   )}
                   <div>
                     <div>
-                      <Typography variant="body1">{props.rowData.name}</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
                     </div>
                     <div>
-                      <Typography variant="body2" color={theme.palette.warning['A200']}>
+                      <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px' }} className='two-line-text' color={theme.palette.warning['A200']}>
                         {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
                       </Typography>
                     </div>
@@ -127,21 +138,21 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
             else if (props.column.key === "status") {
               if (props.rowData.status === "Draft") {
                 return (
-                  <Typography variant="body2" color={'#987100'}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
                     {props.rowData.status}
                   </Typography>
                 )
               }
               if (props.rowData.status === "Review") {
                 return (
-                  <Typography variant="body2" color={'#BA1A1A'}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#BA1A1A'}>
                     {props.rowData.status}
                   </Typography>
                 )
               }
               if (props.rowData.status === "Live") {
                 return (
-                  <Typography variant="body2" color={'#06A816'}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#06A816'}>
                     {props.rowData.status}
                   </Typography>
                 )
@@ -167,7 +178,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                       {/* <Image src={'/logo.png'} alt="" /> */}
                       <img
                         src={'/delete.png'}
-                        height="25px"
+                        height="20px"
                         alt="Image"
 
                       />
@@ -197,7 +208,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
 
                     <img
                       src={'/delete.png'}
-                      height="25px"
+                      height="20px"
                       alt="Image"
 
                     />
