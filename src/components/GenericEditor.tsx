@@ -6,7 +6,7 @@ import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
 import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
-import { CHANNEL_ID } from "@/utils/app.config";
+import { CHANNEL_ID, TENANT_ID } from "@/utils/app.config";
 
 const GenericEditor: React.FC = () => {
     const router = useRouter();
@@ -98,14 +98,14 @@ const GenericEditor: React.FC = () => {
                 window['context'].contentId = identifier;
             }
             window['context'].user = {
-                id: getLocalStoredUserId(),
+                id: getLocalStoredUserId() || TENANT_ID,
                 name: getLocalStoredUserName() || "Anonymous User",
                 orgIds: [CHANNEL_ID],
                 organisations: {
                     [CHANNEL_ID] : CHANNEL_ID + " Channel"
                 }
             }
-            window['context'].uid = getLocalStoredUserId();
+            window['context'].uid = getLocalStoredUserId() || TENANT_ID;
             window['context'].contextRollUp.l1 = CHANNEL_ID;
             window['context'].tags = [CHANNEL_ID];
             window['context'].channel = CHANNEL_ID;

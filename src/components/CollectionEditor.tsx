@@ -9,7 +9,7 @@ const CollectionEditor: React.FC = () => {
 
   const [fullName, setFullName] = useState("Anonymous User");
   const [userId, setUserId] = useState(TENANT_ID);
-  const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
+  const [deviceId, setDeviceId] = useState("");
 
   const [firstName, lastName] = fullName.split(" ");
 
@@ -29,54 +29,33 @@ const CollectionEditor: React.FC = () => {
         id: userId,
         fullName: fullName,
         firstName: firstName || "Anonymous",
-        lastName: lastName || "Anonymous",
-        orgIds: ["01309282781705830427"],
+        lastName: lastName || "User",
+        orgIds: [CHANNEL_ID],
       },
       identifier: identifier,
       channel: CHANNEL_ID,
       framework: "test_k12_framework",
-      authToken: " ",
-      sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",
+      sid: uuidv4(),
       did: deviceId,
-      uid: "bf020396-0d7b-436f-ae9f-869c6780fc45",
-      additionalCategories: [
-        {
-          value: "Textbook",
-          label: "Textbook",
-        },
-        {
-          value: "Lesson Plan",
-          label: "Lesson Plan",
-        },
-      ],
+      uid: getLocalStoredUserId() || TENANT_ID,
+      additionalCategories: [],
       pdata: {
-        id: "dev.dock.portal",
-        ver: "2.8.0",
-        pid: "creation-portal",
+        id: "pratham.admin.portal",
+        ver: "1.0.0",
+        pid: "pratham-portal",
       },
       contextRollup: {
-        l1: "01307938306521497658",
+        l1: CHANNEL_ID,
       },
-      tags: ["01307938306521497658"],
+      tags: [CHANNEL_ID],
       cdata: [
         {
-          id: "01307938306521497658",
-          type: "sourcing_organization",
-        },
-        {
-          type: "project",
-          id: "ec5cc850-3f71-11eb-aae1-fb99d9fb6737",
-        },
-        {
-          type: "linked_collection",
-          id: "do_113140468925825024117",
-        },
+          id: CHANNEL_ID,
+          type: "pratham-portal",
+        }
       ],
       timeDiff: 5,
-      objectRollup: {
-        l1: "do_113140468925825024117",
-        l2: "do_113140468926914560125",
-      },
+      objectRollup: {},
       host: "",
       defaultLicense: "CC BY 4.0",
       endpoint: "/data/v3/telemetry",
