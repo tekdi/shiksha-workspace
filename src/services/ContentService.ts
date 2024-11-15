@@ -137,8 +137,8 @@ export const deleteContent = async (identifier: string, mimeType: string) => {
   if (mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
     apiURL = questionsetRetireURL;
   } else if (
-    mimeType !== MIME_TYPE.QUESTIONSET_MIME_TYPE &&
-    mimeType !== MIME_TYPE.COLLECTION_MIME_TYPE
+    mimeType !== MIME_TYPE.QUESTIONSET_MIME_TYPE
+    // mimeType !== MIME_TYPE.COLLECTION_MIME_TYPE
   ) {
     apiURL = contentRetireURL;
   }

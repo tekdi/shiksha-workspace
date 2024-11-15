@@ -84,10 +84,7 @@ const SubmittedForReviewPage = () => {
     setSortBy(sortBy);
   };
 
-  const handleDelete = (index: number) => {
-    console.log(`Deleting item at index ${index}`);
-    setContentDeleted((prev) => !prev);
-  };
+ 
 
   useEffect(() => {
     const getReviewContentList = async () => {
@@ -174,7 +171,7 @@ const SubmittedForReviewPage = () => {
             </Box>
           ) : contentList && contentList.length > 0 ? (
             <Box className="table-ka-container">
-              <KaTableComponent columns={columns} data={data} tableTitle="submitted" handleDelete={handleDelete} />
+              <KaTableComponent columns={columns} data={data} tableTitle="submitted"  />
             </Box>
           ) : (
             <NoDataFound />
