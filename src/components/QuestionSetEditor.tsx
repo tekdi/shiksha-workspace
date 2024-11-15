@@ -33,38 +33,27 @@ const QuestionSetEditor: React.FC = () => {
         orgIds: [CHANNEL_ID],
       },
       identifier: identifier,
-      sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",
+      sid: uuidv4(),
       did: deviceId,
-      uid: "bf020396-0d7b-436f-ae9f-869c6780fc45",
+      uid: userId,
       channel: CHANNEL_ID,
       pdata: {
-        id: "dev.dock.portal",
-        ver: "2.8.0",
-        pid: "creation-portal",
+        id: "pratham.admin.portal",
+        ver: "1.0.0",
+        pid: "pratham-portal",
       },
       contextRollup: {
-        l1: "01307938306521497658",
+        l1: CHANNEL_ID,
       },
-      tags: ["01307938306521497658"],
+      tags: [CHANNEL_ID],
       cdata: [
         {
-          id: "01307938306521497658",
-          type: "sourcing_organization",
-        },
-        {
-          type: "project",
-          id: "ec5cc850-3f71-11eb-aae1-fb99d9fb6737",
-        },
-        {
-          type: "linked_collection",
-          id: "do_113140468925825024117",
-        },
+          id: CHANNEL_ID,
+          type: "pratham-portal",
+        }
       ],
       timeDiff: 5,
-      objectRollup: {
-        l1: "do_113140468925825024117",
-        l2: "do_113140468926914560125",
-      },
+      objectRollup: {},
       host: "",
       defaultLicense: "CC BY 4.0",
       endpoint: "/data/v3/telemetry",
@@ -79,7 +68,7 @@ const QuestionSetEditor: React.FC = () => {
       cloudStorage: {
         provider: "aws",
         presigned_headers: {},
-      },
+      }
     },
     config: {
       mode: mode || "edit",
