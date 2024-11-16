@@ -233,7 +233,8 @@ const CollectionEditor: React.FC = () => {
         "editorEmitter",
         (event: any) => {
           console.log("Editor event:", event);
-          if (event.detail?.action === "backContent") {
+          if (event.detail?.action === "backContent" || event.detail?.action === "submitContent" ||
+            event.detail?.action === "publishContent" || event.detail?.action === "rejectContent") {
             window.history.back();
             window.addEventListener(
               "popstate",
