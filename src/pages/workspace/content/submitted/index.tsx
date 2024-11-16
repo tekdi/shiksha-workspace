@@ -36,7 +36,7 @@ const columns = [
 const SubmittedForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("submitted");
   const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("updated");
+  const [sortBy, setSortBy] = useState("Modified On");
   const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -165,7 +165,7 @@ const SubmittedForReviewPage = () => {
           </Box>
 
 
-          {loading ? (
+          {/* {loading ? (
             <Box display="flex" justifyContent="center" my={5}>
               <CircularProgress />
             </Box>
@@ -175,13 +175,17 @@ const SubmittedForReviewPage = () => {
             </Box>
           ) : (
             <NoDataFound />
+          )} */}
+           {loading ? (
+            <Box display="flex" justifyContent="center" my={5}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Box className="table-ka-container">
+              <KaTableComponent columns={columns} data={data} tableTitle="submitted"  />
+            </Box>
           )}
-
-
-
-
-
-          {totalCount > LIMIT && (
+        {totalCount > LIMIT && (
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}

@@ -52,8 +52,8 @@ const AllContentsPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("updated");
-  const [contentList, setContentList] = React.useState<content[]>([]);
+  const [sortBy, setSortBy] = useState("Modified On");
+ const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
 
   const [loading, setLoading] = useState(false);
@@ -61,7 +61,7 @@ const AllContentsPage = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
   const [totalCount, setTotalCount] = useState(0);
-
+  
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
   };
@@ -92,6 +92,7 @@ const AllContentsPage = () => {
   };
 
   const handleSortChange = (sortBy: string) => {
+    console.log("sortBy", sortBy)
     setSortBy(sortBy);
   };
 
@@ -135,7 +136,7 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy,  page]);
 
   useEffect(() => {
     const filteredArray = contentList.map(item => ({
@@ -187,21 +188,14 @@ const AllContentsPage = () => {
               onSortChange={handleSortChange}
             />
           </Box>
-
-
-          {loading ? (
+              {loading ? (
             <Loader showBackdrop={true} loadingText={"Loading"} />
-          ) : contentList && contentList.length > 0 ? (
-            contentList &&
-            contentList.length > 0 && (
-              <>
+          ) : (
+            <>
                 <Box className="table-ka-container">
                   <KaTableComponent columns={columns} tableTitle="all-content" data={data} />
                 </Box>
               </>
-            )
-          ) : (
-            <NoDataFound />
           )}
         </Box>
 

@@ -12,6 +12,7 @@ const ActionIcon: React.FC<ActionCellProps> = ({
 }) => {
   const theme = useTheme<any>();
   const [open, setOpen] = useState(false);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -27,7 +28,7 @@ const ActionIcon: React.FC<ActionCellProps> = ({
         alignItems: "center",
       }}
     >
-      <Tooltip title={"COMMON.DELETE"}>
+      <Tooltip title={"Delete"}>
         <Box
           onClick={() => {
             console.log(rowData);

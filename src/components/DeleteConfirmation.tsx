@@ -23,6 +23,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
   rowData,
   handleClose,
 }) => {
+
   const handleDelete = async (content?: any) => {
     console.log(`Deleting item at index`, rowData);
 
@@ -30,10 +31,11 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       try {
         await deleteContent(rowData?.identifier, rowData?.mimeType);
         console.log(`Deleted item with identifier - ${rowData?.identifier}`);
-        // setContentDeleted((prev) => !prev);
+    
       } catch (error) {
         console.error("Failed to delete content:", error);
       }
+     
     }
     handleClose();
   };
