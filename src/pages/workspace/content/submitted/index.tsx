@@ -25,11 +25,11 @@ import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
 const columns = [
-  { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'Content Type', dataType: DataType.String, width: "300px" },
-  { key: 'status', title: 'Status', dataType: DataType.String, width: "300px" },
-  { key: 'lastUpdatedOn', title: 'Last Modified', dataType: DataType.String, width: "300px" },
-  { key: 'action', title: 'Action', dataType: DataType.String, width: "200px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
+  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
+  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
+  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
 
 
 ]
@@ -84,10 +84,7 @@ const SubmittedForReviewPage = () => {
     setSortBy(sortBy);
   };
 
-  const handleDelete = (index: number) => {
-    console.log(`Deleting item at index ${index}`);
-    setContentDeleted((prev) => !prev);
-  };
+ 
 
   useEffect(() => {
     const getReviewContentList = async () => {
@@ -174,7 +171,7 @@ const SubmittedForReviewPage = () => {
             </Box>
           ) : contentList && contentList.length > 0 ? (
             <Box className="table-ka-container">
-              <KaTableComponent columns={columns} data={data} tableTitle="submitted" handleDelete={handleDelete} />
+              <KaTableComponent columns={columns} data={data} tableTitle="submitted"  />
             </Box>
           ) : (
             <NoDataFound />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table as KaTable } from 'ka-table';
 import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
 import { Typography, useTheme, IconButton, Box } from '@mui/material';
@@ -8,7 +8,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import router from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
 import Image from "next/image";
-
+import ActionIcon from './ActionIcon';
+import { deleteContent } from '@/services/ContentService';
 interface CustomTableProps {
   data: any[]; // Define a more specific type for your data if needed
   columns: Array<{
@@ -20,9 +21,14 @@ interface CustomTableProps {
   tableTitle?: string
 }
 
-const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDelete, tableTitle }) => {
+const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitle }) => {
   const theme = useTheme<any>();
+  const [open, setOpen] = useState(false);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => setOpen(true);
 
   const openEditor = (content: any) => {
     const identifier = content?.identifier;
@@ -68,10 +74,24 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
     }
   };
 
+  const handleDelete = async(content: any) => {
+    console.log(`Deleting item at index`, content);
 
+    if (content?.identifier && content?.mimeType) {
+      try {
+        await deleteContent(content?.identifier, content?.mimeType);
+        console.log(`Deleted item with identifier - ${content?.identifier}`);
+      //  setContentDeleted((prev) => !prev);
+      } catch (error) {
+        console.error("Failed to delete content:", error);
+      }
+    }
+    handleClose();
+  };
 
   return (
-    <KaTable
+    <>
+     <KaTable
       columns={columns}
       data={data}
       // editingMode={EditingMode.Cell}
@@ -86,7 +106,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                   {props.rowData.image ? (
                     <img
                       src={props.rowData.image || '/logo.png'}
-                      height="25px"
+                      height="50px"
                       alt="Image"
                       style={props.column.key === 'name' ? { marginRight: '8px' } : {
                         width: 60,
@@ -96,7 +116,18 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                       }}
                     />
                   ) : props.column.key === 'name' ? (
-                    <UpReviewTinyImage fontSize="small" style={{ marginRight: '20px' }} />
+                    <img
+                      src={'/logo.png'}
+                      height="25px"
+                      alt="Image"
+                      style={{
+                        width: 60,
+                        height: 40,
+                        borderRadius: "8px",
+                        marginRight: "10px"
+                      }}
+
+                    />
                   ) : (
                     <img
                       src={'/logo.png'}
@@ -113,10 +144,10 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
                   )}
                   <div>
                     <div>
-                      <Typography variant="body1">{props.rowData.name}</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
                     </div>
                     <div>
-                      <Typography variant="body2" color={theme.palette.warning['A200']}>
+                      <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px' }} className='two-line-text' color={theme.palette.warning['A200']}>
                         {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
                       </Typography>
                     </div>
@@ -127,21 +158,21 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
             else if (props.column.key === "status") {
               if (props.rowData.status === "Draft") {
                 return (
-                  <Typography variant="body2" color={'#987100'}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
                     {props.rowData.status}
                   </Typography>
                 )
               }
               if (props.rowData.status === "Review") {
                 return (
-                  <Typography variant="body2" color={'#BA1A1A'}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#BA1A1A'}>
                     {props.rowData.status}
                   </Typography>
                 )
               }
               if (props.rowData.status === "Live") {
                 return (
-                  <Typography variant="body2" color={'#06A816'}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#06A816'}>
                     {props.rowData.status}
                   </Typography>
                 )
@@ -150,30 +181,14 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
             else if (props.column.key === 'contentAction') {
               if (props.rowData.status === "Draft") {
                 return (
-                  <Box
-                    onClick={handleDelete}
-
-                  >
-                    <Box sx={{
-                      background: '#FAEEEC',
-                      height: '42px',
-                      width: '42px',
-                      borderRadius: '12px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}>
-
-                      {/* <Image src={'/logo.png'} alt="" /> */}
-                      <img
-                        src={'/delete.png'}
-                        height="25px"
-                        alt="Image"
-
-                      />
-
-                    </Box>
-                  </Box>
+                  <>
+                  
+                  
+                  
+                   <ActionIcon
+                   rowData={props.rowData}
+                 /></>
+                  
                 );
               }
             }
@@ -182,34 +197,25 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, handleDel
 
               return (
                 <Box
-                  onClick={handleDelete}
+                  onClick={handleOpen}
 
                 >
-                  <Box sx={{
-                    background: '#FAEEEC',
-                    height: '42px',
-                    width: '42px',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}>
+                  
+                         <ActionIcon
+                   rowData={props.rowData}
+                 
+                 />
 
-                    <img
-                      src={'/delete.png'}
-                      height="25px"
-                      alt="Image"
-
-                    />
-                  </Box>
                 </Box>
               );
             }
-            return props.children; // Default content for other columns
+            return props.children; 
           },
         },
       }}
     />
+    </>
+   
   );
 };
 

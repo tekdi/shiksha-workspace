@@ -27,11 +27,11 @@ import Paper from '@mui/material/Paper';
 import { timeAgo } from "@/utils/Helper";
 
 const columns = [
-  { key: 'title_and_description', title: 'Title & Description', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'Content Type', dataType: DataType.String, width: "300px" },
-  { key: 'status', title: 'Status', dataType: DataType.String, width: "300px" },
-  { key: 'lastUpdatedOn', title: 'Last Modified', dataType: DataType.String, width: "300px" },
-  { key: 'action', title: 'Action', dataType: DataType.String, width: "200px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
+  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
+  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
+  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
 
 
 ]
@@ -97,23 +97,7 @@ const DraftPage = () => {
 
   const router = useRouter();
 
-  const openEditor = (content: any) => {
-    const identifier = content?.identifier;
-    const mode = content?.mode;
-    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
-      router.push({ pathname: `/editor`, query: { identifier, mode } });
-    } else if (
-      content?.mimeType &&
-      MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
-    ) {
-      router.push({ pathname: `/upload-editor`, query: { identifier } });
-    } else if (
-      content?.mimeType &&
-      MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
-    ) {
-      router.push({ pathname: `/collection`, query: { identifier, mode } });
-    }
-  };
+ 
 
   useEffect(() => {
     const getDraftContentList = async () => {
@@ -178,7 +162,7 @@ const DraftPage = () => {
             </Box>
           ) : contentList && contentList.length > 0 ? (
             <Box className="table-ka-container">
-              <KaTableComponent columns={columns} data={data} tableTitle="draft" handleDelete={handleDelete} />
+              <KaTableComponent columns={columns} data={data} tableTitle="draft"  />
             </Box>
 
           ) : (
