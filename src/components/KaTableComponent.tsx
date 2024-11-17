@@ -197,7 +197,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
         },
       }}
       noData={{
-        text:data &&  data?.length === 0 ? "No data found" :"No data found",
+        text: "No data found",
       }}
     />
     </>
