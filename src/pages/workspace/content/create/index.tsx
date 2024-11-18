@@ -139,13 +139,14 @@ const CreatePage = () => {
                     cursor: "pointer",
                     flex: "1 1 180px",
                     // maxWidth: "220px",
-                    minHeight: "114px",
+                    // minHeight: "114px",
                     border: "solid 1px #D0C5B4",
                     boxShadow: 'none',
                     "&:hover": {
                       backgroundColor: theme.palette.action.hover,
                     },
                   }}
+                  className="create-card"
                 >
                   {card?.icon}
                   <Typography className="one-line-text" variant="h3" sx={{ mt: 1, fontWeight: "bold", fontSize: '14px' }}>

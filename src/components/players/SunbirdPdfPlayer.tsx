@@ -18,12 +18,14 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
     script.async = true;
     document.body.appendChild(script);
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
-    document.head.appendChild(link);
-
+    if (!document.getElementById("sunbird-pdf-player-css")) {
+      const link = document.createElement("link");
+      link.id = "sunbird-pdf-player-css";
+      link.rel = "stylesheet";
+      link.href =
+        "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
+      document.head.appendChild(link);
+    }
     const playerElement = sunbirdPdfPlayerRef.current;
 
     const handlePlayerEvent = (event: any) => {
@@ -49,6 +51,8 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
         handleTelemetryEvent
       );
       document.body.removeChild(script);
+      const pdfPlayerCss = document.getElementById("sunbird-pdf-player-css");
+      if (pdfPlayerCss) document.head.removeChild(pdfPlayerCss);
     };
   }, []);
 
