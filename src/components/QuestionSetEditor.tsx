@@ -1,22 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-
+import { TENANT_ID, CHANNEL_ID, FRAMEWORK_ID, CLOUD_STORAGE_URL } from "@/utils/app.config";
+import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier, mode } = router.query;
 
-  const [fullName, setFullName] = useState("Anonymous");
-  const [userId, setUserId] = useState("ef99949b-7f3a-4a5f-806a-e67e683e38f3");
+  const [fullName, setFullName] = useState("Anonymous User");
+  const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
 
   const [firstName, lastName] = fullName.split(" ");
 
   useEffect(() => {
-    const storedFullName = localStorage.getItem("name") || "Anonymous";
-    const storedUserId =
-      localStorage.getItem("userId") || "ef99949b-7f3a-4a5f-806a-e67e683e38f3";
-    setFullName(storedFullName);
+    const storedFullName = getLocalStoredUserName();
+    const storedUserId = getLocalStoredUserId() || TENANT_ID;
+    setFullName(storedFullName ?? "Anonymous User");
     setUserId(storedUserId);
 
     const generatedDeviceId = uuidv4();
@@ -25,55 +25,41 @@ const QuestionSetEditor: React.FC = () => {
 
   const questionSetEditorConfig = {
     context: {
-      programId: "",
-      contributionOrgId: "",
       user: {
         id: userId,
         fullName: fullName,
         firstName: firstName || "Anonymous",
         lastName: lastName || "Anonymous",
-        orgIds: ["test-k12-channel"],
+        orgIds: [CHANNEL_ID],
       },
       identifier: identifier,
-      authToken: " ",
-      sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",
+      sid: uuidv4(),
       did: deviceId,
-      uid: "bf020396-0d7b-436f-ae9f-869c6780fc45",
-      channel: "test-k12-channel",
+      uid: userId,
+      channel: CHANNEL_ID,
       pdata: {
-        id: "dev.dock.portal",
-        ver: "2.8.0",
-        pid: "creation-portal",
+        id: "pratham.admin.portal",
+        ver: "1.0.0",
+        pid: "pratham-portal",
       },
       contextRollup: {
-        l1: "01307938306521497658",
+        l1: CHANNEL_ID,
       },
-      tags: ["01307938306521497658"],
+      tags: [CHANNEL_ID],
       cdata: [
         {
-          id: "01307938306521497658",
-          type: "sourcing_organization",
-        },
-        {
-          type: "project",
-          id: "ec5cc850-3f71-11eb-aae1-fb99d9fb6737",
-        },
-        {
-          type: "linked_collection",
-          id: "do_113140468925825024117",
-        },
+          id: CHANNEL_ID,
+          type: "pratham-portal",
+        }
       ],
       timeDiff: 5,
-      objectRollup: {
-        l1: "do_113140468925825024117",
-        l2: "do_113140468926914560125",
-      },
+      objectRollup: {},
       host: "",
       defaultLicense: "CC BY 4.0",
       endpoint: "/data/v3/telemetry",
       env: "questionset_editor",
-      framework: "test_k12_framework",
-      cloudStorageUrls: ["https://knowlg-public.s3-ap-south-1.amazonaws.com/"],
+      framework: FRAMEWORK_ID,
+      cloudStorageUrls: [CLOUD_STORAGE_URL],
       labels: {
         save_collection_btn_label: "Save as Draft",
       },
@@ -82,7 +68,7 @@ const QuestionSetEditor: React.FC = () => {
       cloudStorage: {
         provider: "aws",
         presigned_headers: {},
-      },
+      }
     },
     config: {
       mode: mode || "edit",
@@ -195,7 +181,8 @@ const QuestionSetEditor: React.FC = () => {
         "editorEmitter",
         (event: any) => {
           console.log("Editor event:", event);
-          if (event.detail?.action === "backContent") {
+          if (event.detail?.action === "backContent" || event.detail?.action === "submitContent" ||
+            event.detail?.action === "publishContent" || event.detail?.action === "rejectContent") {
             window.history.back();
             window.addEventListener(
               "popstate",

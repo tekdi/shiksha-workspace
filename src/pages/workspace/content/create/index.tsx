@@ -12,7 +12,8 @@ import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
 import largeVideoIcon from '/public/150+.png';
 import Image from "next/image";
-import WorkspaceText from '../../../../components/WorkspaceText'
+import WorkspaceText from '../../../../components/WorkspaceText';
+import { getLocalStoredUserId } from "@/services/LocalStorageService";
 
 const CreatePage = () => {
   const theme = useTheme();
@@ -21,7 +22,7 @@ const CreatePage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
+    const userId = getLocalStoredUserId()
 
     if (token && userId) {
       document.cookie = `authToken=${token}; path=/; secure; SameSite=Strict`;
@@ -50,9 +51,7 @@ const CreatePage = () => {
 
   const fetchCollectionData = async () => {
     try {
-      const userId =
-        localStorage.getItem("userId") ||
-        "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
+      const userId = getLocalStoredUserId();
       const response = await createCourse(userId);
       console.log("Course set created successfully:", response);
 

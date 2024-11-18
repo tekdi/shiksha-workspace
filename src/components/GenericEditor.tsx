@@ -5,7 +5,8 @@ import _ from 'lodash';
 import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
-import { getLocalStoredUserData } from "@/services/LocalStorageService";
+import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
+import { CHANNEL_ID, FRAMEWORK_ID, TENANT_ID } from "@/utils/app.config";
 
 const GenericEditor: React.FC = () => {
     const router = useRouter();
@@ -96,9 +97,19 @@ const GenericEditor: React.FC = () => {
             if (identifier) {
                 window['context'].contentId = identifier;
             }
-            window['context'].user.id = getLocalStoredUserData();
-            window['context'].uid = getLocalStoredUserData();
-
+            window['context'].user = {
+                id: getLocalStoredUserId() || TENANT_ID,
+                name: getLocalStoredUserName() || "Anonymous User",
+                orgIds: [CHANNEL_ID],
+                organisations: {
+                    [CHANNEL_ID] : CHANNEL_ID + " Channel"
+                }
+            }
+            window['context'].uid = getLocalStoredUserId() || TENANT_ID;
+            window['context'].contextRollUp.l1 = CHANNEL_ID;
+            window['context'].tags = [CHANNEL_ID];
+            window['context'].channel = CHANNEL_ID;
+            window['context'].framework = FRAMEWORK_ID;
             if (isLargeFileUpload || (_.get(data, 'contentDisposition') === 'online-only')) {
                 window.context['uploadInfo'] = {
                     isLargeFileUpload: true

@@ -62,7 +62,7 @@ const nextConfig = {
       },
       {
         source: "/assets/public/:path*", // Match any URL starting with /assets/public/
-        destination: `${process.env.CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
+        destination: `${process.env.NEXT_PUBLIC_CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
       },
       {
         source: "/workspace/content/assets/:path*", // Match any URL starting with /workspace/content/assets/
