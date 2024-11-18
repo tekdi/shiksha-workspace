@@ -9,7 +9,6 @@ import router from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
 import Image from "next/image";
 import ActionIcon from './ActionIcon';
-import { deleteContent } from '@/services/ContentService';
 interface CustomTableProps {
   data: any[]; // Define a more specific type for your data if needed
   columns: Array<{
@@ -73,23 +72,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       router.push({ pathname: `/collection`, query: { identifier, mode } });
     }
   };
-
-  const handleDelete = async(content: any) => {
-    console.log(`Deleting item at index`, content);
-
-    if (content?.identifier && content?.mimeType) {
-      try {
-        await deleteContent(content?.identifier, content?.mimeType);
-        console.log(`Deleted item with identifier - ${content?.identifier}`);
-      //  setContentDeleted((prev) => !prev);
-      } catch (error) {
-        console.error("Failed to delete content:", error);
-      }
-    }
-    handleClose();
-  };
-
-  return (
+ return (
     <>
      <KaTable
       columns={columns}
@@ -212,6 +195,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
             return props.children; 
           },
         },
+      }}
+      noData={{
+        text: "No data found",
       }}
     />
     </>

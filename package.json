@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@module-federation/nextjs-mf": "^8.5.5",
-    "@module-federation/utilities": "3.0.11",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@module-federation/nextjs-mf": "^8.5.5",
+    "@module-federation/utilities": "3.0.11",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.21",
     "@project-sunbird/sunbird-collection-editor-web-component": "^1.6.0",
@@ -41,7 +41,8 @@
     "reflect-metadata": "^0.1.13",
     "svg2img": "^1.0.0-beta.2",
     "url": "^0.11.3",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.31",

@@ -17,6 +17,7 @@ import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import { publishContent, submitComment } from "@/services/ContentService";
 import Players from "@/components/players/Players";
 import V1Player from "@/components/V1-Player/V1Player";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   playerConfig,
   V1PlayerConfig,
@@ -148,7 +149,9 @@ const ReviewContentSubmissions = () => {
       year: "numeric",
     });
   };
-
+  const handleBackClick = () => {
+    router.back();
+  };
   return (
     <Card sx={{ padding: 2, backgroundColor: "white" }}>
       <Box
@@ -157,6 +160,9 @@ const ReviewContentSubmissions = () => {
         alignItems="center"
         mb={2}
       >
+         <IconButton onClick={handleBackClick}>
+            <ArrowBackIcon />
+          </IconButton>
         <Typography
           variant="h5"
           sx={{

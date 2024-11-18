@@ -42,7 +42,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
   const theme = useTheme<any>();
   const [searchTerm, setSearchTerm] = useState(value);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("Modified On");
   const [primaryCategory, setPrimaryCategory] = useState<string[]>();
 
   useEffect(() => {

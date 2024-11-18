@@ -40,7 +40,7 @@ const PublishPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("updated");
+  const [sortBy, setSortBy] = useState("Modified On");
   const [contentList, setContentList] = React.useState([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [loading, setLoading] = useState(false);
@@ -153,24 +153,27 @@ const PublishPage = () => {
             >
               Published
             </Typography>
+
+          </Box>
+          <Box mb={3}>
+            <SearchBox
+              placeholder="Search by title..."
+              onSearch={handleSearch}
+              onFilterChange={handleFilterChange}
+              onSortChange={handleSortChange}
+            />
           </Box>
           {/* <Typography mb={2}>Here you see all your published content.</Typography> */}
-
-
-          {loading ? (
+{loading ? (
             <Box display="flex" justifyContent="center" my={5}>
               <CircularProgress />
             </Box>
-          ) : contentList && contentList.length > 0 ? (
-            <Box className="table-ka-container">
+          ) : (<>
+          <Box className="table-ka-container">
               <KaTableComponent columns={columns} data={data} tableTitle="publish" />
             </Box>
-          ) : (
-            <NoDataFound />
-          )}
-
-
-          {totalCount > LIMIT && (
+          </>)}
+            {totalCount > LIMIT && (
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
@@ -178,6 +181,7 @@ const PublishPage = () => {
             />
           )}
         </Box>
+     
       </Box>
     </Layout>
   );

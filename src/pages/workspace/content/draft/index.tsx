@@ -41,7 +41,7 @@ const DraftPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("updated");
+  const [sortBy, setSortBy] = useState("Modified On");
   const [contentList, setContentList] = React.useState([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [loading, setLoading] = useState(false);
@@ -156,19 +156,16 @@ const DraftPage = () => {
               onSortChange={handleSortChange}
             />
           </Box>
-          {loading ? (
+         {loading ? (
             <Box display="flex" justifyContent="center" my={5}>
               <CircularProgress />
             </Box>
-          ) : contentList && contentList.length > 0 ? (
-            <Box className="table-ka-container">
+          ) :(<>
+           <Box className="table-ka-container">
               <KaTableComponent columns={columns} data={data} tableTitle="draft"  />
             </Box>
-
-          ) : (
-            <NoDataFound />
+          </>
           )}
-
           {totalCount > LIMIT && (
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
