@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteContent } from "@/services/ContentService";
+import useSharedStore from "@/utils/useSharedState";
 
 interface DeleteConfirmationProps {
   open: boolean;
@@ -23,7 +24,14 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
   rowData,
   handleClose,
 }) => {
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+  const fetchContentAPI = useSharedStore(
+    (state: any) => state.fetchContentAPI
+  );
+  const setFetchContentAPI = useSharedStore(
+    (state: any) => state.setFetchContentAPI
+  );
   const handleDelete = async (content?: any) => {
     console.log(`Deleting item at index`, rowData);
 
@@ -31,10 +39,15 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       try {
         await deleteContent(rowData?.identifier, rowData?.mimeType);
         console.log(`Deleted item with identifier - ${rowData?.identifier}`);
-    
+        await delay(1000); 
+
+        // Update the fetchContentAPI state after the delay
+        setFetchContentAPI(!fetchContentAPI);
       } catch (error) {
         console.error("Failed to delete content:", error);
       }
+      // setFetchContentAPI(!fetchContentAPI)
+
      
     }
     handleClose();
@@ -72,11 +85,24 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ justifyContent: "center", pb: 2 }}>
-        <Button onClick={handleClose} variant="outlined">
+        <Button onClick={handleClose}
+        sx={{          
+        borderRadius: "100px",
+        border: "1px solid #1E1B16",
+        color: "#1E1B16"
+        }} >
           Cancel
         </Button>
-        <Button onClick={handleDelete} variant="contained">
-          Delete
+        <Button onClick={handleDelete} 
+sx={{          backgroundColor: "#FDBE16",
+borderRadius: "100px",
+border: "1px solid #1E1B16",
+color: "#1E1B16"
+}}
+               >
+                <Typography>
+                  Delete
+                </Typography>
         </Button>
       </DialogActions>
     </Dialog>

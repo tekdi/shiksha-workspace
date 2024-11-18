@@ -80,7 +80,12 @@ const SearchBox: React.FC<SearchBarProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value;
     setSearchTerm(searchTerm);
-    handleSearch(searchTerm);
+
+    if(searchTerm.length>=3)
+    {
+      handleSearch(searchTerm);
+    }
+   
   };
 
   const handleFilterChange = (event: SelectChangeEvent<string[]>) => {

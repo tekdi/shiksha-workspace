@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import logo from "/public/logo.png";
 
@@ -44,10 +44,11 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userRole, setUserRole] = useState("");
   const router = useRouter();
   const theme = useTheme<any>();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+  
   const handleNavigation = (key: string) => {
     console.log(key);
     router.push(`/workspace/content/${key}`);
@@ -64,6 +65,20 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   const goBack = () => {
     router.push("/");
   };
+  useEffect(() => {
+    try {
+        const storedUserData = localStorage.getItem("adminInfo");
+        if (storedUserData) {
+            const parsedData = JSON.parse(storedUserData);
+            setUserRole(parsedData?.role);
+            console.log("storedUserData", parsedData);
+        } else {
+            console.log("No adminInfo found in localStorage");
+        }
+    } catch (error) {
+        console.error("Error parsing adminInfo from localStorage:", error);
+    }
+}, []);
 
   const drawerContent = (
     <Box display={'inline-block'} margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"250px"} height={"100%"} sx={{ fontSize: '14px', }}>
@@ -77,20 +92,21 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
         paddingTop={"1rem"}
       >
 
-        <Box display="flex" alignItems="center">
-          <ListItemIcon>
+    { userRole!=="Content Creator" &&  userRole!=="Content Reviewer" && (<Box display="flex" alignItems="center"> {/* temporary assume this role name came from backend auth apies */}
+      <ListItemIcon>
             <IconButton onClick={goBack}>
               <ArrowBackIcon sx={{ color: theme.palette.warning["100"] }} />
             </IconButton>
           </ListItemIcon>
-          <Typography
+       <Typography
             variant="h2"
             fontSize={"14px"}
             sx={{ color: theme.palette.warning["100"] }}
           >
             Back to Main Page
           </Typography>
-        </Box>
+        </Box>)
+      }
         {isMobile && (
           <IconButton onClick={toggleDrawer}>
             <CloseIcon />

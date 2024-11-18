@@ -28,6 +28,7 @@ import { Table as KaTable } from 'ka-table';
 import { DataType } from 'ka-table/enums';
 import "ka-table/style.css";
 import KaTableComponent from "@/components/KaTableComponent";
+import useSharedStore from "@/utils/useSharedState";
 // const columns = [
 //   { key: 'name', title: 'Content', dataType: DataType.String, width: "450px" },
 //   { key: 'lastUpdatedOn', title: 'Last Updated', dataType: DataType.String, width: "300px" },
@@ -58,6 +59,9 @@ const AllContentsPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = React.useState(false);
+  const fetchContentAPI = useSharedStore(
+    (state: any) => state.fetchContentAPI
+  );
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
   const [totalCount, setTotalCount] = useState(0);
@@ -136,7 +140,7 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter, sortBy,  page]);
+  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy,  page]);
 
   useEffect(() => {
     const filteredArray = contentList.map(item => ({
@@ -197,9 +201,16 @@ const AllContentsPage = () => {
                 </Box>
               </>
           )}
+           {totalCount > LIMIT && (
+            <PaginationComponent
+              count={Math.ceil(totalCount / LIMIT)}
+              page={page}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
+            />
+          )}
         </Box>
 
-
+       
       </Box>
 
     </Layout>
