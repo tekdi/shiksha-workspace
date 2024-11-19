@@ -8,6 +8,8 @@ import {
   Button,
   IconButton,
   Typography,
+  Box,
+  Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteContent } from "@/services/ContentService";
@@ -46,11 +48,18 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       aria-labelledby="delete-confirmation-title"
       aria-describedby="delete-confirmation-description"
       maxWidth="xs"
-      fullWidth
+      fullWidth 
+      sx={{
+        "& .MuiDialog-paper": {
+          borderRadius: "16px",
+        },
+      }}
     >
-      <DialogTitle sx={{ m: 0, p: 2 }} id="delete-confirmation-title">
-        <Typography variant="h6">Confirm Deletion</Typography>
-        <IconButton
+      <DialogTitle sx={{ m: 0,}} id="delete-confirmation-title">
+        <Box sx={{padding:'10px'}}>
+          <Typography sx={{ fontWeight: "400", fontSize: "16px" }}>Are you sure you want to delete this item?</Typography>
+        </Box>
+        {/* <IconButton
           aria-label="close"
           onClick={handleClose}
           sx={{
@@ -61,22 +70,16 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
           }}
         >
           <CloseIcon />
-        </IconButton>
+        </IconButton> */}
       </DialogTitle>
-      <DialogContent dividers>
-        <DialogContentText
-          id="delete-confirmation-description"
-          sx={{ textAlign: "center", mt: 1 }}
-        >
-          Are you sure you want to delete this item?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions sx={{ justifyContent: "center", pb: 2 }}>
-        <Button onClick={handleClose} variant="outlined">
-          Cancel
-        </Button>
-        <Button onClick={handleDelete} variant="contained">
-          Delete
+      <Divider />
+     
+      <DialogActions sx={{ justifyContent: "end", gap:'10px', padding:'20px' }}>
+        <Box onClick={handleClose} sx={{ cursor: "pointer", color: "#0D599E", fontSize:'14px', }}>
+          No, go back
+        </Box>
+        <Button sx={{ background:'#FDBE16', color:'#000' , borderRadius:'100px'}} onClick={handleDelete} variant="contained">
+          yes
         </Button>
       </DialogActions>
     </Dialog>
