@@ -79,7 +79,7 @@ const CreatePage = () => {
     {
       title: "New Course",
       description:
-        "Description about what this is and what the user can create.",
+        " Create courses by defining content, assessments, etc",
       icon: <SchoolOutlinedIcon fontSize="large" />,
       onClick: openCollectionEditor,
     },
@@ -91,7 +91,7 @@ const CreatePage = () => {
     },
     {
       title: "New Large Content",
-      description: "Videos and documents larger than 150 MB",
+      description: "Create videos and documents larger than 150mb  ---- Create word needs to be added",
       icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />,
       onClick: () =>
         router.push({
