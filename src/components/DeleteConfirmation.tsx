@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteContent } from "@/services/ContentService";
+import useSharedStore from "@/utils/useSharedState";
 
 interface DeleteConfirmationProps {
   open: boolean;
@@ -25,7 +26,14 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
   rowData,
   handleClose,
 }) => {
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+  const fetchContentAPI = useSharedStore(
+    (state: any) => state.fetchContentAPI
+  );
+  const setFetchContentAPI = useSharedStore(
+    (state: any) => state.setFetchContentAPI
+  );
   const handleDelete = async (content?: any) => {
     console.log(`Deleting item at index`, rowData);
 
@@ -33,10 +41,15 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       try {
         await deleteContent(rowData?.identifier, rowData?.mimeType);
         console.log(`Deleted item with identifier - ${rowData?.identifier}`);
-    
+        await delay(1000); 
+
+        // Update the fetchContentAPI state after the delay
+        setFetchContentAPI(!fetchContentAPI);
       } catch (error) {
         console.error("Failed to delete content:", error);
       }
+      // setFetchContentAPI(!fetchContentAPI)
+
      
     }
     handleClose();

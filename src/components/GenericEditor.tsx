@@ -45,6 +45,21 @@ const GenericEditor: React.FC = () => {
                     console.error('Error:', error);
                     closeModal();
                 });
+
+            const popstateListener = (event: PopStateEvent) => {
+                window.location.hash = 'no';
+                if (event.state) {
+                    console.log('popstate', event.state);
+                    alert('To close this resource, save and click the X icon');
+                    window.location.hash = 'no';
+                }
+            };
+            window.addEventListener('popstate', popstateListener);
+
+            // Cleanup function
+            return () => {
+                window.removeEventListener('popstate', popstateListener);
+            };
         }
     }, [identifier]);
 
@@ -102,7 +117,7 @@ const GenericEditor: React.FC = () => {
                 name: getLocalStoredUserName() || "Anonymous User",
                 orgIds: [CHANNEL_ID],
                 organisations: {
-                    [CHANNEL_ID] : CHANNEL_ID + " Channel"
+                    [CHANNEL_ID]: CHANNEL_ID + " Channel"
                 }
             }
             window['context'].uid = getLocalStoredUserId() || TENANT_ID;

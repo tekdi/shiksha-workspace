@@ -24,11 +24,12 @@ import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
+import useSharedStore from "@/utils/useSharedState";
 
 const columns = [
   { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
-  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
+  // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
   { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
   { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
 
@@ -46,7 +47,9 @@ const PublishPage = () => {
   const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = React.useState<any[]>([]);
-
+  const fetchContentAPI = useSharedStore(
+    (state: any) => state.fetchContentAPI
+  );
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
 
@@ -139,7 +142,7 @@ const PublishPage = () => {
       }
     };
     getPublishContentList();
-  }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy,fetchContentAPI, contentDeleted, page]);
 
 
   return (

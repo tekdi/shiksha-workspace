@@ -24,10 +24,11 @@ import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
+import useSharedStore from "@/utils/useSharedState";
 const columns = [
   { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
-  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
+  // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
   { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
   { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
 
@@ -45,7 +46,9 @@ const SubmittedForReviewPage = () => {
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = React.useState<any[]>([]);
-
+  const fetchContentAPI = useSharedStore(
+    (state: any) => state.fetchContentAPI
+  );
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -115,7 +118,7 @@ const SubmittedForReviewPage = () => {
       }
     };
     getReviewContentList();
-  }, [debouncedSearchTerm, filter, sortBy, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy, fetchContentAPI,contentDeleted, page]);
 
   const openEditor = (content: any) => {
     const identifier = content?.identifier;

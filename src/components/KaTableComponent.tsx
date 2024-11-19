@@ -30,10 +30,14 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
   const handleOpen = () => setOpen(true);
 
   const openEditor = (content: any) => {
+    console.log("content", content)
     const identifier = content?.identifier;
     let mode = content?.mode; // default mode from content, can be overwritten by tableTitle
     switch (tableTitle) {
       case 'draft':
+        mode = !mode ? "edit" : mode;
+
+
         // Use draft-specific routing
         if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
           router.push({ pathname: `/editor`, query: { identifier, mode } });
@@ -56,9 +60,12 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       case 'submitted':
         mode = "review";
         break;
+        case 'all-content':
+          mode=content?.status==="Draft"|| content?.status==="Live" ?"edit":"review"
+          break;
       // Default case for "all-content" or any other values if mode is already defined in content
       default:
-        mode = mode || content?.mode;
+        mode = mode ||"read" ;
         break;
     }
 
@@ -162,7 +169,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
               }
             }
             else if (props.column.key === 'contentAction') {
-              if (props.rowData.status === "Draft") {
+               {
                 return (
                   <>
                   
