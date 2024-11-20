@@ -1,18 +1,15 @@
-import { stringify } from "json5";
-import { getLocalStoredUserData } from "./LocalStorageService";
+import { getLocalStoredUserId } from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE, TENANTID } from "@/utils/app.config";
-const authToken = process.env.NEXT_PUBLIC_AUTH_API_TOKEN;
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+import { MIME_TYPE, CHANNEL_ID, TENANT_ID } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
-import { ChannelID, PrimaryCategoryValue } from "@/utils/app.constant";
+import { PrimaryCategoryValue } from "@/utils/app.constant";
 
-const userId = getLocalStoredUserData();
+const userId = getLocalStoredUserId();
 console.log("userId ==>", userId);
 
 export const getPrimaryCategory = async () => {
-  const apiURL = `/api/channel/v1/read/${ChannelID}`;
+  const apiURL = `/api/channel/v1/read/${CHANNEL_ID}`;
   try {
     const response = await get(apiURL);
     return response?.data?.result;
@@ -121,7 +118,7 @@ export const createQuestionSet = async () => {
     const response = await axios.post(apiURL, reqBody, {
       headers: {
         "Content-Type": "application/json",
-        tenantId: TENANTID.ID,
+        "tenantId": TENANT_ID,
       },
     });
     return response?.data;
@@ -160,9 +157,8 @@ export const createCourse = async (userId: any) => {
         name: "Untitled Course",
         description: "Enter description for Course",
         createdBy: userId,
-        createdFor: ["test-k12-channel"],
+        createdFor: [CHANNEL_ID],
         mimeType: MIME_TYPE.COURSE_MIME_TYPE,
-
         resourceType: "Course",
         primaryCategory: "Course",
         contentType: "Course",

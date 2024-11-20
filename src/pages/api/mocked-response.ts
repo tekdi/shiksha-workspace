@@ -71,25 +71,11 @@ export const genericEditorSaveFormResponse = {
                         "visible": true
                     },
                     {
-                        "code": "medium",
-                        "dataType": "List",
-                        "description": "Language",
-                        "editable": true,
-                        "index": 8,
-                        "inputType": "select",
-                        "label": "Language",
-                        "name": "Langauge",
-                        "placeholder": "Select Language",
-                        "renderingHints": {},
-                        "required": false,
-                        "visible": true
-                    },
-                    {
                         "code": "audience",
                         "dataType": "list",
                         "description": "Audience",
                         "editable": true,
-                        "index": 8,
+                        "index": 5,
                         "inputType": "multiselect",
                         "label": "Audience",
                         "name": "Audience",
@@ -107,29 +93,11 @@ export const genericEditorSaveFormResponse = {
                                 "name": "Administrator"
                             },
                             {
-                                "key": "Teacher",
-                                "name": "Teacher"
-                            },
-                            {
                                 "key": "Other",
                                 "name": "Other"
                             }
                         ],
                         "placeholder": "Select Audience",
-                        "renderingHints": {},
-                        "required": false,
-                        "visible": true
-                    },
-                    {
-                        "code": "attributions",
-                        "dataType": "list",
-                        "description": "Attributions",
-                        "editable": true,
-                        "index": 8,
-                        "inputType": "text",
-                        "label": "Attributions",
-                        "name": "attribution",
-                        "placeholder": "",
                         "renderingHints": {},
                         "required": false,
                         "visible": true
@@ -186,7 +154,7 @@ export const genericEditorReviewFormResponse = {
                         "inputType": "text",
                         "label": "Title",
                         "name": "Title",
-                        "placeholder": "Enter Title For Book",
+                        "placeholder": "Enter Title",
                         "renderingHints": {},
                         "required": false,
                         "visible": true
@@ -219,19 +187,41 @@ export const genericEditorReviewFormResponse = {
                         "visible": true
                     },
                     {
-                        "code": "board",
+                        "code": "state",
                         "visible": true,
                         "depends": [
+                            "board",
                             "medium",
                             "gradeLevel",
+                            "courseType",
                             "subject",
                             "topic"
                         ],
                         "editable": true,
                         "dataType": "text",
                         "renderingHints": {},
+                        "description": "State",
+                        "index": 5,
+                        "label": "State",
+                        "required": true,
+                        "name": "State",
+                        "inputType": "select",
+                        "placeholder": "State"
+                    },
+                    {
+                        "code": "board",
+                        "visible": true,
+                        "depends": [
+                            "medium",
+                            "gradeLevel",
+                            "courseType",
+                            "subject"
+                        ],
+                        "editable": true,
+                        "dataType": "text",
+                        "renderingHints": {},
                         "description": "Board",
-                        "index": 7,
+                        "index": 6,
                         "label": "Board/Syllabus",
                         "required": true,
                         "name": "Board/Syllabus",
@@ -243,14 +233,14 @@ export const genericEditorReviewFormResponse = {
                         "visible": true,
                         "depends": [
                             "gradeLevel",
-                            "subject",
-                            "topic"
+                            "courseType",
+                            "subject"
                         ],
                         "editable": true,
                         "dataType": "list",
                         "renderingHints": {},
                         "description": "",
-                        "index": 8,
+                        "index": 7,
                         "label": "Medium",
                         "required": true,
                         "name": "medium",
@@ -261,14 +251,14 @@ export const genericEditorReviewFormResponse = {
                         "code": "gradeLevel",
                         "visible": true,
                         "depends": [
-                            "subject",
-                            "topic"
+                            "courseType",
+                            "subject"
                         ],
                         "editable": true,
                         "dataType": "list",
                         "renderingHints": {},
                         "description": "Class",
-                        "index": 9,
+                        "index": 8,
                         "label": "Class",
                         "required": true,
                         "name": "Class",
@@ -276,11 +266,26 @@ export const genericEditorReviewFormResponse = {
                         "placeholder": "Select Class"
                     },
                     {
-                        "code": "subject",
+                        "code": "courseType",
                         "visible": true,
                         "depends": [
-                            "topic"
+                            "subject"
                         ],
+                        "editable": true,
+                        "dataType": "list",
+                        "renderingHints": {},
+                        "description": "",
+                        "index": 9,
+                        "label": "Course Type",
+                        "required": true,
+                        "name": "Course Type",
+                        "inputType": "multiselect",
+                        "placeholder": "Course Type"
+                    },
+                    {
+                        "code": "subject",
+                        "visible": true,
+                        "depends": [],
                         "editable": true,
                         "dataType": "list",
                         "renderingHints": {},
@@ -293,25 +298,11 @@ export const genericEditorReviewFormResponse = {
                         "placeholder": "Select Subject"
                     },
                     {
-                        "code": "medium",
-                        "dataType": "list",
-                        "description": "Language",
-                        "editable": true,
-                        "index": 8,
-                        "inputType": "select",
-                        "label": "Language",
-                        "name": "Langauge",
-                        "placeholder": "Select Language",
-                        "renderingHints": {},
-                        "required": false,
-                        "visible": true
-                    },
-                    {
                         "code": "audience",
                         "dataType": "list",
                         "description": "Audience",
                         "editable": true,
-                        "index": 8,
+                        "index": 11,
                         "inputType": "multiselect",
                         "label": "Audience",
                         "name": "Audience",
@@ -334,20 +325,6 @@ export const genericEditorReviewFormResponse = {
                             }
                         ],
                         "placeholder": "Select Audience",
-                        "renderingHints": {},
-                        "required": false,
-                        "visible": true
-                    },
-                    {
-                        "code": "attributions",
-                        "dataType": "list",
-                        "description": "Attributions",
-                        "editable": true,
-                        "index": 8,
-                        "inputType": "text",
-                        "label": "Attributions",
-                        "name": "attribution",
-                        "placeholder": "",
                         "renderingHints": {},
                         "required": false,
                         "visible": true

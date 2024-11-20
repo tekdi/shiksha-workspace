@@ -12,7 +12,8 @@ import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
 import largeVideoIcon from '/public/150+.png';
 import Image from "next/image";
-import WorkspaceText from '../../../../components/WorkspaceText'
+import WorkspaceText from '../../../../components/WorkspaceText';
+import { getLocalStoredUserId } from "@/services/LocalStorageService";
 
 const CreatePage = () => {
   const theme = useTheme();
@@ -21,7 +22,7 @@ const CreatePage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
+    const userId = getLocalStoredUserId()
 
     if (token && userId) {
       document.cookie = `authToken=${token}; path=/; secure; SameSite=Strict`;
@@ -50,9 +51,7 @@ const CreatePage = () => {
 
   const fetchCollectionData = async () => {
     try {
-      const userId =
-        localStorage.getItem("userId") ||
-        "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
+      const userId = getLocalStoredUserId();
       const response = await createCourse(userId);
       console.log("Course set created successfully:", response);
 
@@ -80,7 +79,7 @@ const CreatePage = () => {
     {
       title: "New Course",
       description:
-        "Description about what this is and what the user can create.",
+        " Create courses by defining content, assessments, etc",
       icon: <SchoolOutlinedIcon fontSize="large" />,
       onClick: openCollectionEditor,
     },
@@ -92,7 +91,7 @@ const CreatePage = () => {
     },
     {
       title: "New Large Content",
-      description: "Videos and documents larger than 150 MB",
+      description: "Create videos and documents larger than 150mb  ---- Create word needs to be added",
       icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />,
       onClick: () =>
         router.push({
@@ -140,13 +139,14 @@ const CreatePage = () => {
                     cursor: "pointer",
                     flex: "1 1 180px",
                     // maxWidth: "220px",
-                    minHeight: "114px",
+                    // minHeight: "114px",
                     border: "solid 1px #D0C5B4",
                     boxShadow: 'none',
                     "&:hover": {
                       backgroundColor: theme.palette.action.hover,
                     },
                   }}
+                  className="create-card"
                 >
                   {card?.icon}
                   <Typography className="one-line-text" variant="h3" sx={{ mt: 1, fontWeight: "bold", fontSize: '14px' }}>
