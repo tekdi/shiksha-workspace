@@ -59,6 +59,8 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
         break;
       case 'submitted':
         mode = "review";
+        case 'upForReview':
+        mode = "read";
         break;
         case 'all-content':
           mode=content?.status==="Draft"|| content?.status==="Live" ?"edit":"review"
@@ -73,7 +75,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
     } else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
-      const pathname = tableTitle === 'submitted' ? `/workspace/content/review` : `/upload-editor`;
+      const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
       router.push({ pathname, query: { identifier, mode } });
     } else if (content?.mimeType && MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)) {
       router.push({ pathname: `/collection`, query: { identifier, mode } });

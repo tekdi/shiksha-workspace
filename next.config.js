@@ -130,6 +130,8 @@ const nextConfig = {
           "./Collection": "/src/pages/collection.tsx",
           "./SunbirdPlayers": "/src/pages/sunbirdPlayers.tsx",
           "./Review": "/src/pages/workspace/content/review/index.tsx",
+          "./UpReview": "/src/pages/workspace/content/up-review/index.tsx",
+
         },
       })
     );

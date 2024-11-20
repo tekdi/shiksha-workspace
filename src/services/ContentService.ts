@@ -41,14 +41,24 @@ const defaultReqBody = {
     },
   },
 };
-
+const upForReviewReqBody = {
+  request: {
+    filters: {
+    //  createdBy: { userId},
+    },
+    sort_by: {
+      lastUpdatedOn: "desc",
+    },
+  },
+}
 const getReqBodyWithStatus = (
   status: string[],
   query: string,
   limit: number,
   offset: number,
   primaryCategory: any,
-  sort_by: any
+  sort_by: any,
+  contentType?: string
 ) => {
   if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
     var PrimaryCategory =
@@ -57,6 +67,24 @@ const getReqBodyWithStatus = (
   }
   primaryCategory =
     primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;
+if(contentType==="upReview")
+{
+  return {
+    ...upForReviewReqBody,
+    request: {
+      ...upForReviewReqBody.request,
+      filters: {
+        ...upForReviewReqBody.request.filters,
+        status,
+        primaryCategory,
+      },
+      query,
+      limit,
+      offset,
+      sort_by,
+    },
+  };
+}
 
   return {
     ...defaultReqBody,
@@ -81,7 +109,8 @@ export const getContent = async (
   limit: number,
   offset: number,
   primaryCategory: string[],
-  sort_by: any
+  sort_by: any,
+  contentType?: string
 ) => {
   const apiURL = "/action/composite/v3/search";
   try {
@@ -91,7 +120,8 @@ export const getContent = async (
       limit,
       offset,
       primaryCategory,
-      sort_by
+      sort_by,
+      contentType
     );
     const response = await post(apiURL, reqBody);
     return response?.data?.result;

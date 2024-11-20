@@ -24,16 +24,17 @@ import React, { useState } from "react";
 
 import logo from "/public/logo.png";
 import { Role } from "@/utils/app.constant";
+import { getLocalStoredUserRole } from "@/services/LocalStorageService";
+const userRole = getLocalStoredUserRole();
 
 // Updated menu items with icons
 const menuItems = [
   { text: "Create", key: "create", icon: <AddOutlinedIcon /> },
   { text: "Draft", key: "draft", icon: <CreateOutlinedIcon /> },
-  {
-    text: "Submitted for Review",
-    key: "submitted",
-    icon: <PreviewOutlinedIcon />,
-  },
+  { text: "Submitted for Review", key: "submitted", icon: <PreviewOutlinedIcon /> },
+  ...(userRole === Role.CCTA
+    ? [{ text: "Up for Review", key: "up-review", icon: <PreviewOutlinedIcon /> }]
+    : []),
   { text: "Publish", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
   { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
 ];
