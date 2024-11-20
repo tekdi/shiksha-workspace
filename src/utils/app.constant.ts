@@ -7,7 +7,10 @@ export enum Status {
 export enum ContentType {
   QUESTION_SET = "QuestionSet",
 }
-
+export enum Role {
+  SCTA = "State Admin SCTA",
+  CCTA="Central Admin CCTA"
+}
 export const SortOptions = ["Modified On", "Created On"];
 
 export const LIMIT = 10;

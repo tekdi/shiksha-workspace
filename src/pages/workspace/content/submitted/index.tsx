@@ -120,27 +120,7 @@ const SubmittedForReviewPage = () => {
     getReviewContentList();
   }, [debouncedSearchTerm, filter, sortBy, fetchContentAPI,contentDeleted, page]);
 
-  const openEditor = (content: any) => {
-    const identifier = content?.identifier;
-    const mode = "review";
-    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
-      router.push({ pathname: `/editor`, query: { identifier, mode } });
-    } else if (
-      content?.mimeType &&
-      MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
-    ) {
-      router.push({
-        pathname: `/workspace/content/review`,
-        query: { identifier, mode },
-      });
-    } else if (
-      content?.mimeType &&
-      MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
-    ) {
-      router.push({ pathname: `/collection`, query: { identifier, mode } });
-    }
-  };
-
+  
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />

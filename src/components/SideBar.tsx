@@ -23,6 +23,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import logo from "/public/logo.png";
+import { Role } from "@/utils/app.constant";
 
 // Updated menu items with icons
 const menuItems = [
@@ -61,9 +62,18 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
     setDrawerOpen(!drawerOpen);
   };
 
+
   const goBack = () => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const userInfo = JSON.parse(localStorage.getItem("adminInfo") || "{}");
+      console.log("userInfo", userInfo);
+      if (userInfo?.role === Role.SCTA || userInfo?.role === Role.CCTA) {
+        router.push("/course-planner");
+
+      }
+      else
     router.push("/");
-  };
+  }};
 
   const drawerContent = (
     <Box display={'inline-block'} margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"250px"} height={"100%"} sx={{ fontSize: '14px', }}>
