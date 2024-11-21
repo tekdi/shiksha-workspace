@@ -138,7 +138,7 @@ const GenericEditor: React.FC = () => {
         if (typeof window !== 'undefined') {
             window['config'] = _.cloneDeep(editorConfig.GENERIC_EDITOR.WINDOW_CONFIG);
             window['config'].build_number = buildNumber;
-            window['config'].headerLogo = 'https://staging.sunbirded.org/assets/images/sunbird_logo.png';
+            window['config'].headerLogo = '/logo.png';
             window['config'].lock = {};
             window['config'].extContWhitelistedDomains = extContWhitelistedDomains;
             window['config'].enableTelemetryValidation = false;
