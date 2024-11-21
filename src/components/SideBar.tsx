@@ -77,7 +77,19 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   }};
 
   const drawerContent = (
-    <Box display={'inline-block'} margin={"1rem 0.5rem 0.5rem 0.5rem"} width={"250px"} height={"100%"} sx={{ fontSize: '14px', }}>
+    <Box
+      display="inline-block"
+      padding="1rem 0.5rem 0.5rem"
+      width="275px"
+      height="100%"
+      sx={{
+        fontSize: '16px',
+        '@media (max-width: 900px)': {
+          background: 'linear-gradient(to bottom, white, #F8EFDA)',
+          fontSize: '12px',
+        },
+      }}
+    >
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <img src={'/logo.png'} alt="logo" height={60} />
       </Box>
@@ -96,8 +108,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
           </ListItemIcon>
           <Typography
             variant="h2"
-            fontSize={"14px"}
-            sx={{ color: theme.palette.warning["100"] }}
+            fontSize={"16px"}
+            sx={{ color: theme.palette.warning["100"], fontWeight: 500 }}
           >
             Back to Main Page
           </Typography>
@@ -121,10 +133,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
                 selectedKey === item.key
                   ? "var(--mui-palette-primary-main)"
                   : "transparent",
-              color:
-                selectedKey === item.key
-                  ? "#2E1500"
-                  : theme.palette.warning.A200,
+              color: "#000",
+               
+                  fontSize: '16px !important' ,
 
               "&:hover": {
                 background:
@@ -144,13 +155,13 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
                     ? "#2E1500"
                     : theme.palette.warning.A200,
                 minWidth: '40px',
-                fontWeight: selectedKey === item?.key ? '600' : 'normal',
-                fontSize: '14px !important'
+                fontWeight: selectedKey === item?.key ? '500' : '500',
+                fontSize: '16px !important'
               }}
             >
               {item?.icon}
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ fontSize: '14px', fontWeight: selectedKey === item?.key ? '600' : 'normal' }} primary={item?.text} />
+            <ListItemText className="menu-list-content" primaryTypographyProps={{ fontSize: '16px', fontWeight: selectedKey === item?.key ? '600' : 'normal' }} primary={item?.text} />
           </ListItemButton>
         ))}
       </List>
@@ -166,6 +177,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
 
           <Drawer
             anchor="left"
+            sx={{
+              width: "275px",
+              // background: "linear-gradient(to bottom, white, #F8EFDA)",
+            }}
             open={drawerOpen}
             onClose={toggleDrawer}
             ModalProps={{
@@ -180,11 +195,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            width: 250,
-            // height: "100vh",
-            bgcolor: theme.palette.background.paper,
-            borderRight: 1,
-            borderColor: theme.palette.divider,
+            width: 275,
+       
           }}
         >
           {drawerContent}

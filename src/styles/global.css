@@ -23,18 +23,6 @@ body {
   font-family: Poppins, sans-serif !important;
 }
 
-.drawer-select div div {
-  display: flex !important;
-  align-items: center;
-  height: 32px !important;
-  padding: 0 10px !important;
-  font-weight: 500 !important;
-  font-size: 14px !important;
-
-  /* border: 1px solid #1f1b13 !important; */
-  border-radius: 8px !important;
-}
-
 .ka-thead-cell {
   font-weight: 600;
 }
