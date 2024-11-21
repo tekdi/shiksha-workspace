@@ -58,9 +58,10 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
         mode = "read";
         break;
       case 'submitted':
-        mode = "review";
-        case 'upForReview':
         mode = "read";
+        break;
+        case 'upForReview':
+        mode = "review";
         break;
         case 'all-content':
           mode=content?.status==="Draft"|| content?.status==="Live" ?"edit":"review"
@@ -72,9 +73,13 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     }
 
     // Generic routing for cases other than 'draft'
-    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE ) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
-    } else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
+    }
+    // else if (content?.mimeType === MIME_TYPE.COURSE_MIME_TYPE && tableTitle==='submitted')  {
+    //   router.push({ pathname: `/editor`, query: { identifier, mode } });
+    // }
+     else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
       const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
       router.push({ pathname, query: { identifier, mode } });
     } else if (content?.mimeType && MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)) {

@@ -35,7 +35,7 @@ const columns = [
 
 ]
 const UpForReviewPage = () => {
-  const [selectedKey, setSelectedKey] = useState("submitted");
+  const [selectedKey, setSelectedKey] = useState("up-review");
   const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("Modified On");
   const [searchTerm, setSearchTerm] = useState("");
