@@ -108,7 +108,7 @@ const CreatePage = () => {
       {/* Outer box for "Create new content" heading and cards */}
       <Box
         sx={{
-          backgroundColor: "#F7F2FA",
+          backgroundColor: "#F8EFE7",
           padding: "1.5rem",
           borderRadius: "12px",
           boxShadow: theme.shadows[3],
