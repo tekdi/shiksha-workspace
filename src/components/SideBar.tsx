@@ -35,7 +35,7 @@ const menuItems = [
   ...(userRole === Role.CCTA
     ? [{ text: "Up for Review", key: "up-review", icon: <PreviewOutlinedIcon /> }]
     : []),
-  { text: "Publish", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
+  { text: "Published", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
   { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
 ];
 
