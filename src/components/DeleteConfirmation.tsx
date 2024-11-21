@@ -10,6 +10,7 @@ import {
   Typography,
   Box,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteContent } from "@/services/ContentService";
@@ -26,51 +27,53 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
   rowData,
   handleClose,
 }) => {
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
-  const fetchContentAPI = useSharedStore(
-    (state: any) => state.fetchContentAPI
-  );
+  const [loading, setLoading] = React.useState(false);
+
+  const fetchContentAPI = useSharedStore((state: any) => state.fetchContentAPI);
   const setFetchContentAPI = useSharedStore(
     (state: any) => state.setFetchContentAPI
   );
-  const handleDelete = async (content?: any) => {
-    console.log(`Deleting item at index`, rowData);
-
-    if (rowData?.identifier && rowData?.mimeType) {
-      try {
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      if (rowData?.identifier && rowData?.mimeType) {
         await deleteContent(rowData?.identifier, rowData?.mimeType);
         console.log(`Deleted item with identifier - ${rowData?.identifier}`);
-        await delay(1000); 
-
-        // Update the fetchContentAPI state after the delay
+        await delay(1000);
         setFetchContentAPI(!fetchContentAPI);
-      } catch (error) {
-        console.error("Failed to delete content:", error);
       }
-      // setFetchContentAPI(!fetchContentAPI)
-
-     
+    } catch (error) {
+      console.error("Failed to delete content:", error);
     }
+    setLoading(false);
     handleClose();
   };
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={(event, reason) => {
+        if (reason !== "backdropClick") {
+          handleClose();
+        }
+      }}
       aria-labelledby="delete-confirmation-title"
       aria-describedby="delete-confirmation-description"
       maxWidth="xs"
-      fullWidth 
+      fullWidth
       sx={{
         "& .MuiDialog-paper": {
           borderRadius: "16px",
         },
       }}
     >
-      <DialogTitle sx={{ m: 0,}} id="delete-confirmation-title">
-        <Box sx={{padding:'10px'}}>
-          <Typography sx={{ fontWeight: "400", fontSize: "16px" }}>Are you sure you want to delete this item?</Typography>
+      <DialogTitle sx={{ m: 0 }} id="delete-confirmation-title">
+        <Box sx={{ padding: "10px" }}>
+          <Typography sx={{ fontWeight: "400", fontSize: "16px" }}>
+            Are you sure you want to delete this item?
+          </Typography>
         </Box>
         {/* <IconButton
           aria-label="close"
@@ -86,13 +89,24 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
         </IconButton> */}
       </DialogTitle>
       <Divider />
-     
-      <DialogActions sx={{ justifyContent: "end", gap:'10px', padding:'20px' }}>
-        <Box onClick={handleClose} sx={{ cursor: "pointer", color: "#0D599E", fontSize:'14px', }}>
+
+      <DialogActions
+        sx={{ justifyContent: "end", gap: "10px", padding: "20px" }}
+      >
+        <Box
+          onClick={handleClose}
+          sx={{ cursor: "pointer", color: "#0D599E", fontSize: "14px" }}
+        >
           No, go back
         </Box>
-        <Button sx={{ background:'#FDBE16', color:'#000' , borderRadius:'100px'}} onClick={handleDelete} variant="contained">
-          yes
+        <Button
+          sx={{ background: "#FDBE16", color: "#000", borderRadius: "100px" }}
+          onClick={handleDelete}
+          variant="contained"
+          disabled={loading}
+          startIcon={loading && <CircularProgress size={20} />}
+        >
+          {loading ? "Deleting..." : "Yes"}
         </Button>
       </DialogActions>
     </Dialog>
