@@ -26,11 +26,13 @@ import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
 import useSharedStore from "@/utils/useSharedState";
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "300px" },
+
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
   // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
   { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
+  { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
+ { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
 
 
 ]
@@ -71,7 +73,9 @@ const UpForReviewPage = () => {
       identifier: item.identifier,
       mimeType: item.mimeType,
       mode: item.mode,
-      createdBy: item.createdBy
+      createdBy: item.createdBy,
+      creator: item.creator
+
 
     }));
     setData(filteredArray)

@@ -178,6 +178,14 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                 )
               }
             }
+            else if(props.column.key === "create-by")
+            {
+              return (
+                <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
+                  {props.rowData.creator}
+                </Typography>
+              )
+            }
             else if (props.column.key === 'contentAction') {
                {
                 return (
