@@ -127,6 +127,11 @@ const ReviewContentSubmissions = () => {
       console.log("Published successfully:", response);
       // Add toaster success message here
       setOpenConfirmationPopup(false);
+      if(getLocalStoredUserRole() === Role.CCTA){
+        router.push({ pathname: `/workspace/content/up-review` });
+  
+      }
+      else
       router.push({ pathname: `/workspace/content/submitted` });
     } catch (error) {
       console.error("Error during publishing:", error);
@@ -140,6 +145,11 @@ const ReviewContentSubmissions = () => {
       console.log("Comment submitted successfully:", response);
       // Add toaster success message here
       setOpenCommentPopup(false);
+      if(getLocalStoredUserRole() === Role.CCTA){
+        router.push({ pathname: `/workspace/content/up-review` });
+  
+      }
+      else
       router.push({ pathname: `/workspace/content/submitted` });
     } catch (error) {
       console.error("Error submitting comment:", error);
