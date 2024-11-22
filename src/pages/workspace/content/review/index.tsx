@@ -94,10 +94,11 @@ const ReviewContentSubmissions = () => {
   }, [identifier]);
 
   const redirectToReviewPage = () => {
-    if(getLocalStoredUserRole() === Role.SCTA){
+    if(getLocalStoredUserRole() === Role.CCTA){
       router.push({ pathname: `/workspace/content/up-review` });
 
     }
+    else
     router.push({ pathname: `/workspace/content/submitted` });
   };
 
