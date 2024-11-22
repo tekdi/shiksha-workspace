@@ -41,7 +41,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       try {
         await deleteContent(rowData?.identifier, rowData?.mimeType);
         console.log(`Deleted item with identifier - ${rowData?.identifier}`);
-        await delay(1000); 
+        await delay(2000); 
 
         // Update the fetchContentAPI state after the delay
         setFetchContentAPI(!fetchContentAPI);
@@ -70,7 +70,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
     >
       <DialogTitle sx={{ m: 0,}} id="delete-confirmation-title">
         <Box sx={{padding:'10px'}}>
-          <Typography sx={{ fontWeight: "400", fontSize: "16px" }}>Are you sure you want to delete this item?</Typography>
+          <Typography sx={{ fontWeight: "400", fontSize: "16px" }}>Are you sure you want to delete this Resource?</Typography>
         </Box>
         {/* <IconButton
           aria-label="close"
