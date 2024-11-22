@@ -94,6 +94,10 @@ const ReviewContentSubmissions = () => {
   }, [identifier]);
 
   const redirectToReviewPage = () => {
+    if(getLocalStoredUserRole() === Role.SCTA){
+      router.push({ pathname: `/workspace/content/up-review` });
+
+    }
     router.push({ pathname: `/workspace/content/submitted` });
   };
 
@@ -389,7 +393,7 @@ const ReviewContentSubmissions = () => {
             </Grid>
           </Grid>
 
-          {getLocalStoredUserRole() === Role.CCTA&&(<Box
+          {getLocalStoredUserRole() === Role.CCTA&& localStorage.getItem("contentCreatedBy") !==  localStorage.getItem("userId") &&(<Box
             sx={{
               display: "flex",
               justifyContent: "flex-end",

@@ -70,7 +70,9 @@ const UpForReviewPage = () => {
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
-      mode: item.mode
+      mode: item.mode,
+      createdBy: item.createdBy
+
     }));
     setData(filteredArray)
     console.log(filteredArray)

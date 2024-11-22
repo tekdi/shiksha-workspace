@@ -73,6 +73,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     }
 
     // Generic routing for cases other than 'draft'
+   
     if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE ) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
     }
@@ -80,6 +81,8 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
     }
      else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
+      localStorage.setItem('contentCreatedBy', content?.createdBy);
+      console.log(content)
       const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
       router.push({ pathname, query: { identifier, mode } });
     } else if (content?.mimeType && MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)) {
