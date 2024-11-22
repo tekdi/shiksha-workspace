@@ -31,7 +31,10 @@ const userRole = getLocalStoredUserRole();
 const menuItems = [
   { text: "Create", key: "create", icon: <AddOutlinedIcon /> },
   { text: "Draft", key: "draft", icon: <CreateOutlinedIcon /> },
-  { text: "Submitted for Review", key: "submitted", icon: <PreviewOutlinedIcon /> },
+  ...(userRole !== Role.CCTA
+    ? [  { text: "Submitted for Review", key: "submitted", icon: <PreviewOutlinedIcon /> },
+  ]
+    : []),
   ...(userRole === Role.CCTA
     ? [{ text: "Up for Review", key: "up-review", icon: <PreviewOutlinedIcon /> }]
     : []),

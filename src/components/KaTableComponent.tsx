@@ -76,9 +76,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE ) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
     }
-    // else if (content?.mimeType === MIME_TYPE.COURSE_MIME_TYPE && tableTitle==='submitted')  {
-    //   router.push({ pathname: `/editor`, query: { identifier, mode } });
-    // }
+    else if ( tableTitle==='submitted')  {
+      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
+    }
      else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
       const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
       router.push({ pathname, query: { identifier, mode } });

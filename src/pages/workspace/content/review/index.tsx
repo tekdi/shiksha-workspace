@@ -30,7 +30,8 @@ import {
 } from "../../../../components/players/playerMetadata";
 import $ from "jquery";
 import { MIME_TYPE, CHANNEL_ID } from "@/utils/app.config";
-import { getLocalStoredUserName } from "@/services/LocalStorageService";
+import { getLocalStoredUserName , getLocalStoredUserRole} from "@/services/LocalStorageService";
+import { Role } from "@/utils/app.constant";
 
 const userFullName = getLocalStoredUserName() || "Anonymous User";
 const [firstName, lastName] = userFullName.split(" ");
@@ -388,7 +389,7 @@ const ReviewContentSubmissions = () => {
             </Grid>
           </Grid>
 
-          <Box
+          {getLocalStoredUserRole() === Role.CCTA&&(<Box
             sx={{
               display: "flex",
               justifyContent: "flex-end",
@@ -416,7 +417,7 @@ const ReviewContentSubmissions = () => {
             >
               Request Changes
             </Button>
-          </Box>
+          </Box>)}
         </>
       ) : (
         <Typography>No content details available</Typography>
