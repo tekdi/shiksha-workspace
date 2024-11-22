@@ -42,6 +42,11 @@ jobs:
       env:
         ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT_PROD }}
       run: echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
+    - name: Copy .env file in the code
+      env:
+       PROD_ENV: ${{ secrets.PROD_ENV }}
+      run:  rm -f .env && echo '${{ secrets.PROD_ENV }}' > .env
+      #echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
 
     - name: Show PWD and list content and Latest 3 commits 
       run: |
