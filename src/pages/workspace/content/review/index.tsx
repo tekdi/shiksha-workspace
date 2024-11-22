@@ -404,7 +404,7 @@ const ReviewContentSubmissions = () => {
             </Grid>
           </Grid>
 
-          {getLocalStoredUserRole() === Role.CCTA&& localStorage.getItem("contentCreatedBy") !==  localStorage.getItem("userId") &&(<Box
+          {getLocalStoredUserRole() === Role.CCTA &&(<Box
             sx={{
               display: "flex",
               justifyContent: "flex-end",
