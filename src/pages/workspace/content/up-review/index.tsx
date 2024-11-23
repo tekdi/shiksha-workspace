@@ -26,16 +26,18 @@ import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
 import useSharedStore from "@/utils/useSharedState";
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "300px" },
+
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
   // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
   { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
+  { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
+ { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
 
 
 ]
-const SubmittedForReviewPage = () => {
-  const [selectedKey, setSelectedKey] = useState("submitted");
+const UpForReviewPage = () => {
+  const [selectedKey, setSelectedKey] = useState("up-review");
   const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("Modified On");
   const [searchTerm, setSearchTerm] = useState("");
@@ -70,7 +72,11 @@ const SubmittedForReviewPage = () => {
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
-      mode: item.mode
+      mode: item.mode,
+      createdBy: item.createdBy,
+      creator: item.creator
+
+
     }));
     setData(filteredArray)
     console.log(filteredArray)
@@ -98,13 +104,15 @@ const SubmittedForReviewPage = () => {
         const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
+        const contentType="upReview"
         const response = await getContent(
           ["Review", "FlagReview"],
           query,
           LIMIT,
           offset,
           primaryCategory,
-          sort_by
+          sort_by,
+          contentType
         );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
@@ -131,7 +139,7 @@ const SubmittedForReviewPage = () => {
               variant="h4"
               sx={{ fontWeight: "bold", fontSize: "16px" }}
             >
-              Submitted For Review
+              Up For Review
             </Typography>
           </Box>
           {/* <Typography mb={2}>
@@ -165,7 +173,7 @@ const SubmittedForReviewPage = () => {
             </Box>
           ) : (
             <Box className="table-ka-container">
-              <KaTableComponent columns={columns} data={data} tableTitle="submitted"  />
+              <KaTableComponent columns={columns} data={data} tableTitle="upForReview"  />
             </Box>
           )}
         {totalCount > LIMIT && (
@@ -181,4 +189,4 @@ const SubmittedForReviewPage = () => {
   );
 };
 
-export default SubmittedForReviewPage;
+export default UpForReviewPage;

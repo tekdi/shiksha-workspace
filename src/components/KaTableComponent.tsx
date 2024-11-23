@@ -58,6 +58,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
         mode = "read";
         break;
       case 'submitted':
+        mode = "read";
+        break;
+        case 'upForReview':
         mode = "review";
         break;
         case 'all-content':
@@ -70,10 +73,17 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     }
 
     // Generic routing for cases other than 'draft'
-    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
+   
+    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE ) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
-    } else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
-      const pathname = tableTitle === 'submitted' ? `/workspace/content/review` : `/upload-editor`;
+    }
+    else if ( tableTitle==='submitted')  {
+      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
+    }
+     else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
+      localStorage.setItem('contentCreatedBy', content?.createdBy);
+      console.log(content)
+      const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
       router.push({ pathname, query: { identifier, mode } });
     } else if (content?.mimeType && MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)) {
       router.push({ pathname: `/collection`, query: { identifier, mode } });
@@ -167,6 +177,14 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                   </Typography>
                 )
               }
+            }
+            else if(props.column.key === "create-by")
+            {
+              return (
+                <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
+                  {props.rowData.creator}
+                </Typography>
+              )
             }
             else if (props.column.key === 'contentAction') {
                {
