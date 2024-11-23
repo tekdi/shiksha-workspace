@@ -150,7 +150,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             >
               {item?.icon}
             </ListItemIcon>
-            <ListItemText className="menu-list-content" primaryTypographyProps={{ fontSize: '16px', fontWeight: selectedKey === item?.key ? '600' : 'normal' }} primary={item?.text} />
+            <ListItemText className="menu-list-content" primaryTypographyProps={{ fontSize: '16px', fontFamily:'Poppins', fontWeight: selectedKey === item?.key ? '600' : 'normal' }} primary={item?.text} />
           </ListItemButton>
         ))}
       </List>

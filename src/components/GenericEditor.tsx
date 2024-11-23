@@ -31,6 +31,10 @@ const GenericEditor: React.FC = () => {
             }
 
             console.log('editorConfig ==>', editorConfig);
+
+            // Load CSS dynamically
+            loadPdfPlayerCss();
+
             getContentDetails(identifier)
                 .then((data: any) => {
                     initEditor();
@@ -59,6 +63,7 @@ const GenericEditor: React.FC = () => {
             // Cleanup function
             return () => {
                 window.removeEventListener('popstate', popstateListener);
+                removePdfPlayerCss();
             };
         }
     }, [identifier]);
@@ -80,6 +85,25 @@ const GenericEditor: React.FC = () => {
         } catch (err: any) {
             console.error(err);
             return null;
+        }
+    };
+
+    // Dynamically load the CSS
+    const loadPdfPlayerCss = () => {
+        if (!document.getElementById("generic-editor.css")) {
+            const link = document.createElement("link");
+            link.id = "generic-editor.css";
+            link.rel = "stylesheet";
+            link.href = "/path/to/generic-editor.css"; // Update with the correct path
+            document.head.appendChild(link);
+        }
+    };
+
+    // Remove the dynamically loaded CSS
+    const removePdfPlayerCss = () => {
+        const pdfPlayerCss = document.getElementById("generic-editor.css");
+        if (pdfPlayerCss) {
+            document.head.removeChild(pdfPlayerCss);
         }
     };
 
@@ -151,13 +175,20 @@ const GenericEditor: React.FC = () => {
         }
     };
 
-    // Function to close the modal and navigate away
+    // Function to close the modal and clean up
     const closeModal = () => {
         setShowLoader(false);
+
+        // Remove the modal element
         const editorElement = document.getElementById('genericEditor');
         if (editorElement) {
             editorElement.remove();
         }
+
+        // Remove specific CSS
+        removePdfPlayerCss();
+
+        // Navigate back
         window.history.back();
     };
 
@@ -167,7 +198,6 @@ const GenericEditor: React.FC = () => {
             {showLoader && <div>Loading.....</div>}
         </div>
     );
-
 };
 
 export default GenericEditor;
