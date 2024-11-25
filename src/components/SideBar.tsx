@@ -40,6 +40,8 @@ const menuItems = [
     : []),
   { text: "Published", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
   { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
+  { text: "Discover-contents", key: "discover-contents", icon: <AppsOutlinedIcon /> },
+
 ];
 
 interface SidebarProps {

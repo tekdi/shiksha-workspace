@@ -57,6 +57,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       case 'publish':
         mode = "read";
         break;
+        case 'discover-contents':
+        mode = "read";
+        break;
       case 'submitted':
         mode = "read";
         break;
