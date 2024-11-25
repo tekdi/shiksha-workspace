@@ -131,6 +131,8 @@ const nextConfig = {
           "./SunbirdPlayers": "/src/pages/sunbirdPlayers.tsx",
           "./Review": "/src/pages/workspace/content/review/index.tsx",
           "./UpReview": "/src/pages/workspace/content/up-review/index.tsx",
+          "./DiscoverContent": "/src/pages/workspace/content/discover-contents/index.tsx",
+
 
         },
       })
