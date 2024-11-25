@@ -8,6 +8,7 @@ interface DashboardContentProps {
 }
 
 interface content {
+  creator?: any;
   name: string;
   status: string;
   lastUpdatedOn: string;
