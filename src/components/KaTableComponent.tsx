@@ -57,6 +57,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       case 'publish':
         mode = "read";
         break;
+        case 'discover-contents':
+        mode = "read";
+        break;
       case 'submitted':
         mode = "read";
         break;
@@ -66,6 +69,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
         case 'all-content':
           mode=content?.status==="Draft"|| content?.status==="Live" ?"edit":"review"
           break;
+          case 'contents':
+            mode=content?.status==="Draft"|| content?.status==="Live" ?"edit":"review"
+            break;
       // Default case for "all-content" or any other values if mode is already defined in content
       default:
         mode = mode ||"read" ;
