@@ -12,6 +12,8 @@ export enum Role {
   CCTA="Central Admin CCTA"
 }
 export const SortOptions = ["Modified On", "Created On"];
+export const StatusOptions = ["Live", "Review" ,  "Draft", "All"];
+
 
 export const LIMIT = 10;
 

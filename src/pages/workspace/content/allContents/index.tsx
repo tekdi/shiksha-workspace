@@ -54,6 +54,8 @@ const AllContentsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("Modified On");
+  const [statusBy, setStatusBy] = useState("");
+
  const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
 
@@ -99,13 +101,16 @@ const AllContentsPage = () => {
     console.log("sortBy", sortBy)
     setSortBy(sortBy);
   };
+  const handleStatusChange = (statusBy: string) => {
+    setStatusBy(statusBy);
+  };
 
 
   useEffect(() => {
     const getContentList = async () => {
       try {
         setLoading(true);
-        const status = [
+        let status=[
           "Draft",
           "FlagDraft",
           "Review",
@@ -114,6 +119,33 @@ const AllContentsPage = () => {
           "Unlisted",
           "FlagReview",
         ];
+        if (statusBy === "" || statusBy === "All") {
+           status = [
+            "Draft",
+            "FlagDraft",
+            "Review",
+            "Processing",
+            "Live",
+            "Unlisted",
+            "FlagReview",
+          ];
+        }
+        else if (statusBy === "Live") {
+          status = ["Live"];
+        }
+        else if (statusBy === "Review") {
+          status = ["Review"];
+        }
+        else if (statusBy === "Draft") {
+          status = ["Draft"];
+        }
+        else if (statusBy === "Unlisted") {
+          status = ["Unlisted"];
+        }
+        else if (statusBy === "FlagReview") {
+          status = ["FlagReview"];
+        }
+     
         const query = debouncedSearchTerm || "";
         const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
@@ -140,7 +172,7 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy,  page]);
+  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, statusBy, page]);
 
   useEffect(() => {
     const filteredArray = contentList.map(item => ({
@@ -193,6 +225,8 @@ const AllContentsPage = () => {
               onSearch={handleSearch}
               onFilterChange={handleFilterChange}
               onSortChange={handleSortChange}
+              onStatusChange={handleStatusChange}
+              allContents={true}
             />
           </Box>
               {loading ? (
