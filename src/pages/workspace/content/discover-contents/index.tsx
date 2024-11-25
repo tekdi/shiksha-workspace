@@ -37,19 +37,19 @@ import useSharedStore from "@/utils/useSharedState";
 
 // ]
 const columns = [
-  { key: 'name', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
-  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
-  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'contentAction', title: 'ACTION', dataType: DataType.String, width: "100px" },
+  { key: 'name', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "200px" },
   { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
+
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "100px" },
+  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
+  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "100px" },
 
 
 ]
 const ContentsPage = () => {
   const theme = useTheme<any>();
 
-  const [selectedKey, setSelectedKey] = useState("contents");
+  const [selectedKey, setSelectedKey] = useState("discover-contents");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");

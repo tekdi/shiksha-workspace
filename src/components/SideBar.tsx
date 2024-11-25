@@ -21,7 +21,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import logo from "/public/logo.png";
 import { Role } from "@/utils/app.constant";
 import { getLocalStoredUserRole } from "@/services/LocalStorageService";
@@ -38,9 +38,9 @@ const menuItems = [
   ...(userRole === Role.CCTA
     ? [{ text: "Up for Review", key: "up-review", icon: <PreviewOutlinedIcon /> }]
     : []),
-  { text: "Published", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
+  { text: "My Published Contents", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
   { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
-  { text: "Discover-contents", key: "discover-contents", icon: <AppsOutlinedIcon /> },
+  { text: "Discover-contents", key: "discover-contents", icon: <ManageSearchIcon /> },
 
 ];
 
