@@ -206,7 +206,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
 
       </Grid>
     
-      <Grid item xs={3} md={3} justifySelf={"end"}>
+      <Grid xs={12} md={3} sx={{ mx: theme.spacing(2.5) }} justifySelf={"end"}>
         <FormControl sx={{ width: "100%", mt: 2 }}>
           <InputLabel>Sort By</InputLabel>
           <Select
