@@ -30,16 +30,16 @@ const userRole = getLocalStoredUserRole();
 // Updated menu items with icons
 const menuItems = [
   { text: "Create", key: "create", icon: <AddOutlinedIcon /> },
-  { text: "Draft", key: "draft", icon: <CreateOutlinedIcon /> },
+  { text: "Drafts", key: "draft", icon: <CreateOutlinedIcon /> },
   ...(userRole !== Role.CCTA
-    ? [  { text: "Submitted for Review", key: "submitted", icon: <PreviewOutlinedIcon /> },
+    ? [{ text: "Submitted for Review", key: "submitted", icon: <PreviewOutlinedIcon /> },
   ]
     : []),
   ...(userRole === Role.CCTA
     ? [{ text: "Up for Review", key: "up-review", icon: <PreviewOutlinedIcon /> }]
     : []),
   { text: "Published", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
-  { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
+  { text: "All My Content", key: "allContents", icon: <AppsOutlinedIcon /> },
 ];
 
 interface SidebarProps {
@@ -164,7 +164,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             >
               {item?.icon}
             </ListItemIcon>
-            <ListItemText className="menu-list-content" primaryTypographyProps={{ fontSize: '16px', fontFamily:'Poppins', fontWeight: selectedKey === item?.key ? '600' : 'normal' }} primary={item?.text} />
+            <ListItemText className="menu-list-content" primaryTypographyProps={{ fontSize: '16px', fontFamily:'Poppins', fontWeight: selectedKey === item?.key ? '600' : '500', color:'black' }} primary={item?.text} />
           </ListItemButton>
         ))}
       </List>
