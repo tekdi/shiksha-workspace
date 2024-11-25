@@ -42,7 +42,6 @@ const ReviewContentSubmissions = () => {
   const router = useRouter();
   const { identifier } = router.query;
   const { isDiscoverContent } = router.query;
-console.log("isDiscoverContent", isDiscoverContent);
   const [contentDetails, setContentDetails] = useState<any>(undefined);
   const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
   const [confirmationActionType, setConfirmationActionType] = useState<

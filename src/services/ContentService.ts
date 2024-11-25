@@ -69,7 +69,6 @@ const getReqBodyWithStatus = (
     primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;
     if(contentType==="discover-contents")
 {
-  console.log("hiii")
   return {
     ...upForReviewReqBody,
     request: {
