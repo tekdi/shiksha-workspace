@@ -83,6 +83,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     else if ( tableTitle==='submitted')  {
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
     }
+    else if ( tableTitle==='discover-contents')  {
+      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
+    }
      else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
       localStorage.setItem('contentCreatedBy', content?.createdBy);
       console.log(content)

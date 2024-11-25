@@ -41,7 +41,8 @@ const ReviewContentSubmissions = () => {
     useState(false);
   const router = useRouter();
   const { identifier } = router.query;
-
+  const { isDiscoverContent } = router.query;
+console.log("isDiscoverContent", isDiscoverContent);
   const [contentDetails, setContentDetails] = useState<any>(undefined);
   const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
   const [confirmationActionType, setConfirmationActionType] = useState<
@@ -94,7 +95,11 @@ const ReviewContentSubmissions = () => {
   }, [identifier]);
 
   const redirectToReviewPage = () => {
-    if(getLocalStoredUserRole() === Role.CCTA){
+    if(isDiscoverContent === "true"){
+      router.push({ pathname: `/workspace/content/discover-contents` });
+
+    }
+    else if(getLocalStoredUserRole() === Role.CCTA){
       router.push({ pathname: `/workspace/content/up-review` });
 
     }
@@ -404,7 +409,7 @@ const ReviewContentSubmissions = () => {
             </Grid>
           </Grid>
 
-          {getLocalStoredUserRole() === Role.CCTA &&(<Box
+          {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" &&(<Box
             sx={{
               display: "flex",
               justifyContent: "flex-end",

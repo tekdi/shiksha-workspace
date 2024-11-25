@@ -67,7 +67,29 @@ const getReqBodyWithStatus = (
   }
   primaryCategory =
     primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;
-if(contentType==="upReview")
+    if(contentType==="discover-contents")
+{
+  console.log("hiii")
+  return {
+    ...upForReviewReqBody,
+    request: {
+      ...upForReviewReqBody.request,
+      filters: {
+        ...upForReviewReqBody.request.filters,
+        status,
+        primaryCategory,
+        createdBy:{"!=":localStorage.getItem("userId")}
+
+      },
+
+      query,
+      limit,
+      offset,
+      sort_by,
+    },
+  };
+}
+else if(contentType==="upReview")
 {
   return {
     ...upForReviewReqBody,

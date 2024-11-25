@@ -122,7 +122,7 @@ const ContentsPage = () => {
           lastUpdatedOn: order,
         };
         const offset = page * LIMIT;
-        const contentType="upReview"
+        const contentType="discover-contents"
 
         const response = await getContent(
           status,
