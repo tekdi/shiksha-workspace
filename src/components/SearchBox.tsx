@@ -113,7 +113,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
   };
   return (
     <Grid container gap={1} alignItems={"center"}>
-      <Grid item xs={5} md={5}>
+      <Grid item xs={12} md={5}>
         <Box sx={{ mt: 2, px: theme.spacing(2.5) }}>
           <Paper
             component="form"
@@ -121,10 +121,10 @@ const SearchBox: React.FC<SearchBarProps> = ({
             sx={{
               display: "flex",
               alignItems: "center",
-              borderRadius: "50px",
-              background: theme.palette.warning.A700,
-              boxShadow: "none",
-              border: "1px solid #000000DE !important",
+              backgroundColor: theme.palette.warning["A700"],
+              borderRadius: "8px",
+              "& .MuiOutlinedInput-root fieldset": { border: "none" },
+              "& .MuiOutlinedInput-input": { borderRadius: 8 },
             }}
           >
             <InputBase
@@ -146,7 +146,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
         </Box>
       </Grid>
 
-      <Grid item xs={3} md={3}>
+      <Grid sx={{ mx: theme.spacing(2.5) }} item xs={12} md={3}>
         <FormControl className="drawer-select" sx={{ width: "100%", mt: 2 }}>
           <InputLabel>Filter By</InputLabel>
           <Select
