@@ -6,7 +6,8 @@ env:
   EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME_DEV }}
   AWS_REGION: ${{ secrets.AWS_REGION_NAME }}
 jobs:
-  build_dev:
+  build:
+
     name: Deployment
     runs-on: ubuntu-latest
     steps:
@@ -27,11 +28,16 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 21.1.0
+        #echo '${{ secrets.QA_ENV }}' > .env
     - name: Copy .env file
       env:
        ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT_DEV }}
-      run: printf "%s" "$ENV_FILE_CONTENT" > manifest/configmap.yaml 
-      # run: echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
+      run: printf "%s" "$ENV_FILE_CONTENT" > manifest/configmap.yaml
+    - name: Copy .env file in the code
+      env:
+       DEV_ENV: ${{ secrets.DEV_ENV }}
+      run:  rm -f .env && echo '${{ secrets.DEV_ENV }}' > .env
+      #echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
     - name: Show PWD and list content and Latest 3 commits 
       run: |
            echo "Fetching all branches to ensure complete history"
