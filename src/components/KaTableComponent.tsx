@@ -83,6 +83,11 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     else if ( tableTitle==='submitted')  {
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
     }
+    else if ( tableTitle==='all-content')  {
+      if(mode==="review"){
+        router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isReadOnly: true } });
+     }
+    }
     else if ( tableTitle==='discover-contents')  {
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
     }
@@ -153,7 +158,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                       <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
                     </div>
                     <div>
-                      <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px' }} className='two-line-text' color={theme.palette.warning['A200']}>
+                      <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px', }} className='two-line-text' color={theme.palette.warning['A200']}>
                         {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
                       </Typography>
                     </div>

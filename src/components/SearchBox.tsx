@@ -47,7 +47,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
   const [searchTerm, setSearchTerm] = useState(value);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>("Modified On");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("All");
 
   const [primaryCategory, setPrimaryCategory] = useState<string[]>();
 
