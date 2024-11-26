@@ -136,7 +136,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
             <InputBase
               value={searchTerm}
               onChange={handleChange}
-              sx={{ ml: theme.spacing(3), flex: 1, fontSize: "14px" }}
+              sx={{ ml: theme.spacing(3), flex: 1, fontSize: "16px", fontFamily: 'Poppins', color:'000000DB' }}
               placeholder={placeholder}
               inputProps={{ "aria-label": placeholder }}
             />
@@ -154,7 +154,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
 
       <Grid sx={{ mx: theme.spacing(2.5) }} item xs={12} md={3}>
         <FormControl className="drawer-select" sx={{ width: "100%", mt: 2 }}>
-          <InputLabel>Filter By</InputLabel>
+          <InputLabel sx={{ color:"#000000DB" }}>Filter By</InputLabel>
           <Select
             multiple
             value={selectedFilters}

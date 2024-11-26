@@ -9,6 +9,7 @@ import router from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
 import Image from "next/image";
 import ActionIcon from './ActionIcon';
+import { Padding } from '@mui/icons-material';
 interface CustomTableProps {
   data: any[]; // Define a more specific type for your data if needed
   columns: Array<{
@@ -110,43 +111,78 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
               return (
                 <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }} onClick={() => openEditor(props.rowData)} >
                   {props.rowData.image ? (
-                    <img
-                      src={props.rowData.image || '/logo.png'}
-                      height="50px"
-                      alt="Image"
-                      style={props.column.key === 'name' ? { marginRight: '8px' } : {
-                        width: 60,
-                        height: 40,
+                    <Box
+                      style={{
+                        width: "60px",
+                        height: "40px",
+                        padding: "10px", 
                         borderRadius: "8px",
                         marginRight: "10px",
+                        overflow: "hidden", 
+                        background:'#F1E6D6'
                       }}
-                    />
+                    >
+                      <img
+                        src={props.rowData.image || '/logo.png'}
+                        alt="Image"
+                        style={{
+                          width: "100%", 
+                          height: "100%", 
+                          objectFit: "cover", 
+                          borderRadius: "8px",
+                        }}
+                      />
+                    </Box>
                   ) : props.column.key === 'name' ? (
+                      <Box
+                        style={{
+                          width: "60px",
+                          height: "40px",
+                          padding: "10px",
+                          borderRadius: "8px",
+                          marginRight: "10px",
+                          overflow: "hidden", 
+                          background: '#F1E6D6'
+                        }}
+                      >
                     <img
                       src={'/logo.png'}
                       height="25px"
                       alt="Image"
-                      style={{
-                        width: 60,
-                        height: 40,
-                        borderRadius: "8px",
-                        marginRight: "10px"
-                      }}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
 
                     />
+                      </Box>
                   ) : (
+                        <Box
+                          style={{
+                            width: "60px",
+                            height: "40px",
+                            padding: "10px", // Fixed casing
+                            borderRadius: "8px",
+                            marginRight: "10px",
+                            overflow: "hidden", // Ensures content doesn't overflow the box
+                            background: '#F1E6D6'
+                          }}
+                        >
                     <img
                       src={'/logo.png'}
                       height="25px"
                       alt="Image"
-                      style={{
-                        width: 60,
-                        height: 40,
-                        borderRadius: "8px",
-                        marginRight: "10px"
-                      }}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "8px",
+                            }}
 
                     />
+                        </Box>
                   )}
                   <div>
                     <div>
