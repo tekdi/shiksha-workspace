@@ -91,6 +91,12 @@ const SearchBox: React.FC<SearchBarProps> = ({
     {
       handleSearch(searchTerm);
     }
+   else if(searchTerm.length===0|| searchTerm==="")
+    {
+     
+      handleSearchClear()
+      handleSearch(searchTerm)
+    }
    
   };
 
