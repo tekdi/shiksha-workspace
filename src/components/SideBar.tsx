@@ -85,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
     <Box
       display="inline-block"
       padding="1rem 0.5rem 0.5rem"
-      width="275px"
+      width="284px !important"
       height="100%"
       sx={{
         fontSize: '16px',
@@ -183,7 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
           <Drawer
             anchor="left"
             sx={{
-              width: "275px",
+              width: "284px",
               // background: "linear-gradient(to bottom, white, #F8EFDA)",
             }}
             open={drawerOpen}
@@ -200,7 +200,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            width: 275,
+            width: 284,
        
           }}
         >

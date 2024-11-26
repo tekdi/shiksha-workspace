@@ -28,7 +28,7 @@ import useSharedStore from "@/utils/useSharedState";
 
 const columns = [
   { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "200px" },
   // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
   { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
   { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },

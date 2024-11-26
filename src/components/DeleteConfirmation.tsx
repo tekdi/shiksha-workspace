@@ -91,7 +91,14 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
         <Box onClick={handleClose} sx={{ cursor: "pointer", color: "#0D599E", fontSize:'14px', }}>
           No, go back
         </Box>
-        <Button sx={{ background:'#FDBE16', color:'#000' , borderRadius:'100px'}} onClick={handleDelete} variant="contained">
+        <Button sx={{
+          background: '#FDBE16',
+          color: '#000',
+          borderRadius: '100px',
+          '&:hover': {
+            background: '#FDBE16', 
+          },
+        }} onClick={handleDelete} variant="contained">
           yes
         </Button>
       </DialogActions>
