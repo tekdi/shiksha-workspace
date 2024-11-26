@@ -58,6 +58,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       case 'publish':
         mode = "read";
         break;
+        case 'discover-contents':
+        mode = "read";
+        break;
       case 'submitted':
         mode = "read";
         break;
@@ -80,6 +83,9 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     }
     else if ( tableTitle==='submitted')  {
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
+    }
+    else if ( tableTitle==='discover-contents')  {
+      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
     }
      else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
       localStorage.setItem('contentCreatedBy', content?.createdBy);
@@ -216,11 +222,19 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
             }
             else if(props.column.key === "create-by")
             {
+              if(props.rowData.creator)
               return (
                 <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
                   {props.rowData.creator}
                 </Typography>
               )
+              else
+              return (
+                <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
+                  -
+                </Typography>
+              )
+
             }
             else if (props.column.key === 'contentAction') {
                {

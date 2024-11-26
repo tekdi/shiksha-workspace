@@ -37,25 +37,24 @@ import useSharedStore from "@/utils/useSharedState";
 
 // ]
 const columns = [
-  { key: 'name', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
+  { key: 'name', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "200px" },
+  { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
+
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "100px" },
   { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
-  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'contentAction', title: 'ACTION', dataType: DataType.String, width: "100px" },
+  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "100px" },
 
 
 ]
-const AllContentsPage = () => {
+const ContentsPage = () => {
   const theme = useTheme<any>();
 
-  const [selectedKey, setSelectedKey] = useState("allContents");
+  const [selectedKey, setSelectedKey] = useState("discover-contents");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("Modified On");
-  const [statusBy, setStatusBy] = useState("");
-
  const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
 
@@ -101,51 +100,21 @@ const AllContentsPage = () => {
     console.log("sortBy", sortBy)
     setSortBy(sortBy);
   };
-  const handleStatusChange = (statusBy: string) => {
-    setStatusBy(statusBy);
-  };
 
 
   useEffect(() => {
     const getContentList = async () => {
       try {
         setLoading(true);
-        let status=[
-          "Draft",
-          "FlagDraft",
-          "Review",
-          "Processing",
+        const status = [
+          // "Draft",
+          // "FlagDraft",
+          // "Review",
+          // "Processing",
           "Live",
-          "Unlisted",
-          "FlagReview",
+          // "Unlisted",
+          // "FlagReview",
         ];
-        if (statusBy === "" || statusBy === "All") {
-           status = [
-            "Draft",
-            "FlagDraft",
-            "Review",
-            "Processing",
-            "Live",
-            "Unlisted",
-            "FlagReview",
-          ];
-        }
-        else if (statusBy === "Live") {
-          status = ["Live"];
-        }
-        else if (statusBy === "Review") {
-          status = ["Review"];
-        }
-        else if (statusBy === "Draft") {
-          status = ["Draft"];
-        }
-        else if (statusBy === "Unlisted") {
-          status = ["Unlisted"];
-        }
-        else if (statusBy === "FlagReview") {
-          status = ["FlagReview"];
-        }
-     
         const query = debouncedSearchTerm || "";
         const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
@@ -153,13 +122,16 @@ const AllContentsPage = () => {
           lastUpdatedOn: order,
         };
         const offset = page * LIMIT;
+        const contentType="discover-contents"
+
         const response = await getContent(
           status,
           query,
           LIMIT,
           offset,
           primaryCategory,
-          sort_by
+          sort_by,
+          contentType
         );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
@@ -172,7 +144,7 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, statusBy, page]);
+  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy,  page]);
 
   useEffect(() => {
     const filteredArray = contentList.map(item => ({
@@ -184,7 +156,9 @@ const AllContentsPage = () => {
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
-      mode: item.mode
+      mode: item.mode,
+      creator: item.creator
+
 
     }));
     setData(filteredArray)
@@ -225,8 +199,6 @@ const AllContentsPage = () => {
               onSearch={handleSearch}
               onFilterChange={handleFilterChange}
               onSortChange={handleSortChange}
-              onStatusChange={handleStatusChange}
-              allContents={true}
             />
           </Box>
               {loading ? (
@@ -234,7 +206,7 @@ const AllContentsPage = () => {
           ) : (
             <>
                 <Box className="table-ka-container">
-                  <KaTableComponent columns={columns} tableTitle="all-content" data={data} />
+                  <KaTableComponent columns={columns} tableTitle="discover-contents" data={data} />
                 </Box>
               </>
           )}
@@ -254,4 +226,4 @@ const AllContentsPage = () => {
   );
 };
 
-export default AllContentsPage;
+export default ContentsPage;

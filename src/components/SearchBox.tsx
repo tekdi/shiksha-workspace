@@ -19,7 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { debounce } from "@/utils/Helper";
 import { getPrimaryCategory } from "@/services/ContentService";
-import { SortOptions } from "@/utils/app.constant";
+import { SortOptions , StatusOptions} from "@/utils/app.constant";
 
 export interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -28,6 +28,8 @@ export interface SearchBarProps {
   placeholder: string;
   onFilterChange?: (selectedFilters: string[]) => void;
   onSortChange?: (sortBy: string) => void;
+  onStatusChange?: (status: string) => void;
+  allContents?: boolean
 }
 
 const sortOptions = SortOptions;
@@ -38,11 +40,15 @@ const SearchBox: React.FC<SearchBarProps> = ({
   placeholder = "Search...",
   onFilterChange,
   onSortChange,
+  onStatusChange,
+  allContents=false
 }) => {
   const theme = useTheme<any>();
   const [searchTerm, setSearchTerm] = useState(value);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>("Modified On");
+  const [status, setStatus] = useState<string>("");
+
   const [primaryCategory, setPrimaryCategory] = useState<string[]>();
 
   useEffect(() => {
@@ -85,6 +91,12 @@ const SearchBox: React.FC<SearchBarProps> = ({
     {
       handleSearch(searchTerm);
     }
+   else if(searchTerm.length===0|| searchTerm==="")
+    {
+     
+      handleSearchClear()
+      handleSearch(searchTerm)
+    }
    
   };
 
@@ -100,6 +112,11 @@ const SearchBox: React.FC<SearchBarProps> = ({
     onSortChange && onSortChange(value);
   };
 
+  const handleStatusChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value as string;
+    setStatus(value);
+    onStatusChange && onStatusChange(value);
+  };
   return (
     <Grid container gap={1} alignItems={"center"}>
       <Grid item xs={12} md={5}>
@@ -194,9 +211,9 @@ const SearchBox: React.FC<SearchBarProps> = ({
         </FormControl>
 
       </Grid>
-
-      <Grid item xs={12} md={3} sx={{ mx: theme.spacing(2.5) }} justifySelf={"end"}>
-        <FormControl sx={{ width: "100%", mt: 2,  }}>
+    
+      <Grid xs={12} md={3} sx={{ mx: theme.spacing(2.5) }} justifySelf={"end"}>
+        <FormControl sx={{ width: "100%", mt: 2 }}>
           <InputLabel>Sort By</InputLabel>
           <Select
             value={sortBy}
@@ -211,6 +228,22 @@ const SearchBox: React.FC<SearchBarProps> = ({
           </Select>
         </FormControl>
       </Grid>
+     {allContents &&(<Grid item xs={3} md={3} ml={3} justifySelf={"end"}>
+        <FormControl sx={{ width: "100%", mt: 2 }}>
+          <InputLabel>Filter By Status</InputLabel>
+          <Select
+            value={status}
+            onChange={handleStatusChange}
+            input={<OutlinedInput label="Filter By Status" />}
+          >
+            {StatusOptions?.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>)}
     </Grid>
   );
 };
