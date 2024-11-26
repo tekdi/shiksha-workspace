@@ -1,8 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import { TENANT_ID, CHANNEL_ID, FRAMEWORK_ID, CLOUD_STORAGE_URL } from "@/utils/app.config";
-import { getLocalStoredUserName, getLocalStoredUserId } from "@/services/LocalStorageService";
+import {
+  TENANT_ID,
+  CHANNEL_ID,
+  FRAMEWORK_ID,
+  CLOUD_STORAGE_URL,
+} from "@/utils/app.config";
+import {
+  getLocalStoredUserName,
+  getLocalStoredUserId,
+} from "@/services/LocalStorageService";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
   const { identifier, mode } = router.query;
@@ -52,7 +60,7 @@ const CollectionEditor: React.FC = () => {
         {
           id: CHANNEL_ID,
           type: "pratham-portal",
-        }
+        },
       ],
       timeDiff: 5,
       objectRollup: {},
@@ -163,6 +171,7 @@ const CollectionEditor: React.FC = () => {
       // Load Collection Editor CSS if not already loaded
       if (!document.getElementById("collection-editor-css")) {
         const link = document.createElement("link");
+        console.log("PDF Player loaded");
         link.id = "collection-editor-css";
         link.rel = "stylesheet";
         link.href =
@@ -188,23 +197,20 @@ const CollectionEditor: React.FC = () => {
         document.head.appendChild(pdfLink);
       }
 
-      if (!document.getElementById("sunbird-video-player.js")) {
-        const videoScript = document.createElement("script");
-        videoScript.id = "sunbird-video-player.js";
-        videoScript.src =
-          "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/sunbird-video-player.js";
-        videoScript.async = true;
-        document.body.appendChild(videoScript);
-      }
+      const videoScript = document.createElement("script");
+      console.log("Video Player loaded");
+      videoScript.id = "sunbird-video-player.js";
+      videoScript.src =
+        "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/sunbird-video-player.js";
+      videoScript.async = true;
+      document.body.appendChild(videoScript);
 
-      if (!document.getElementById("sunbird-video-player-css")) {
-        const videoLink = document.createElement("link");
-        videoLink.id = "sunbird-video-player-css";
-        videoLink.rel = "stylesheet";
-        videoLink.href =
-          "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/styles.css";
-        document.head.appendChild(videoLink);
-      }
+      const videoLink = document.createElement("link");
+      videoLink.id = "sunbird-video-player-css";
+      videoLink.rel = "stylesheet";
+      videoLink.href =
+        "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/styles.css";
+      document.head.appendChild(videoLink);
     };
 
     loadAssets();
@@ -233,8 +239,12 @@ const CollectionEditor: React.FC = () => {
         "editorEmitter",
         (event: any) => {
           console.log("Editor event:", event);
-          if (event.detail?.action === "backContent" || event.detail?.action === "submitContent" ||
-            event.detail?.action === "publishContent" || event.detail?.action === "rejectContent") {
+          if (
+            event.detail?.action === "backContent" ||
+            event.detail?.action === "submitContent" ||
+            event.detail?.action === "publishContent" ||
+            event.detail?.action === "rejectContent"
+          ) {
             window.history.back();
             window.addEventListener(
               "popstate",
