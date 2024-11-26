@@ -37,7 +37,7 @@ import useSharedStore from "@/utils/useSharedState";
 
 // ]
 const columns = [
-  { key: 'name', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
   { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
   { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
@@ -54,7 +54,7 @@ const AllContentsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("Modified On");
-  const [statusBy, setStatusBy] = useState("");
+  const [statusBy, setStatusBy] = useState("All");
 
  const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
@@ -184,7 +184,8 @@ const AllContentsPage = () => {
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
-      mode: item.mode
+      mode: item.mode,
+      description: item?.description
 
     }));
     setData(filteredArray)

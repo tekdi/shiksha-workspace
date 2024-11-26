@@ -1,9 +1,9 @@
-import { getLocalStoredUserId } from "./LocalStorageService";
+import { getLocalStoredUserId , getLocalStoredUserRole} from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
 import { MIME_TYPE, CHANNEL_ID, TENANT_ID } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
-import { PrimaryCategoryValue } from "@/utils/app.constant";
+import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
 
 const userId = getLocalStoredUserId();
 console.log("userId ==>", userId);
@@ -69,6 +69,31 @@ const getReqBodyWithStatus = (
     primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;
     if(contentType==="discover-contents")
 {
+  const userRole = getLocalStoredUserRole();
+
+   if(userRole===Role.SCTA && localStorage.getItem("stateName"))
+   {
+    return {
+      ...upForReviewReqBody,
+      request: {
+        ...upForReviewReqBody.request,
+        filters: {
+          ...upForReviewReqBody.request.filters,
+          status,
+          primaryCategory,
+          createdBy:{"!=":localStorage.getItem("userId")},
+          state:localStorage.getItem("stateName"),
+  
+        },
+  
+        query,
+        limit,
+        offset,
+        sort_by,
+      },
+    };
+   }
+
   return {
     ...upForReviewReqBody,
     request: {

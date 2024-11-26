@@ -42,6 +42,9 @@ const ReviewContentSubmissions = () => {
   const router = useRouter();
   const { identifier } = router.query;
   const { isDiscoverContent } = router.query;
+  const { isReadOnly } = router.query;
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
   const [contentDetails, setContentDetails] = useState<any>(undefined);
   const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
   const [confirmationActionType, setConfirmationActionType] = useState<
@@ -131,6 +134,8 @@ const ReviewContentSubmissions = () => {
       console.log("Published successfully:", response);
       // Add toaster success message here
       setOpenConfirmationPopup(false);
+      await delay(2000); 
+
       if(getLocalStoredUserRole() === Role.CCTA){
         router.push({ pathname: `/workspace/content/up-review` });
   
@@ -408,7 +413,7 @@ const ReviewContentSubmissions = () => {
             </Grid>
           </Grid>
 
-          {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" &&(<Box
+          {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true"  && isReadOnly !== "true" &&(<Box
             sx={{
               display: "flex",
               justifyContent: "flex-end",
