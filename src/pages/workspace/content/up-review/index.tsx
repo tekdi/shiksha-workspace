@@ -26,7 +26,7 @@ import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
 import useSharedStore from "@/utils/useSharedState";
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "300px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "480px" },
 
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "250px" },
   // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
