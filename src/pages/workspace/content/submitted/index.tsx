@@ -1,32 +1,54 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../../../components/Layout";
-import { Typography, Box } from "@mui/material";
-import CourseCard from "../../../../components/CourseCard";
-import SearchBox from "../../../../components/SearchBox";
+import {
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getContent } from "@/services/ContentService";
-import Loader from "@/components/Loader";
-import NoDataFound from "@/components/NoDataFound";
-import { setTimeout } from "timers";
+import SearchBox from "../../../../components/SearchBox";
 import PaginationComponent from "@/components/PaginationComponent";
+import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
+import { MIME_TYPE } from "@/utils/app.config";
+import router from "next/router";
+import WorkspaceText from "@/components/WorkspaceText";
+import { DataType } from 'ka-table/enums';
+import KaTableComponent from "@/components/KaTableComponent";
+import { timeAgo } from "@/utils/Helper";
+import useSharedStore from "@/utils/useSharedState";
+const columns = [
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "200px" },
+  // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
+  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
+  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
 
+
+]
 const SubmittedForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("submitted");
-  const [filter, setFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("updated");
+  const [filter, setFilter] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState("Modified On");
   const [searchTerm, setSearchTerm] = useState("");
-  const [contentList, setContentList] = React.useState<content[]>([]);
+  const [contentList, setContentList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [contentDeleted, setContentDeleted] = React.useState(false);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] =
-    useState<string>(searchTerm);
+  const [contentDeleted, setContentDeleted] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage - 1);
-  };
-
+  const [data, setData] = React.useState<any[]>([]);
+  const fetchContentAPI = useSharedStore(
+    (state: any) => state.fetchContentAPI
+  );
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -36,11 +58,28 @@ const SubmittedForReviewPage = () => {
       clearTimeout(handler);
     };
   }, [searchTerm]);
+  useEffect(() => {
+    const filteredArray = contentList.map((item: any) => ({
+      image: item?.appIcon,
+
+      name: item?.name,
+      description: item?.description,
+
+      contentType: item.primaryCategory,
+      lastUpdatedOn: timeAgo(item.lastUpdatedOn),
+      status: item.status,
+      identifier: item.identifier,
+      mimeType: item.mimeType,
+      mode: item.mode
+    }));
+    setData(filteredArray)
+    console.log(filteredArray)
+  }, [contentList]);
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
   };
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: string[]) => {
     setFilter(filter);
   };
 
@@ -48,26 +87,7 @@ const SubmittedForReviewPage = () => {
     setSortBy(sortBy);
   };
 
-  const filteredData = useMemo(
-    () =>
-      contentList?.filter((content) =>
-        content?.name.toLowerCase().includes(searchTerm)
-      ),
-    [searchTerm]
-  );
-
-  const displayedCards = filteredData
-    ?.slice
-    // page * rowsPerPage,
-    // page * rowsPerPage + rowsPerPage
-    ();
-
-  const handleDelete = (index: number) => {
-    console.log(`Deleting item at index ${index}`);
-    setTimeout(() => {
-      setContentDeleted((prev) => !prev);
-    }, 1000);
-  };
+ 
 
   useEffect(() => {
     const getReviewContentList = async () => {
@@ -75,80 +95,87 @@ const SubmittedForReviewPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const offset = page * LIMIT;
+        const primaryCategory = filter.length ? filter : [];
+        const order = sortBy === "Created On" ? "asc" : "desc";
+        const sort_by = { lastUpdatedOn: order };
         const response = await getContent(
           ["Review", "FlagReview"],
           query,
           LIMIT,
-          offset
+          offset,
+          primaryCategory,
+          sort_by
         );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
         setContentList(contentList);
         setTotalCount(response?.count);
-        setLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     getReviewContentList();
-  }, [debouncedSearchTerm, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy, fetchContentAPI,contentDeleted, page]);
 
+  
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
+      <WorkspaceText />
       <Box p={3}>
-        <Typography variant="h4"> Content Submitted For ReviewPage</Typography>
-        <Typography>
-          Here you see all your content Submitted For ReviewPage.
-        </Typography>
+        <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: totalCount > LIMIT ? '15px' : '0px' }}>
+          <Box p={2}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", fontSize: "16px" }}
+            >
+              Submitted For Review
+            </Typography>
+          </Box>
+          {/* <Typography mb={2}>
+          Here you can see all your content submitted for review.
+        </Typography> */}
 
-        <Box m={3}>
-          <SearchBox
-            placeholder="Search by title..."
-            onSearch={handleSearch}
-            // onFilterChange={handleFilterChange}
-            // onSortChange={handleSortChange}
-          />
-        </Box>
+          <Box mb={3}>
+            <SearchBox
+              placeholder="Search by title..."
+              onSearch={handleSearch}
+              onFilterChange={handleFilterChange}
+              onSortChange={handleSortChange}
+            />
+          </Box>
 
-        <Box display="flex" flexWrap="wrap" gap={3} padding={2}>
-          {loading ? (
-            <Loader showBackdrop={true} loadingText={"Loading"} />
+
+          {/* {loading ? (
+            <Box display="flex" justifyContent="center" my={5}>
+              <CircularProgress />
+            </Box>
           ) : contentList && contentList.length > 0 ? (
-            contentList?.map((content, index) => (
-              <Box
-                key={index}
-                sx={{
-                  minWidth: "250px",
-                  maxWidth: "250px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <CourseCard
-                  title={content?.name}
-                  description={content?.description}
-                  type={content?.primaryCategory}
-                  imageUrl={content.appIcon}
-                  status={content.status}
-                  identifier={content?.identifier}
-                  mimeType={content?.mimeType}
-                  mode={"review"}
-                  onDelete={() => handleDelete(index)}
-                />
-              </Box>
-            ))
+            <Box className="table-ka-container">
+              <KaTableComponent columns={columns} data={data} tableTitle="submitted"  />
+            </Box>
           ) : (
             <NoDataFound />
+          )} */}
+           {loading ? (
+            <Box display="flex" justifyContent="center" my={5}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Box className="table-ka-container">
+              <KaTableComponent columns={columns} data={data} tableTitle="submitted"  />
+            </Box>
+          )}
+        {totalCount > LIMIT && (
+            <PaginationComponent
+              count={Math.ceil(totalCount / LIMIT)}
+              page={page}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
+            />
           )}
         </Box>
-        {totalCount > LIMIT && (
-          <PaginationComponent
-            count={Math.ceil(totalCount / LIMIT)}
-            page={page}
-            onPageChange={handleChangePage}
-          />
-        )}
       </Box>
     </Layout>
   );

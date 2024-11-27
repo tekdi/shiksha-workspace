@@ -50,6 +50,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
       MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType) &&
       mode === "review"
     ) {
+      sessionStorage.setItem("previousPage", window.location.href);
       router.push({
         pathname: `/workspace/content/review`,
         query: { identifier, mode },
@@ -90,6 +91,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
         display: "flex",
         flexDirection: "column",
         width: "250px",
+        borderRight: 'unset !important'
       }}
     >
       <Box position="relative" onClick={onContentClick}>

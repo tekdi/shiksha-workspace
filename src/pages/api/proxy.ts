@@ -4,11 +4,9 @@ import {
   telemetryResponse,
   creatLockResponse,
   genericEditorReviewFormResponse,
-  genericEditorRequestForChangesFormResponse
+  genericEditorRequestForChangesFormResponse,
 } from "./mocked-response";
-const cookie = require("cookie");
-
-let storedToken: string | null = null;
+import * as cookie from "cookie";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,13 +16,15 @@ export default async function handler(
   const { path } = query;
 
   const BASE_URL = process.env.BASE_URL as string;
-  const TENANT_ID = process.env.TENANT_ID as string;
   const API_KEY = process.env.AUTH_API_TOKEN as string;
+  const NEXT_PUBLIC_TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID as string;
+  const NEXT_PUBLIC_CHANNEL_ID = process.env.NEXT_PUBLIC_CHANNEL_ID as string;
 
   const cookies = cookie.parse(req.headers.cookie || "");
-  const tokenFromCookie = cookies.authToken;
 
-  const token = API_KEY;
+  console.log(cookies?.authToken);
+
+  const token = cookies?.authToken || API_KEY;
 
   if (!token) {
     console.error("No valid token available");
@@ -34,6 +34,7 @@ export default async function handler(
   console.log("Using token:", token);
 
   let pathString = Array.isArray(path) ? path.join("/") : (path as string);
+
   // Handle mocked responses
   if (pathString === "/action/data/v3/telemetry") {
     return res.status(200).json(telemetryResponse);
@@ -68,24 +69,27 @@ export default async function handler(
     queryString ? `?${queryString}` : ""
   }`;
 
-  console.log('targetUrl =====>', targetUrl);
+  console.log("targetUrl =====>", targetUrl);
 
   try {
     const options: RequestInit = {
       method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        tenantId: TENANT_ID,
-        "X-Channel-Id": "test-k12-channel",
+        "Authorization": `Bearer ${token}`,
+        "tenantId": NEXT_PUBLIC_TENANT_ID,
+        "X-Channel-Id": NEXT_PUBLIC_CHANNEL_ID,
       },
       ...(method === "POST" || method === "PATCH"
         ? { body: JSON.stringify(body) }
         : {}),
     };
 
+    console.log("options =====>", options);
     const response = await fetch(targetUrl, options);
+    console.log("response =====>", response);
     const data = await response.json();
+    console.log("data =====>", data);
     res.status(response.status).json(data);
   } catch (error: any) {
     console.error("Error in proxy:", error.message);

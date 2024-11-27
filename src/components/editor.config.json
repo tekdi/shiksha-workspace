@@ -78,12 +78,12 @@
         "WINDOW_CONTEXT": {
             "user": {
                 "id": "",
-                "name": "Rahul Tekdi",
+                "name": "",
                 "orgIds": [
-                    "test-k12-channel"
+                    ""
                 ],
                 "organisations": {
-                    "test-k12-channel": "Test Channel"
+                    "channel-id": "channel Name"
                 }
             },
             "did": "",
@@ -95,14 +95,14 @@
                 "pid": "admin-portal.genericEditor"
             },
             "contextRollUp": {
-                "l1": "test-k12-channel"
+                "l1": ""
             },
             "tags": [
-                "test-k12-channel"
+                ""
             ],
-            "channel": "test-k12-channel",
+            "channel": "",
             "env": "generic-editor",
-            "framework": "test_k12_framework",
+            "framework": "",
             "ownershipType": [
                 "createdBy",
                 "createdFor"
