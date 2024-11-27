@@ -324,7 +324,7 @@ export const genericEditorReviewFormResponse = {
                     {
                         "code": "isForOpenSchool",
                         "dataType": "text",
-                        "description": "Indicate if this should be visible on open school.",
+                        "description": "Indicate if this should be visible on open school",
                         "editable": true,
                         "index": 12,
                         "inputType": "select",
