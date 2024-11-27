@@ -40,7 +40,7 @@ const menuItems = [
     : []),
   { text: "My Published Contents", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
   { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
-  { text: "Discover-contents", key: "discover-contents", icon: <ManageSearchIcon /> },
+  { text: "Discover Contents", key: "discover-contents", icon: <ManageSearchIcon /> },
 
 ];
 

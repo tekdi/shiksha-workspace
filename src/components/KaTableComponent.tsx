@@ -84,10 +84,8 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
     else if ( tableTitle==='submitted')  {
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
     }
-    else if ( tableTitle==='all-content')  {
-      if(mode==="review"){
+    else if ( tableTitle==='all-content' && mode==="review")  {
         router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isReadOnly: true } });
-     }
     }
     else if ( tableTitle==='discover-contents')  {
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
