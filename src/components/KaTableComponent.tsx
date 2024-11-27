@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table as KaTable } from 'ka-table';
 import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
-import { Typography, useTheme, IconButton, Box } from '@mui/material';
+import { Typography, useTheme, IconButton, Box, Grid } from '@mui/material';
 import UpReviewTinyImage from '@mui/icons-material/LibraryBooks';
 import "ka-table/style.css";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -115,70 +115,47 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
             if (props.column.key === 'name' || props.column.key === "title_and_description") {
               return (
                 <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }} onClick={() => openEditor(props.rowData)} >
-                  {props.rowData.image ? (
-                    <Box
-                      style={{
-                        width: "60px",
-                        height: "40px",
-                        padding: "10px", 
-                        borderRadius: "8px",
-                        marginRight: "10px",
-                        overflow: "hidden", 
-                        background:'#F1E6D6'
-                      }}
-                    >
-                      <img
-                        src={props.rowData.image || '/logo.png'}
-                        alt="Image"
-                        style={{
-                          width: "100%", 
-                          height: "100%", 
-                          objectFit: "cover", 
-                          borderRadius: "8px",
-                        }}
-                      />
-                    </Box>
-                  ) : props.column.key === 'name' ? (
-                      <Box
-                        style={{
-                          width: "60px",
-                          height: "40px",
-                          padding: "10px",
-                          borderRadius: "8px",
-                          marginRight: "10px",
-                          overflow: "hidden", 
-                          background: '#F1E6D6'
-                        }}
-                      >
-                    <img
-                      src={'/logo.png'}
-                      height="25px"
-                      alt="Image"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            borderRadius: "8px",
-                          }}
-
-                    />
-                      </Box>
-                  ) : (
+                  <Grid container alignItems="center" spacing={1}>
+                    <Grid item xs={3} md={3} lg={3} xl={2}>
+                      {props.rowData.image ? (
                         <Box
                           style={{
                             width: "60px",
                             height: "40px",
-                            padding: "10px", // Fixed casing
+                            padding: "10px",
                             borderRadius: "8px",
-                            marginRight: "10px",
-                            overflow: "hidden", // Ensures content doesn't overflow the box
+                            
+                            overflow: "hidden",
                             background: '#F1E6D6'
                           }}
                         >
-                    <img
-                      src={'/logo.png'}
-                      height="25px"
-                      alt="Image"
+                          <img
+                            src={props.rowData.image || '/logo.png'}
+                            alt="Image"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "8px",
+                            }}
+                          />
+                        </Box>
+                      ) : props.column.key === 'name' ? (
+                        <Box
+                          style={{
+                            width: "60px",
+                            height: "40px",
+                            padding: "10px",
+                            borderRadius: "8px",
+                            
+                            overflow: "hidden",
+                            background: '#F1E6D6'
+                          }}
+                        >
+                          <img
+                            src={'/logo.png'}
+                            height="25px"
+                            alt="Image"
                             style={{
                               width: "100%",
                               height: "100%",
@@ -186,19 +163,50 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                               borderRadius: "8px",
                             }}
 
-                    />
+                          />
                         </Box>
-                  )}
-                  <div>
-                    <div>
-                      <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
-                    </div>
-                    <div>
-                      <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px', }} className='two-line-text' color={theme.palette.warning['A200']}>
-                        {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
-                      </Typography>
-                    </div>
-                  </div>
+                      ) : (
+                        <Box
+                          style={{
+                            width: "60px",
+                            height: "40px",
+                            padding: "10px", // Fixed casing
+                            borderRadius: "8px",
+                            
+                            overflow: "hidden", // Ensures content doesn't overflow the box
+                            background: '#F1E6D6'
+                          }}
+                        >
+                          <img
+                            src={'/logo.png'}
+                            height="25px"
+                            alt="Image"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "8px",
+                            }}
+
+                          />
+                        </Box>
+                      )}
+                    </Grid>
+                    <Grid item xs={9} md={9} lg={9} xl={10}>
+                      <div>
+                        <div>
+                          <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
+                        </div>
+                        <div>
+                          <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px' }} className='two-line-text' color={theme.palette.warning['A200']}>
+                            {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
+                          </Typography>
+                        </div>
+                      </div>
+                    </Grid>
+                  </Grid>
+                  
+                  
                 </div>
               );
             }

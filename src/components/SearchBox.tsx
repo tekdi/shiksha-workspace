@@ -118,133 +118,132 @@ const SearchBox: React.FC<SearchBarProps> = ({
     onStatusChange && onStatusChange(value);
   };
   return (
-    <Grid container gap={1} alignItems={"center"}>
-      <Grid item xs={12} md={5}>
-        <Box sx={{ mt: 2, px: theme.spacing(2.5) }}>
-          <Paper
-            component="form"
-            onSubmit={(e) => e.preventDefault()}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: theme.palette.warning["A700"],
-              borderRadius: "8px",
-              "& .MuiOutlinedInput-root fieldset": { border: "none" },
-              "& .MuiOutlinedInput-input": { borderRadius: 8 },
-            }}
-          >
-            <InputBase
-              value={searchTerm}
-              onChange={handleChange}
-              sx={{ ml: theme.spacing(3), flex: 1, fontSize: "16px", fontFamily: 'Poppins', color:'000000DB' }}
-              placeholder={placeholder}
-              inputProps={{ "aria-label": placeholder }}
-            />
-            <IconButton
-              type="button"
-              onClick={searchTerm ? handleSearchClear : undefined}
-              sx={{ p: theme.spacing(1.25) }}
-              aria-label={searchTerm ? "Clear" : "Search"}
+    <Box sx={{ mx: 2 }}>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={12} md={12} lg={6}>
+          <Box sx={{ mt: 2 }}>
+            <Paper
+              component="form"
+              onSubmit={(e) => e.preventDefault()}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: theme.palette.warning["A700"],
+                borderRadius: "8px",
+                "& .MuiOutlinedInput-root fieldset": { border: "none" },
+                "& .MuiOutlinedInput-input": { borderRadius: 8 },
+              }}
             >
-              {searchTerm ? <ClearIcon /> : <SearchIcon />}
-            </IconButton>
-          </Paper>
-        </Box>
-      </Grid>
-
-      <Grid sx={{ mx: theme.spacing(2.5) }} item xs={12} md={3}>
-        <FormControl className="drawer-select" sx={{ width: "100%", mt: 2 }}>
-          <InputLabel sx={{ color:"#000000DB" }}>Filter By</InputLabel>
-          <Select
-            multiple
-            value={selectedFilters}
-            onChange={handleFilterChange}
-            input={<OutlinedInput label="Filter By" />}
-            renderValue={(selected) => (selected as string[]).join(", ")}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '&.Mui-focused fieldset': {
-                  borderColor: '#000', // Set focus border color to black
-                },
-              },
-              '& .MuiSelect-select': {
-                height: '20px',
-                display: 'flex',
-                alignItems: 'center',
-              },
-            }}
-          >
-            {filterOptions?.map((option) => (
-              <MenuItem
+              <InputBase
+                value={searchTerm}
+                onChange={handleChange}
                 sx={{
-                  color: '#000',
-                  '& .MuiCheckbox-root': {
-                    color: '#000',
-                    '&.Mui-checked, &.MuiCheckbox-indeterminate': {
-                      color: '#000'
-                    }
-                  },
-                  '& .MuiSvgIcon-root': {
-                    fontSize: '20px'
-                  }
+                  ml: theme.spacing(3),
+                  flex: 1,
+                  fontSize: "16px",
+                  fontFamily: "Poppins",
+                  color: "#000000DB",
                 }}
-                key={option}
-                value={option}
+                placeholder={placeholder}
+                inputProps={{ "aria-label": placeholder }}
+              />
+              <IconButton
+                type="button"
+                onClick={searchTerm ? handleSearchClear : undefined}
+                sx={{ p: theme.spacing(1.25) }}
+                aria-label={searchTerm ? "Clear" : "Search"}
               >
-                <Checkbox
+                {searchTerm ? <ClearIcon /> : <SearchIcon />}
+              </IconButton>
+            </Paper>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} md={12} lg={2} justifySelf={"end"}>
+          <FormControl sx={{ width: "100%", mt: 2 }}>
+            <InputLabel sx={{ color: "#000000DB" }}>Filter By</InputLabel>
+            <Select
+              multiple
+              value={selectedFilters}
+              onChange={handleFilterChange}
+              input={<OutlinedInput label="Filter By" />}
+              renderValue={(selected) => (selected as string[]).join(", ")}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#000" },
+                },
+                "& .MuiSelect-select": {
+                  height: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                },
+              }}
+            >
+              {filterOptions?.map((option) => (
+                <MenuItem
+                  key={option}
+                  value={option}
                   sx={{
-                    color: '#000',
-                    '&.Mui-checked, &.MuiCheckbox-indeterminate': {
-                      color: '#000'
+                    color: "#000",
+                    "& .MuiCheckbox-root": {
+                      color: "#000",
+                      "&.Mui-checked, &.MuiCheckbox-indeterminate": { color: "#000" },
                     },
-                    '& .MuiSvgIcon-root': {
-                      fontSize: '20px'
-                    }
+                    "& .MuiSvgIcon-root": { fontSize: "20px" },
                   }}
-                  checked={selectedFilters.indexOf(option) > -1}
-                />
-                <ListItemText primary={option} />
-              </MenuItem>
+                >
+                  <Checkbox
+                    checked={selectedFilters.indexOf(option) > -1}
+                    sx={{
+                      color: "#000",
+                      "&.Mui-checked, &.MuiCheckbox-indeterminate": { color: "#000" },
+                    }}
+                  />
+                  <ListItemText primary={option} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
 
-            ))}
-          </Select>
-        </FormControl>
+        <Grid item xs={12} md={12} lg={2} justifySelf={"end"}>
+          <FormControl sx={{ width: "100%", mt: 2 }}>
+            <InputLabel>Sort By</InputLabel>
+            <Select
+              value={sortBy}
+              onChange={handleSortChange}
+              input={<OutlinedInput label="Sort By" />}
+            >
+              {sortOptions?.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
 
+        {allContents && (
+          <Grid item xs={12} md={12} lg={2} justifySelf={"end"}>
+            <FormControl sx={{ width: "100%", mt: 2 }}>
+              <InputLabel>Filter By Status</InputLabel>
+              <Select
+                value={status}
+                onChange={handleStatusChange}
+                input={<OutlinedInput label="Filter By Status" />}
+              >
+                {StatusOptions?.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
       </Grid>
-    
-      <Grid xs={12} md={3} sx={{ mx: theme.spacing(2.5) }} justifySelf={"end"}>
-        <FormControl sx={{ width: "100%", mt: 2 }}>
-          <InputLabel>Sort By</InputLabel>
-          <Select
-            value={sortBy}
-            onChange={handleSortChange}
-            input={<OutlinedInput label="Sort By" />}
-          >
-            {sortOptions?.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-     {allContents &&(<Grid item xs={3} md={3} ml={3} justifySelf={"end"}>
-        <FormControl sx={{ width: "100%", mt: 2 }}>
-          <InputLabel>Filter By Status</InputLabel>
-          <Select
-            value={status}
-            onChange={handleStatusChange}
-            input={<OutlinedInput label="Filter By Status" />}
-          >
-            {StatusOptions?.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>)}
-    </Grid>
+    </Box>
+
   );
 };
 

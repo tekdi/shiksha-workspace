@@ -37,7 +37,7 @@ import useSharedStore from "@/utils/useSharedState";
 
 // ]
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "200px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "350px" },
   { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
 
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "100px" },
