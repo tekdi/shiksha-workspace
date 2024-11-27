@@ -83,12 +83,15 @@ jobs:
       run: |
         export ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY }}
         export IMAGE_TAG=${{ env.TAG }}
-        envsubst < manifest/backend.yaml > manifest/backend-updated.yaml
-        cat manifest/backend-updated.yaml
-        kubectl delete deployment backend
-        kubectl apply -f manifest/backend-updated.yaml
+        envsubst < manifest/workspace.yaml > manifest/workspace-updated.yaml
+        cat manifest/workspace-updated.yaml
+        rm -rf manifest/workspace-service.yaml
+        kubectl delete deployment shiksha-workspace
+        kubectl delete service shiksha-workspace
+        kubectl delete cm workspace-service-config
+        kubectl apply -f manifest/workspace-updated.yaml
         kubectl apply -f manifest/configmap.yaml
         sleep 10
         kubectl get pods
         kubectl get services
-        kubectl get deployment
+        kubectl get deployment 
