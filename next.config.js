@@ -32,6 +32,10 @@ const nextConfig = {
         destination: "/api/fileUpload", // Forward asset uploads to fileUpload.js
       },
       {
+        source: "/assets/pdfjs/:path*", // Match any URL starting with /workspace/content/assets/
+        destination: "/assets/:path*", // Serve the assets from the public folder
+      },
+      {
         source: "/action/content/v3/upload/url/:identifier*", // Match content upload with 'url' in the path
         destination:
           "/api/proxy?path=/action/content/v3/upload/url/:identifier*", // Forward to proxy route with path as query param
@@ -58,7 +62,7 @@ const nextConfig = {
       },
       {
         source: "/assets/public/:path*", // Match any URL starting with /assets/public/
-        destination: `${process.env.CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
+        destination: `${process.env.NEXT_PUBLIC_CLOUD_STORAGE_URL}/:path*`, // Forward to S3, stripping "/assets/public"
       },
       {
         source: "/workspace/content/assets/:path*", // Match any URL starting with /workspace/content/assets/
@@ -125,6 +129,11 @@ const nextConfig = {
           "./UploadEditor": "/src/pages/upload-editor.tsx",
           "./Collection": "/src/pages/collection.tsx",
           "./SunbirdPlayers": "/src/pages/sunbirdPlayers.tsx",
+          "./Review": "/src/pages/workspace/content/review/index.tsx",
+          "./UpReview": "/src/pages/workspace/content/up-review/index.tsx",
+          "./DiscoverContent": "/src/pages/workspace/content/discover-contents/index.tsx",
+
+
         },
       })
     );

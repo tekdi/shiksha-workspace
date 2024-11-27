@@ -8,7 +8,7 @@ const Loader: React.FC<{ showBackdrop: boolean; loadingText: string }> = ({
   const Spinner = () => {
     return (
       <>
-        <CircularProgress color="inherit" />
+        <CircularProgress sx={{ color: "#0000" }} />
         <br />
         <Typography variant="h4">{loadingText}...</Typography>
       </>

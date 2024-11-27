@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import React, { useEffect } from "react";
 import { useRef } from "react";
+import { handleExitEvent } from "@/utils/Helper";
 
 interface PlayerConfigProps {
   playerConfig: any;
@@ -17,16 +18,21 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
     script.async = true;
     document.body.appendChild(script);
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
-    document.head.appendChild(link);
-
+    if (!document.getElementById("sunbird-pdf-player-css")) {
+      const link = document.createElement("link");
+      link.id = "sunbird-pdf-player-css";
+      link.rel = "stylesheet";
+      link.href =
+        "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
+      document.head.appendChild(link);
+    }
     const playerElement = sunbirdPdfPlayerRef.current;
 
     const handlePlayerEvent = (event: any) => {
       console.log("Player Event", event.detail);
+      if (event?.detail?.edata?.type === "EXIT") {
+        handleExitEvent();
+      }
     };
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
@@ -45,6 +51,8 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
         handleTelemetryEvent
       );
       document.body.removeChild(script);
+      const pdfPlayerCss = document.getElementById("sunbird-pdf-player-css");
+      if (pdfPlayerCss) document.head.removeChild(pdfPlayerCss);
     };
   }, []);
 

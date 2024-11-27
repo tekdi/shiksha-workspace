@@ -1,26 +1,37 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../../../components/Layout";
-import { Typography, Box, useTheme } from "@mui/material";
+import { Typography, Box, useTheme, Paper, Grid } from "@mui/material";
 import ContentCard from "../../../../components/ContentCard";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import UploadIcon from "@mui/icons-material/Upload";
 import { useRouter } from "next/router";
 import { createCourse, createQuestionSet } from "@/services/ContentService";
-import axios from "axios";
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
+import largeVideoIcon from '/public/150+.png';
+import Image from "next/image";
+import WorkspaceText from '../../../../components/WorkspaceText';
+import { getLocalStoredUserId } from "@/services/LocalStorageService";
 
 const CreatePage = () => {
-  const theme = useTheme<any>();
+  const theme = useTheme();
   const [selectedKey, setSelectedKey] = useState("create");
   const router = useRouter();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userId = getLocalStoredUserId()
+
+    if (token && userId) {
+      document.cookie = `authToken=${token}; path=/; secure; SameSite=Strict`;
+      document.cookie = `userId=${userId}; path=/; secure; SameSite=Strict`;
+    }
+  }, []);
+
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        document.cookie = `authToken=${token}; path=/; secure; SameSite=Strict`;
-      }
-
       const response = await createQuestionSet();
       console.log("Question set created successfully:", response);
 
@@ -40,7 +51,7 @@ const CreatePage = () => {
 
   const fetchCollectionData = async () => {
     try {
-      const userId = "5afb0c71-5e85-46f6-8780-3059cbb7bbf9";
+      const userId = getLocalStoredUserId();
       const response = await createCourse(userId);
       console.log("Course set created successfully:", response);
 
@@ -50,7 +61,7 @@ const CreatePage = () => {
         query: { identifier },
       });
     } catch (error) {
-      console.error("Error creating question set:", error);
+      console.error("Error creating course:", error);
     }
   };
 
@@ -60,62 +71,96 @@ const CreatePage = () => {
 
   const cardData = [
     {
-      title: "Upload Content",
-      description: "You can upload content here.",
-      icon: <UploadIcon fontSize="large" />,
+      title: "New Question Set",
+      description: "Create assessments, question banks, quizzes, etc.",
+      icon: <QuizOutlinedIcon fontSize="large" />,
+      onClick: openEditor,
+    },
+    {
+      title: "New Course",
+      description:
+        " Create courses by defining content, assessments, etc",
+      icon: <SchoolOutlinedIcon fontSize="large" />,
+      onClick: openCollectionEditor,
+    },
+    {
+      title: "New Content",
+      description: "Create new documents, PDF, video, QML, HTML, etc.",
+      icon: <VideoLibraryOutlinedIcon fontSize="large" />,
       onClick: () => router.push("/upload-editor"),
     },
     {
-      title: "Upload Large Videos(>50 MB)",
-      description: "You can upload content here.",
-      icon: <UploadIcon fontSize="large" />,
+      title: "New Large Content",
+      description: "Create videos and documents larger than 150mb  ---- Create word needs to be added",
+      icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />,
       onClick: () =>
         router.push({
           pathname: "/upload-editor",
           query: { editorforlargecontent: "true" },
         }),
     },
-    {
-      title: "Question Set",
-      description: "Create Questionsets",
-      icon: <DescriptionIcon fontSize="large" />,
-      onClick: openEditor,
-    },
-    {
-      title: "Course",
-      description: "Design courses using collections and resources.",
-      icon: <DescriptionOutlinedIcon fontSize="large" />,
-      onClick: openCollectionEditor,
-    },
   ];
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
-      <Box p={3}>
-        <Typography
-          variant="h2"
-          fontSize={"16px"}
-          sx={{ color: theme.palette.warning["100"] }}
-        >
-          Here you can create new content.
-        </Typography>
-      </Box>
+      <WorkspaceText />
 
+      {/* Outer box for "Create new content" heading and cards */}
       <Box
-        display={"flex"}
-        gap={"1rem"}
-        padding={"1rem"}
-        justifyContent={"flex-start"}
+        sx={{
+          backgroundColor: "#F8EFE7",
+          padding: "1.5rem",
+          borderRadius: "12px",
+          boxShadow: theme.shadows[3],
+        }}
+        m={3} // Margin around the box for spacing
       >
-        {cardData.map((card, index) => (
-          <ContentCard
-            key={index}
-            title={card.title}
-            description={card.description}
-            icon={card.icon}
-            onClick={card.onClick}
-          />
-        ))}
+        <Typography variant="h4" sx={{ mb: 2 }} fontSize={'16px'} fontWeight={600}>
+          Create new content
+        </Typography>
+
+        <Box
+          display="flex"
+          gap="1rem"
+          justifyContent="flex-start"
+          flexWrap="wrap"
+        >
+          <Grid container spacing={2}>
+            {cardData.map((card, index) => (
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={3} key={index}>
+                <Paper
+                  key={index}
+                  elevation={3}
+                  onClick={card.onClick}
+                  sx={{
+                    padding: "1rem",
+                    borderRadius: "8px",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    flex: "1 1 180px",
+                    // maxWidth: "220px",
+                    // minHeight: "114px",
+                    border: "solid 1px #D0C5B4",
+                    boxShadow: 'none',
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                  className="create-card"
+                >
+                  {card?.icon}
+                  <Typography className="one-line-text" variant="h3" sx={{ mt: 1, fontWeight: "bold", fontSize: '14px' }}>
+                    {card?.title}
+                  </Typography>
+                  <Typography variant="body2" className="two-line-text" color="textSecondary" sx={{ mt: 1, mb: 0 }}>
+                    {card?.description}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+
+        </Box>
       </Box>
     </Layout>
   );
