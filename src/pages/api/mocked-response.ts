@@ -91,10 +91,6 @@ export const genericEditorSaveFormResponse = {
                             {
                                 "key": "Administrator",
                                 "name": "Administrator"
-                            },
-                            {
-                                "key": "Other",
-                                "name": "Other"
                             }
                         ],
                         "placeholder": "Select Audience",
@@ -318,15 +314,59 @@ export const genericEditorReviewFormResponse = {
                             {
                                 "key": "Administrator",
                                 "name": "Administrator"
-                            },
-                            {
-                                "key": "Other",
-                                "name": "Other"
                             }
                         ],
                         "placeholder": "Select Audience",
                         "renderingHints": {},
                         "required": false,
+                        "visible": true
+                    },
+                    {
+                        "code": "isForOpenSchool",
+                        "dataType": "text",
+                        "description": "Indicate if this should be visible on open school.",
+                        "editable": true,
+                        "index": 12,
+                        "inputType": "select",
+                        "label": "Show on open school?",
+                        "name": "Open School Visibility",
+                        "range": [
+                            {
+                                "key": "Yes",
+                                "name": "Yes"
+                            },
+                            {
+                                "key": "No",
+                                "name": "No"
+                            }
+                        ],
+                        "placeholder": "Please select an option",
+                        "renderingHints": {},
+                        "required": true,
+                        "visible": true
+                    },
+                    {
+                        "code": "program",
+                        "dataType": "text",
+                        "description": "Program",
+                        "editable": true,
+                        "index": 13,
+                        "inputType": "select",
+                        "label": "Program",
+                        "name": "Program",
+                        "range": [
+                            {
+                                "key": "secondchance",
+                                "name": "Second Chance"
+                            },
+                            {
+                                "key": "youthnet",
+                                "name": "Youthnet"
+                            }
+                        ],
+                        "placeholder": "Please select an option",
+                        "renderingHints": {},
+                        "required": true,
                         "visible": true
                     }
                 ]
