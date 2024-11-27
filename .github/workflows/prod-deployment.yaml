@@ -86,9 +86,6 @@ jobs:
         envsubst < manifest/workspace.yaml > manifest/workspace-updated.yaml
         cat manifest/workspace-updated.yaml
         rm -rf manifest/workspace-service.yaml
-        kubectl delete deployment shiksha-workspace
-        kubectl delete service shiksha-workspace
-        kubectl delete cm workspace-service-config
         kubectl apply -f manifest/workspace-updated.yaml
         kubectl apply -f manifest/configmap.yaml
         sleep 10
