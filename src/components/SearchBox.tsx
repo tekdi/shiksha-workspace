@@ -159,7 +159,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={2} justifySelf={"end"}>
+        <Grid item xs={12} md={12} lg={allContents ? 2 : 3} justifySelf={"end"}>
           <FormControl sx={{ width: "100%", mt: 2 }}>
             <InputLabel sx={{ color: "#000000DB" }}>Filter By</InputLabel>
             <Select
@@ -206,7 +206,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={2} justifySelf={"end"}>
+        <Grid item xs={12} md={12} lg={allContents? 2 : 3} justifySelf={"end"}>
           <FormControl sx={{ width: "100%", mt: 2 }}>
             <InputLabel>Sort By</InputLabel>
             <Select
