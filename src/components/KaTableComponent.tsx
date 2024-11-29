@@ -122,9 +122,8 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             height: "40px",
                             padding: "10px",
                             borderRadius: "8px",
-                            
                             overflow: "hidden",
-                            background: '#F1E6D6'
+                            // background: '#F1E6D6'
                           }}
                         >
                           <img
@@ -147,7 +146,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             borderRadius: "8px",
                             
                             overflow: "hidden",
-                            background: '#F1E6D6'
+                            // background: '#F1E6D6'
                           }}
                         >
                           <img
@@ -172,7 +171,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             borderRadius: "8px",
                             
                             overflow: "hidden", // Ensures content doesn't overflow the box
-                            background: '#F1E6D6'
+                            // background: '#F1E6D6'
                           }}
                         >
                           <img
