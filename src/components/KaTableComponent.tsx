@@ -82,18 +82,22 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       router.push({ pathname: `/editor`, query: { identifier, mode } });
     }
     else if ( tableTitle==='submitted')  {
+      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode }}) : 
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
     }
     else if ( tableTitle==='all-content' && mode==="review")  {
+      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isReadOnly: true } }) : 
         router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isReadOnly: true } });
     }
     else if ( tableTitle==='discover-contents')  {
+      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isDiscoverContent: true } }) : 
       router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
     }
      else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
       localStorage.setItem('contentCreatedBy', content?.createdBy);
       console.log(content)
       const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
+      // content.contentType === "Course" ? router.push({ pathname:`/course-hierarchy/${identifier}`, query: { identifier, mode } }) :
       router.push({ pathname, query: { identifier, mode } });
     } else if (content?.mimeType && MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)) {
       router.push({ pathname: `/collection`, query: { identifier, mode } });

@@ -292,3 +292,21 @@ export const submitComment = async (identifier: any, comment: any) => {
     throw error;
   }
 };
+
+export const getContentHierarchy = async ({
+  doId,
+}: {
+  doId: string;
+}): Promise<any> => {
+  const apiUrl: string = `/action/content/v3/hierarchy/${doId}`;
+
+  try {
+    console.log('Request data', apiUrl);
+    const response = await get(apiUrl);
+    // console.log('response', response);
+    return response;
+  } catch (error) {
+    console.error('Error in getContentHierarchy Service', error);
+    throw error;
+  }
+};
