@@ -71,7 +71,7 @@ const getReqBodyWithStatus = (
 {
   const userRole = getLocalStoredUserRole();
 
-   if(userRole===Role.SCTA && localStorage.getItem("stateName"))
+   if(userRole===Role.SCTA  )
    {
     return {
       ...upForReviewReqBody,
@@ -82,7 +82,7 @@ const getReqBodyWithStatus = (
           status,
           primaryCategory,
           createdBy:{"!=":localStorage.getItem("userId")},
-          state:localStorage.getItem("stateName"),
+      //  state:localStorage.getItem("stateName"),
   
         },
   
@@ -289,6 +289,24 @@ export const submitComment = async (identifier: any, comment: any) => {
     return response.data;
   } catch (error) {
     console.error("Error submitting comment:", error);
+    throw error;
+  }
+};
+
+export const getContentHierarchy = async ({
+  doId,
+}: {
+  doId: string;
+}): Promise<any> => {
+  const apiUrl: string = `/action/content/v3/hierarchy/${doId}`;
+
+  try {
+    console.log('Request data', apiUrl);
+    const response = await get(apiUrl);
+    // console.log('response', response);
+    return response;
+  } catch (error) {
+    console.error('Error in getContentHierarchy Service', error);
     throw error;
   }
 };
