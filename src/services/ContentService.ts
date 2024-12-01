@@ -71,7 +71,7 @@ const getReqBodyWithStatus = (
 {
   const userRole = getLocalStoredUserRole();
 
-   if(userRole===Role.SCTA && localStorage.getItem("stateName"))
+   if(userRole===Role.SCTA  )
    {
     return {
       ...upForReviewReqBody,
@@ -81,8 +81,8 @@ const getReqBodyWithStatus = (
           ...upForReviewReqBody.request.filters,
           status,
           primaryCategory,
-          createdBy:{"!=":localStorage.getItem("userId") || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"},
-          state:localStorage.getItem("stateName"),
+          createdBy:{"!=":localStorage.getItem("userId")},
+      //  state:localStorage.getItem("stateName"),
   
         },
   
