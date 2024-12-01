@@ -81,7 +81,7 @@ const getReqBodyWithStatus = (
           ...upForReviewReqBody.request.filters,
           status,
           primaryCategory,
-          createdBy:{"!=":localStorage.getItem("userId")},
+          createdBy:{"!=":localStorage.getItem("userId") || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"},
           state:localStorage.getItem("stateName"),
   
         },
@@ -102,7 +102,7 @@ const getReqBodyWithStatus = (
         ...upForReviewReqBody.request.filters,
         status,
         primaryCategory,
-        createdBy:{"!=":localStorage.getItem("userId")}
+        createdBy:{"!=":localStorage.getItem("userId") || "5afb0c71-5e85-46f6-8780-3059cbb7bbf9"}
 
       },
 

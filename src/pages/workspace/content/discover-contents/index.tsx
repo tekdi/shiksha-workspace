@@ -158,9 +158,8 @@ const ContentsPage = () => {
       mimeType: item.mimeType,
       mode: item.mode,
       creator: item.creator,
-      description: item?.description
-
-
+      description: item?.description,
+      author: item.author
     }));
     setData(filteredArray)
     console.log(filteredArray)
