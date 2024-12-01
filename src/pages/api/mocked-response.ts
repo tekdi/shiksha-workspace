@@ -362,7 +362,7 @@ export const genericEditorReviewFormResponse = {
                             {
                                 "name": "Youthnet",
                                 "value": "youthnet"
-                            },
+                            }
                         ],
                         "placeholder": "Please select an option",
                         "renderingHints": {},
