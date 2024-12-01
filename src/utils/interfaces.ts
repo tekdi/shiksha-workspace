@@ -19,4 +19,5 @@ interface content {
   mimeType?: string;
   primaryCategory: string;
   mode?: string;
+  state?:string
 }
