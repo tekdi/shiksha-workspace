@@ -41,6 +41,8 @@ const columns = [
   { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
 
   { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "100px" },
+  { key: 'state', title: 'STATE', dataType: DataType.String, width: "100px" },
+
   { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
   { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "100px" },
 
@@ -158,9 +160,9 @@ const ContentsPage = () => {
       mimeType: item.mimeType,
       mode: item.mode,
       creator: item.creator,
-      description: item?.description
-
-
+      description: item?.description,
+      state: item?.state,
+      author: item.author
     }));
     setData(filteredArray)
     console.log(filteredArray)

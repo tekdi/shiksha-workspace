@@ -122,9 +122,8 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             height: "40px",
                             padding: "10px",
                             borderRadius: "8px",
-                            
                             overflow: "hidden",
-                            background: '#F1E6D6'
+                            // background: '#F1E6D6'
                           }}
                         >
                           <img
@@ -147,7 +146,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             borderRadius: "8px",
                             
                             overflow: "hidden",
-                            background: '#F1E6D6'
+                            // background: '#F1E6D6'
                           }}
                         >
                           <img
@@ -172,7 +171,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             borderRadius: "8px",
                             
                             overflow: "hidden", // Ensures content doesn't overflow the box
-                            background: '#F1E6D6'
+                            // background: '#F1E6D6'
                           }}
                         >
                           <img
@@ -233,10 +232,11 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
             }
             else if(props.column.key === "create-by")
             {
-              if(props.rowData.creator)
+              console.log('props.rowData ====>', props.rowData)
+              if(props.rowData.creator || props.rowData.author)
               return (
                 <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
-                  {props.rowData.creator}
+                  {props.rowData.creator || props.rowData.author}
                 </Typography>
               )
               else

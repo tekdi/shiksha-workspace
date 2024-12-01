@@ -8,6 +8,7 @@ interface DashboardContentProps {
 }
 
 interface content {
+  author?: any;
   creator?: any;
   name: string;
   status: string;
@@ -19,4 +20,5 @@ interface content {
   mimeType?: string;
   primaryCategory: string;
   mode?: string;
+  state?:string
 }
