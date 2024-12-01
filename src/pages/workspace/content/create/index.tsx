@@ -89,16 +89,16 @@ const CreatePage = () => {
       icon: <VideoLibraryOutlinedIcon fontSize="large" />,
       onClick: () => router.push("/upload-editor"),
     },
-    {
-      title: "New Large Content",
-      description: "Create videos and documents larger than 150mb  ---- Create word needs to be added",
-      icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />,
-      onClick: () =>
-        router.push({
-          pathname: "/upload-editor",
-          query: { editorforlargecontent: "true" },
-        }),
-    },
+    // {
+    //   title: "New Large Content",
+    //   description: "Create videos and documents larger than 150mb  ---- Create word needs to be added",
+    //   icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />,
+    //   onClick: () =>
+    //     router.push({
+    //       pathname: "/upload-editor",
+    //       query: { editorforlargecontent: "true" },
+    //     }),
+    // },
   ];
 
   return (
