@@ -71,7 +71,7 @@ const getReqBodyWithStatus = (
 {
   const userRole = getLocalStoredUserRole();
 
-   if(userRole===Role.SCTA && localStorage.getItem("stateName") && localStorage.getItem("userId"))
+   if(userRole===Role.SCTA  )
    {
     return {
       ...upForReviewReqBody,
