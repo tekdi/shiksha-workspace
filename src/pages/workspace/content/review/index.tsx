@@ -1,37 +1,29 @@
-import React, { useEffect, useState } from "react";
+import Players from "@/components/players/Players";
+import V1Player from "@/components/V1-Player/V1Player";
+import { publishContent, submitComment } from "@/services/ContentService";
+import { getLocalStoredUserName, getLocalStoredUserRole } from "@/services/LocalStorageService";
+import { fetchContent } from "@/services/PlayerService";
+import { CHANNEL_ID, MIME_TYPE } from "@/utils/app.config";
+import { Role } from "@/utils/app.constant";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
   Button,
   Card,
-  CardContent,
-  CardActions,
-  Typography,
-  IconButton,
   Grid,
+  IconButton,
+  Typography
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { fetchContent } from "@/services/PlayerService";
+import $ from "jquery";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import ConfirmActionPopup from "../../../../components/ConfirmActionPopup";
-import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
-import { publishContent, submitComment } from "@/services/ContentService";
-import Players from "@/components/players/Players";
-import V1Player from "@/components/V1-Player/V1Player";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   playerConfig,
   V1PlayerConfig,
 } from "../../../../components/players/PlayerConfig";
-import {
-  pdfMetadata,
-  videoMetadata,
-  quMLMetadata,
-  epubMetadata,
-} from "../../../../components/players/playerMetadata";
-import $ from "jquery";
-import { MIME_TYPE, CHANNEL_ID } from "@/utils/app.config";
-import { getLocalStoredUserName , getLocalStoredUserRole} from "@/services/LocalStorageService";
-import { Role } from "@/utils/app.constant";
+import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 
 const userFullName = getLocalStoredUserName() || "Anonymous User";
 const [firstName, lastName] = userFullName.split(" ");
@@ -73,7 +65,7 @@ const ReviewContentSubmissions = () => {
             V1PlayerConfig.context.tags = [CHANNEL_ID];
             V1PlayerConfig.context.app = [CHANNEL_ID];
             V1PlayerConfig.context.userData.firstName = firstName;
-            V1PlayerConfig.context.userData.lastName = lastName;
+            V1PlayerConfig.context.userData.lastName = lastName || '';
             setIsContentInteractiveType(true);
           } else {
             setIsContentInteractiveType(false);
@@ -82,7 +74,7 @@ const ReviewContentSubmissions = () => {
             playerConfig.context.channel = CHANNEL_ID;
             playerConfig.context.tags = [CHANNEL_ID];
             playerConfig.context.userData.firstName = firstName;
-            playerConfig.context.userData.lastName = lastName;
+            playerConfig.context.userData.lastName = lastName || '';
           }
           setContentDetails(data);
         }
@@ -97,16 +89,16 @@ const ReviewContentSubmissions = () => {
   }, [identifier]);
 
   const redirectToReviewPage = () => {
-    if(isDiscoverContent === "true"){
+    if (isDiscoverContent === "true") {
       router.push({ pathname: `/workspace/content/discover-contents` });
 
     }
-    else if(getLocalStoredUserRole() === Role.CCTA){
+    else if (getLocalStoredUserRole() === Role.CCTA) {
       router.push({ pathname: `/workspace/content/up-review` });
 
     }
     else
-    router.push({ pathname: `/workspace/content/submitted` });
+      router.push({ pathname: `/workspace/content/submitted` });
   };
 
   const closePublishPopup = () => {
@@ -134,14 +126,14 @@ const ReviewContentSubmissions = () => {
       console.log("Published successfully:", response);
       // Add toaster success message here
       setOpenConfirmationPopup(false);
-      await delay(2000); 
+      await delay(2000);
 
-      if(getLocalStoredUserRole() === Role.CCTA){
+      if (getLocalStoredUserRole() === Role.CCTA) {
         router.push({ pathname: `/workspace/content/up-review` });
-  
+
       }
       else
-      router.push({ pathname: `/workspace/content/submitted` });
+        router.push({ pathname: `/workspace/content/submitted` });
     } catch (error) {
       console.error("Error during publishing:", error);
       // Add toaster error message here
@@ -154,12 +146,12 @@ const ReviewContentSubmissions = () => {
       console.log("Comment submitted successfully:", response);
       // Add toaster success message here
       setOpenCommentPopup(false);
-      if(getLocalStoredUserRole() === Role.CCTA){
+      if (getLocalStoredUserRole() === Role.CCTA) {
         router.push({ pathname: `/workspace/content/up-review` });
-  
+
       }
       else
-      router.push({ pathname: `/workspace/content/submitted` });
+        router.push({ pathname: `/workspace/content/submitted` });
     } catch (error) {
       console.error("Error submitting comment:", error);
       // Add toaster error message here
@@ -185,9 +177,9 @@ const ReviewContentSubmissions = () => {
         alignItems="center"
         mb={2}
       >
-         <IconButton onClick={handleBackClick}>
-            <ArrowBackIcon />
-          </IconButton>
+        <IconButton onClick={handleBackClick}>
+          <ArrowBackIcon />
+        </IconButton>
         <Typography
           variant="h5"
           sx={{
@@ -413,7 +405,7 @@ const ReviewContentSubmissions = () => {
             </Grid>
           </Grid>
 
-          {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true"  && isReadOnly !== "true" &&(<Box
+          {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" && isReadOnly !== "true" && (<Box
             sx={{
               display: "flex",
               justifyContent: "flex-end",
