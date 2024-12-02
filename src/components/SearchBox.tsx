@@ -17,8 +17,8 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { debounce } from "@/utils/Helper";
-import { getPrimaryCategory } from "@/services/ContentService";
+import { debounce, getOptionsByCategory } from "@/utils/Helper";
+import { getChannelDetails, getPrimaryCategory } from "@/services/ContentService";
 import { SortOptions , StatusOptions} from "@/utils/app.constant";
 
 export interface SearchBarProps {
@@ -29,7 +29,10 @@ export interface SearchBarProps {
   onFilterChange?: (selectedFilters: string[]) => void;
   onSortChange?: (sortBy: string) => void;
   onStatusChange?: (status: string) => void;
-  allContents?: boolean
+  onStateChange?: (state: string) => void;
+
+  allContents?: boolean;
+  discoverContents?: boolean
 }
 
 const sortOptions = SortOptions;
@@ -41,13 +44,19 @@ const SearchBox: React.FC<SearchBarProps> = ({
   onFilterChange,
   onSortChange,
   onStatusChange,
-  allContents=false
+  onStateChange,
+  allContents=false,
+  discoverContents=false
 }) => {
   const theme = useTheme<any>();
   const [searchTerm, setSearchTerm] = useState(value);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>("Modified On");
   const [status, setStatus] = useState<string>("All");
+  const [state, setState] = useState<string>("All");
+  const [stateOptions, setStateOptions] = useState<string[]>([]);
+
+
 
   const [primaryCategory, setPrimaryCategory] = useState<string[]>();
 
@@ -70,6 +79,59 @@ const SearchBox: React.FC<SearchBarProps> = ({
   }, []);
 
   const filterOptions = primaryCategory;
+  useEffect(() => {
+    const fetchStates = async (stateName?: string) => {
+      try {
+        const data = await getChannelDetails();
+        const framework = data?.result?.framework;
+       // setFramework(framework);
+       // setFramedata(framework);
+
+        const states = await getOptionsByCategory(framework, "state");
+
+       {
+          // Get all states and their names
+          const stateNames = states.map((state: any) => state.name);
+          setStateOptions(["All", ...stateNames]);
+
+          //setStateOptions(stateNames);
+          console.log("stateNames", stateNames);
+          // setStateNames(stateNames);
+          // setState(stateNames);
+
+          // const stateBoardMapping = states.map((state: any) => {
+          //   const stateAssociations = state.associations || [];
+          //   const boards = getOptionsByCategory(framework, "board");
+
+          //   const associatedBoards = boards
+          //     .filter((board: { code: any }) =>
+          //       stateAssociations.some(
+          //         (assoc: { code: any; category: string }) =>
+          //           assoc.code === board.code && assoc.category === "board"
+          //       )
+          //     )
+          //     .map((board: { name: any; code: any }) => ({
+          //       name: board.name,
+          //       code: board.code,
+          //     }));
+
+          //   return {
+          //     stateName: state.name,
+          //     boards: associatedBoards,
+          //     associations: stateAssociations,
+          //   };
+          // });
+
+          
+        } 
+      } catch (err) {
+        console.error(err);
+      } finally {
+        //setLoading(false);
+      }
+    };
+    fetchStates();
+  }, []);
 
   const handleSearchClear = () => {
     onSearch("");
@@ -117,6 +179,11 @@ const SearchBox: React.FC<SearchBarProps> = ({
     setStatus(value);
     onStatusChange && onStatusChange(value);
   };
+  const handleStateChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value as string;
+    setState(value);
+    onStateChange && onStateChange(value);
+  };
   return (
     <Box sx={{ mx: 2 }}>
       <Grid container spacing={2} alignItems="center">
@@ -159,7 +226,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={allContents ? 2 : 3} justifySelf={"end"}>
+        <Grid item xs={12} md={12} lg={allContents||discoverContents ? 2 : 3} justifySelf={"end"}>
           <FormControl sx={{ width: "100%", mt: 2 }}>
             <InputLabel sx={{ color: "#000000DB" }}>Filter By</InputLabel>
             <Select
@@ -206,7 +273,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={allContents? 2 : 3} justifySelf={"end"}>
+        <Grid item xs={12} md={12} lg={allContents||discoverContents? 2 : 3} justifySelf={"end"}>
           <FormControl sx={{ width: "100%", mt: 2 }}>
             <InputLabel>Sort By</InputLabel>
             <Select
@@ -241,9 +308,24 @@ const SearchBox: React.FC<SearchBarProps> = ({
             </FormControl>
           </Grid>
         )}
+           {discoverContents &&(<Grid item xs={12} md={12} lg={2}justifySelf={"end"}>
+        <FormControl sx={{ width: "100%", mt: 2 }}>
+          <InputLabel>Filter By State</InputLabel>
+          <Select
+            value={state}
+            onChange={handleStateChange}
+            input={<OutlinedInput label="Filter By State" />}
+          >
+            {stateOptions?.map((option: any) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>)}
       </Grid>
-    </Box>
-
+      </Box>
   );
 };
 

@@ -1,7 +1,7 @@
 import { getLocalStoredUserId , getLocalStoredUserRole} from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE, CHANNEL_ID, TENANT_ID } from "@/utils/app.config";
+import { MIME_TYPE, CHANNEL_ID, TENANT_ID, FRAMEWORK_ID } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
 
@@ -58,7 +58,8 @@ const getReqBodyWithStatus = (
   offset: number,
   primaryCategory: any,
   sort_by: any,
-  contentType?: string
+  contentType?: string,
+  state?: string
 ) => {
   if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
     var PrimaryCategory =
@@ -71,7 +72,7 @@ const getReqBodyWithStatus = (
 {
   const userRole = getLocalStoredUserRole();
 
-   if(userRole===Role.SCTA  )
+   if(state)
    {
     return {
       ...upForReviewReqBody,
@@ -82,7 +83,7 @@ const getReqBodyWithStatus = (
           status,
           primaryCategory,
           createdBy:{"!=": getLocalStoredUserId()},
-      //  state:localStorage.getItem("stateName"),
+        state:state
   
         },
   
@@ -156,7 +157,8 @@ export const getContent = async (
   offset: number,
   primaryCategory: string[],
   sort_by: any,
-  contentType?: string
+  contentType?: string,
+  state?: string
 ) => {
   const apiURL = "/action/composite/v3/search";
   try {
@@ -167,7 +169,8 @@ export const getContent = async (
       offset,
       primaryCategory,
       sort_by,
-      contentType
+      contentType,
+      state
     );
     const response = await post(apiURL, reqBody);
     return response?.data?.result;
@@ -308,5 +311,16 @@ export const getContentHierarchy = async ({
   } catch (error) {
     console.error('Error in getContentHierarchy Service', error);
     throw error;
+  }
+};
+export const getChannelDetails = async (): Promise<any> => {
+  const apiUrl: string = `/api/framework/v1/read/${FRAMEWORK_ID}`;
+
+  try {
+    const response = await axios.get(apiUrl);
+    return response?.data;
+  } catch (error) {
+    console.error('Error in getting Channel Details', error);
+    return error;
   }
 };
