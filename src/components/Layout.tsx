@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Sidebar from "./SideBar";
 import { Toaster, toast } from "react-hot-toast";
 import CloseIcon from '@mui/icons-material/Close';
+import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,9 +18,12 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedKey, onSelect }) => {
     const handleResize = () => {
       if (window.innerWidth < 768 && !toastShown) {
         toast((t) => (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span>For a better experience, please use a desktop view.</span>
-            <button
+          <Box style={{ display: "flex", alignItems: "center", gap:'15px', justifyContent: "space-between" }}>
+            <Box sx={{display:'flex', alignItems:'flex-start', gap:'15px'}}>
+              <PersonalVideoIcon sx={{ color:'#FFFFFF'}}/>
+              <Box sx={{ fontSize: '14px', color: '#F4F4F4', fontWeight: '500' }}>Switch to desktop for a better experience</Box>
+            </Box>
+            <Button
               onClick={() => toast.dismiss(t.id)}
               style={{
                 marginLeft: "10px",
@@ -30,13 +34,13 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedKey, onSelect }) => {
               }}
             >
               <CloseIcon/>
-            </button>
-          </div>
+            </Button>
+          </Box>
         ), {
           position: "top-center",
           duration: Infinity,
           style: {
-            background: "#333",
+            background: "green",
             color: "#fff",
           },
         });
