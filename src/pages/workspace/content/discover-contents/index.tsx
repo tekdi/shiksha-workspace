@@ -68,7 +68,8 @@ const ContentsPage = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
   const [totalCount, setTotalCount] = useState(0);
-  
+  const [state, setState] = useState("All");
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
   };
@@ -102,7 +103,9 @@ const ContentsPage = () => {
     console.log("sortBy", sortBy)
     setSortBy(sortBy);
   };
-
+  const handleStateChange = (state: string) => {
+    setState(state)
+  };
 
   useEffect(() => {
     const getContentList = async () => {
@@ -125,16 +128,32 @@ const ContentsPage = () => {
         };
         const offset = page * LIMIT;
         const contentType="discover-contents"
-
-        const response = await getContent(
-          status,
-          query,
-          LIMIT,
-          offset,
-          primaryCategory,
-          sort_by,
-          contentType
-        );
+let response;
+if(state!=="All")
+{
+  response = await getContent(
+    status,
+    query,
+    LIMIT,
+    offset,
+    primaryCategory,
+    sort_by,
+    contentType,
+    state
+  );
+}
+else{
+  response = await getContent(
+    status,
+    query,
+    LIMIT,
+    offset,
+    primaryCategory,
+    sort_by,
+    contentType
+  );
+}
+        
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
@@ -146,7 +165,7 @@ const ContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy,  page]);
+  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, state, page]);
 
   useEffect(() => {
     const filteredArray = contentList.map(item => ({
@@ -202,6 +221,8 @@ const ContentsPage = () => {
               onSearch={handleSearch}
               onFilterChange={handleFilterChange}
               onSortChange={handleSortChange}
+              onStateChange={handleStateChange}
+              discoverContents={true}
             />
           </Box>
               {loading ? (
