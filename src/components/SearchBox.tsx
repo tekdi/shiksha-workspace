@@ -18,8 +18,11 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { debounce, getOptionsByCategory } from "@/utils/Helper";
-import { getChannelDetails, getPrimaryCategory } from "@/services/ContentService";
-import { SortOptions , StatusOptions} from "@/utils/app.constant";
+import {
+  getFrameworkDetails,
+  getPrimaryCategory,
+} from "@/services/ContentService";
+import { SortOptions, StatusOptions } from "@/utils/app.constant";
 
 export interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -32,7 +35,7 @@ export interface SearchBarProps {
   onStateChange?: (state: string) => void;
 
   allContents?: boolean;
-  discoverContents?: boolean
+  discoverContents?: boolean;
 }
 
 const sortOptions = SortOptions;
@@ -45,8 +48,8 @@ const SearchBox: React.FC<SearchBarProps> = ({
   onSortChange,
   onStatusChange,
   onStateChange,
-  allContents=false,
-  discoverContents=false
+  allContents = false,
+  discoverContents = false,
 }) => {
   const theme = useTheme<any>();
   const [searchTerm, setSearchTerm] = useState(value);
@@ -55,8 +58,6 @@ const SearchBox: React.FC<SearchBarProps> = ({
   const [status, setStatus] = useState<string>("All");
   const [state, setState] = useState<string>("All");
   const [stateOptions, setStateOptions] = useState<string[]>([]);
-
-
 
   const [primaryCategory, setPrimaryCategory] = useState<string[]>();
 
@@ -82,21 +83,17 @@ const SearchBox: React.FC<SearchBarProps> = ({
   useEffect(() => {
     const fetchStates = async (stateName?: string) => {
       try {
-        const data = await getChannelDetails();
+        const data = await getFrameworkDetails();
         const framework = data?.result?.framework;
-      
 
         const states = await getOptionsByCategory(framework, "state");
 
-       {
+        {
           const stateNames = states.map((state: any) => state.name);
           setStateOptions(["All", ...stateNames]);
 
           console.log("stateNames", stateNames);
-          
-
-          
-        } 
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -121,17 +118,12 @@ const SearchBox: React.FC<SearchBarProps> = ({
     const searchTerm = event.target.value;
     setSearchTerm(searchTerm);
 
-    if(searchTerm.length>=3)
-    {
+    if (searchTerm.length >= 3) {
+      handleSearch(searchTerm);
+    } else if (searchTerm.length === 0 || searchTerm === "") {
+      handleSearchClear();
       handleSearch(searchTerm);
     }
-   else if(searchTerm.length===0|| searchTerm==="")
-    {
-     
-      handleSearchClear()
-      handleSearch(searchTerm)
-    }
-   
   };
 
   const handleFilterChange = (event: SelectChangeEvent<string[]>) => {
@@ -198,7 +190,13 @@ const SearchBox: React.FC<SearchBarProps> = ({
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={allContents||discoverContents ? 2 : 3} justifySelf={"end"}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          lg={allContents || discoverContents ? 2 : 3}
+          justifySelf={"end"}
+        >
           <FormControl sx={{ width: "100%", mt: 2 }}>
             <InputLabel sx={{ color: "#000000DB" }}>Filter By</InputLabel>
             <Select
@@ -226,7 +224,9 @@ const SearchBox: React.FC<SearchBarProps> = ({
                     color: "#000",
                     "& .MuiCheckbox-root": {
                       color: "#000",
-                      "&.Mui-checked, &.MuiCheckbox-indeterminate": { color: "#000" },
+                      "&.Mui-checked, &.MuiCheckbox-indeterminate": {
+                        color: "#000",
+                      },
                     },
                     "& .MuiSvgIcon-root": { fontSize: "20px" },
                   }}
@@ -235,7 +235,9 @@ const SearchBox: React.FC<SearchBarProps> = ({
                     checked={selectedFilters.indexOf(option) > -1}
                     sx={{
                       color: "#000",
-                      "&.Mui-checked, &.MuiCheckbox-indeterminate": { color: "#000" },
+                      "&.Mui-checked, &.MuiCheckbox-indeterminate": {
+                        color: "#000",
+                      },
                     }}
                   />
                   <ListItemText primary={option} />
@@ -245,7 +247,13 @@ const SearchBox: React.FC<SearchBarProps> = ({
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={allContents||discoverContents? 2 : 3} justifySelf={"end"}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          lg={allContents || discoverContents ? 2 : 3}
+          justifySelf={"end"}
+        >
           <FormControl sx={{ width: "100%", mt: 2 }}>
             <InputLabel>Sort By</InputLabel>
             <Select
@@ -280,24 +288,26 @@ const SearchBox: React.FC<SearchBarProps> = ({
             </FormControl>
           </Grid>
         )}
-           {discoverContents &&(<Grid item xs={12} md={12} lg={2}justifySelf={"end"}>
-        <FormControl sx={{ width: "100%", mt: 2 }}>
-          <InputLabel>Filter By State</InputLabel>
-          <Select
-            value={state}
-            onChange={handleStateChange}
-            input={<OutlinedInput label="Filter By State" />}
-          >
-            {stateOptions?.map((option: any) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>)}
+        {discoverContents && (
+          <Grid item xs={12} md={12} lg={2} justifySelf={"end"}>
+            <FormControl sx={{ width: "100%", mt: 2 }}>
+              <InputLabel>Filter By State</InputLabel>
+              <Select
+                value={state}
+                onChange={handleStateChange}
+                input={<OutlinedInput label="Filter By State" />}
+              >
+                {stateOptions?.map((option: any) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
       </Grid>
-      </Box>
+    </Box>
   );
 };
 

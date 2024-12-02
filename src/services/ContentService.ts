@@ -313,14 +313,14 @@ export const getContentHierarchy = async ({
     throw error;
   }
 };
-export const getChannelDetails = async (): Promise<any> => {
+export const getFrameworkDetails = async (): Promise<any> => {
   const apiUrl: string = `/api/framework/v1/read/${FRAMEWORK_ID}`;
 
   try {
     const response = await axios.get(apiUrl);
     return response?.data;
   } catch (error) {
-    console.error('Error in getting Channel Details', error);
+    console.error('Error in getting Framework Details', error);
     return error;
   }
 };
