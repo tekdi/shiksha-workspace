@@ -188,7 +188,7 @@ const ReviewContentSubmissions = () => {
          <IconButton onClick={handleBackClick}>
             <ArrowBackIcon />
           </IconButton>
-        <Typography
+       {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true"  && isReadOnly !== "true" && (<Typography
           variant="h5"
           sx={{
             fontFamily: "inherit",
@@ -203,7 +203,7 @@ const ReviewContentSubmissions = () => {
           color="primary"
         >
           Review Content Submissions
-        </Typography>
+        </Typography>)}
         <IconButton onClick={redirectToReviewPage}>
           <CloseIcon />
         </IconButton>
