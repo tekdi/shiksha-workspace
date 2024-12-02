@@ -1,43 +1,53 @@
-name: Deploy to EKS-Pratham
+name: PROD-WORKSPACE-TAG-BASE-DEPLOYMENT
+
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'   # This will trigger on tags starting with 'v'
+
 env:
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME_DEV }}
+  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME_PROD }}
   AWS_REGION: ${{ secrets.AWS_REGION_NAME }}
+
 jobs:
-  build_dev:
+  BACKEND-TAG-BASE-DEPLOYMENT-PROD:
     name: Deployment
     runs-on: ubuntu-latest
     steps:
-    - name: Set short git commit SHA
-      id: commit
-      uses: prompt/actions-commit-hash@v2
     - name: Check out code
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0 
+        fetch-depth: 0
+
+    - name: Set TAG environment variable
+      run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+    - name: Debug TAG value
+      run: echo "TAG value - ${{ env.TAG }}"
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{env.AWS_REGION}}
+        aws-region: ${{ env.AWS_REGION }}
+        
     - name: Setup Node Env
       uses: actions/setup-node@v3
       with:
         node-version: 21.1.0
-        #echo '${{ secrets.QA_ENV }}' > .env
+
     - name: Copy .env file
       env:
-       ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT_DEV }}
-      run: printf "%s" "$ENV_FILE_CONTENT" > manifest/configmap.yaml 
-      # run: echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
+        ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT_PROD }}
+      run: echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
     - name: Copy .env file in the code
       env:
-       DEV_ENV: ${{ secrets.DEV_ENV }}
-      run:  rm -f .env && echo '${{ secrets.DEV_ENV }}' > .env
+       PROD_ENV: ${{ secrets.PROD_ENV }}
+      run:  rm -f .env && echo '${{ secrets.PROD_ENV }}' > .env
       #echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
+
     - name: Show PWD and list content and Latest 3 commits 
       run: |
            echo "Fetching all branches to ensure complete history"
@@ -50,34 +60,29 @@ jobs:
            git log --merges -n 3
            pwd
            ls -ltra
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+
     - name: Build, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ secrets.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ secrets.ECR_IMAGE }}
+        IMAGE_TAG: ${{ env.TAG }}
       run: |
-        docker build -t ${{ secrets.ECR_REPOSITORY }}:${{ secrets.IMAGE_TAG_DEV }} .
-        docker push ${{ secrets.ECR_REPOSITORY }}:${{ secrets.IMAGE_TAG_DEV }}
+        docker build -t ${{ secrets.ECR_REPOSITORY }}:${{ env.TAG }} .
+        docker push ${{ secrets.ECR_REPOSITORY }}:${{ env.TAG }}
+
     - name: Update kube config
-      run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME_DEV }} --region ${{ secrets.AWS_REGION_NAME }}
+      run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME_PROD }} --region ${{ secrets.AWS_REGION_NAME }}
+
     - name: Deploy to EKS
       env:
         ECR_REGISTRY: ${{ secrets.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ secrets.IMAGE_TAG_DEV }}
-        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        ECR_IMAGE: ${{ secrets.ECR_IMAGE_DEV }}
+        IMAGE_TAG: ${{ env.TAG }}
       run: |
         export ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY }}
-        export IMAGE_TAG=${{ secrets.IMAGE_TAG_DEV }}
-        export ECR_IMAGE=${{ secrets.ECR_IMAGE_DEV }}
+        export IMAGE_TAG=${{ env.TAG }}
         envsubst < manifest/workspace.yaml > manifest/workspace-updated.yaml
         cat manifest/workspace-updated.yaml
         rm -rf manifest/workspace-service.yaml
