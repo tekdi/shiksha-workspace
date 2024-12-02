@@ -19,7 +19,7 @@ export const playerConfig = {
     userData: { firstName: "Guest", lastName: "User"},
 
     //telemetry
-    host: "https://telemetry.prathamdigital.org",
+    host: "",
     endpoint: "/v1/telemetry",
   },
   config: {
@@ -82,7 +82,7 @@ export const V1PlayerConfig = {
       bgImage: "assets/icons/splacebackground_1.png",
       webLink: "",
     },
-    apislug: "/action",
+    apislug: "",
     repos: ["/sunbird-plugins/renderer"],
     plugins: [
       {
