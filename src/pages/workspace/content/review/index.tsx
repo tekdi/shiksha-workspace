@@ -1,4 +1,3 @@
-
 import Players from "@/components/players/Players";
 import V1Player from "@/components/V1-Player/V1Player";
 import { publishContent, submitComment } from "@/services/ContentService";
@@ -181,7 +180,7 @@ const ReviewContentSubmissions = () => {
         <IconButton onClick={handleBackClick}>
           <ArrowBackIcon />
         </IconButton>
-       { getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" && isReadOnly !== "true" &&(<Typography
+        {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" && isReadOnly !== "true" &&(<Typography
           variant="h5"
           sx={{
             fontFamily: "inherit",
@@ -196,8 +195,7 @@ const ReviewContentSubmissions = () => {
           color="primary"
         >
           Review Content Submissions
-        </Typography>)
-}
+        </Typography>)}
         <IconButton onClick={redirectToReviewPage}>
           <CloseIcon />
         </IconButton>
