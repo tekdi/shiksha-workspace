@@ -84,50 +84,22 @@ const SearchBox: React.FC<SearchBarProps> = ({
       try {
         const data = await getChannelDetails();
         const framework = data?.result?.framework;
-       // setFramework(framework);
-       // setFramedata(framework);
+      
 
         const states = await getOptionsByCategory(framework, "state");
 
        {
-          // Get all states and their names
           const stateNames = states.map((state: any) => state.name);
           setStateOptions(["All", ...stateNames]);
 
-          //setStateOptions(stateNames);
           console.log("stateNames", stateNames);
-          // setStateNames(stateNames);
-          // setState(stateNames);
-
-          // const stateBoardMapping = states.map((state: any) => {
-          //   const stateAssociations = state.associations || [];
-          //   const boards = getOptionsByCategory(framework, "board");
-
-          //   const associatedBoards = boards
-          //     .filter((board: { code: any }) =>
-          //       stateAssociations.some(
-          //         (assoc: { code: any; category: string }) =>
-          //           assoc.code === board.code && assoc.category === "board"
-          //       )
-          //     )
-          //     .map((board: { name: any; code: any }) => ({
-          //       name: board.name,
-          //       code: board.code,
-          //     }));
-
-          //   return {
-          //     stateName: state.name,
-          //     boards: associatedBoards,
-          //     associations: stateAssociations,
-          //   };
-          // });
+          
 
           
         } 
       } catch (err) {
         console.error(err);
       } finally {
-        //setLoading(false);
       }
     };
     fetchStates();
