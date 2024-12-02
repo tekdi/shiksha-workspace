@@ -81,7 +81,7 @@ const getReqBodyWithStatus = (
           ...upForReviewReqBody.request.filters,
           status,
           primaryCategory,
-          createdBy:{"!=":localStorage.getItem("userId")},
+          createdBy:{"!=": getLocalStoredUserId()},
       //  state:localStorage.getItem("stateName"),
   
         },
@@ -102,7 +102,7 @@ const getReqBodyWithStatus = (
         ...upForReviewReqBody.request.filters,
         status,
         primaryCategory,
-        createdBy:{"!=":localStorage.getItem("userId")}
+        createdBy:{"!=":getLocalStoredUserId()}
 
       },
 

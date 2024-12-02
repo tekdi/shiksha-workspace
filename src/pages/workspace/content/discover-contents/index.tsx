@@ -161,10 +161,8 @@ const ContentsPage = () => {
       mode: item.mode,
       creator: item.creator,
       description: item?.description,
-      state: item?.state
-
-
-
+      state: item?.state,
+      author: item.author
     }));
     setData(filteredArray)
     console.log(filteredArray)
