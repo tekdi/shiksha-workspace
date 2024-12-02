@@ -237,10 +237,10 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
             else if(props.column.key === "create-by")
             {
               console.log('props.rowData ====>', props.rowData)
-              if(props.rowData.creator || props.rowData.author)
+              if(props?.rowData?.creator || props?.rowData?.author)
               return (
                 <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
-                  {props.rowData.creator || props.rowData.author}
+                  {props?.rowData?.creator || props?.rowData?.author}
                 </Typography>
               )
               else
