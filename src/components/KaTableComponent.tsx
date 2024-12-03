@@ -46,6 +46,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
           content?.mimeType &&
           MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
         ) {
+          sessionStorage.setItem("previousPage", window.location.href);
           router.push({ pathname: `/upload-editor`, query: { identifier } });
         } else if (
           content?.mimeType &&
