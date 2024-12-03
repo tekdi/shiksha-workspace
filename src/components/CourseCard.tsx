@@ -60,6 +60,7 @@ const CourseCard: React.FC<ContentCardProps> = ({
       MIME_TYPE.GENERIC_MIME_TYPE.includes(mimeType) &&
       mode !== "review"
     ) {
+      sessionStorage.setItem("previousPage", window.location.href);
       router.push({ pathname: `/upload-editor`, query: { identifier } });
     } else if (
       mimeType &&
