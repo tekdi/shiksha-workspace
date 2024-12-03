@@ -127,7 +127,7 @@ const CreatePage = () => {
         >
           <Grid container spacing={2}>
             {cardData.map((card, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
                 <Paper
                   key={index}
                   elevation={3}
