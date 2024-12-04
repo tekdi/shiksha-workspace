@@ -180,7 +180,7 @@ const ReviewContentSubmissions = () => {
         <IconButton onClick={handleBackClick}>
           <ArrowBackIcon />
         </IconButton>
-        {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" && isReadOnly !== "true" &&(<Typography
+        {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" && isReadOnly !== "true" && (<Typography
           variant="h5"
           sx={{
             fontFamily: "inherit",
@@ -416,22 +416,29 @@ const ReviewContentSubmissions = () => {
             }}
           >
             <Button
-              variant="contained"
-              color="primary"
-              onClick={handlePublish}
-              sx={{ marginRight: 1, minWidth: "120px" }}
-              className="Request-btn"
+              variant="outlined"
+              sx={{
+                color: "var(--mui-palette-warning-100) !important",
+                border: "1px solid var(--mui-palette-warning-100) !important",
+                fontSize: "14px !important",
+                fontWeight: "500 !important",
+                marginRight: 1,
+                minWidth: "120px",
+                borderRadius: "100px",
+                textTransform: "capitalize"
+              }}
+              onClick={handleReject}
             >
-              Publish
+              Request Changes
             </Button>
             <Button
               variant="contained"
               color="primary"
-              onClick={handleReject}
-              sx={{ minWidth: "120px" }}
+              onClick={handlePublish}
+              sx={{ minWidth: "120px", textTransform: "capitalize" }}
               className="Request-btn"
             >
-              Request Changes
+              Publish
             </Button>
           </Box>)}
         </>
