@@ -1,38 +1,58 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Layout from "../../../../components/Layout";
-import { Typography, Box, TablePagination } from "@mui/material";
-import CourseCard from "../../../../components/CourseCard";
-import SearchBox from "../../../../components/SearchBox";
+import {
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getContent } from "@/services/ContentService";
-import Loader from "@/components/Loader";
-import NoDataFound from "@/components/NoDataFound";
+import SearchBox from "../../../../components/SearchBox";
 import PaginationComponent from "@/components/PaginationComponent";
+import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
+import { useRouter } from "next/router";
+import { MIME_TYPE } from "@/utils/app.config";
+import WorkspaceText from "@/components/WorkspaceText";
+import { DataType } from 'ka-table/enums';
+import KaTableComponent from "@/components/KaTableComponent";
+import Paper from '@mui/material/Paper';
+import { timeAgo } from "@/utils/Helper";
+import useSharedStore from "@/utils/useSharedState";
 
+const columns = [
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "200px" },
+  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
+  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
+
+
+]
 const DraftPage = () => {
   const [selectedKey, setSelectedKey] = useState("draft");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("updated");
-  const [contentList, setContentList] = React.useState<content[]>([]);
+  const [filter, setFilter] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState("Modified On");
+  const [contentList, setContentList] = React.useState([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
+  const [data, setData] = React.useState<any[]>([]);
+  const fetchContentAPI = useSharedStore(
+    (state: any) => state.fetchContentAPI
+  );
+
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage - 1);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -44,11 +64,29 @@ const DraftPage = () => {
     };
   }, [searchTerm]);
 
+  useEffect(() => {
+    const filteredArray = contentList.map((item: any) => ({
+      image: item?.appIcon,
+
+      name: item?.name,
+      description: item?.description,
+
+      contentType: item.primaryCategory,
+      lastUpdatedOn: timeAgo(item.lastUpdatedOn),
+      status: item.status,
+      identifier: item.identifier,
+      mimeType: item.mimeType,
+      mode: item.mode
+    }));
+    setData(filteredArray)
+    console.log(filteredArray)
+  }, [contentList]);
+
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
   };
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: string[]) => {
     setFilter(filter);
   };
 
@@ -56,25 +94,14 @@ const DraftPage = () => {
     setSortBy(sortBy);
   };
 
-  const filteredData = useMemo(
-    () =>
-      contentList?.filter((content) =>
-        content.name.toLowerCase().includes(searchTerm)
-      ),
-    [searchTerm]
-  );
-
-  // const displayedCards = filteredData?.slice(
-  //   page * rowsPerPage,
-  //   page * rowsPerPage + rowsPerPage
-  // );
-
   const handleDelete = (index: number) => {
     console.log(`Deleting item at index ${index}`);
-    setTimeout(() => {
-      setContentDeleted((prev) => !prev);
-    }, 1000);
+    setContentDeleted((prev) => !prev);
   };
+
+  const router = useRouter();
+
+ 
 
   useEffect(() => {
     const getDraftContentList = async () => {
@@ -82,78 +109,77 @@ const DraftPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         const offset = page * LIMIT;
+        const primaryCategory = filter.length ? filter : [];
+        const order = sortBy === "Created On" ? "asc" : "desc";
+        const sort_by = { lastUpdatedOn: order };
         const response = await getContent(
           ["Draft", "FlagDraft"],
           query,
           LIMIT,
-          offset
+          offset,
+          primaryCategory,
+          sort_by
         );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
         setContentList(contentList);
         setTotalCount(response?.count);
-        setLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     getDraftContentList();
-  }, [debouncedSearchTerm, contentDeleted, page]);
+  }, [debouncedSearchTerm, filter, sortBy, contentDeleted, fetchContentAPI,page]);
+
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
-      <Box p={3}>
-        <Typography variant="h4">Draft Content</Typography>
-        <Typography mb={2}>Here you see all your draft content.</Typography>
+      <WorkspaceText />
+      <Box p={3} >
+        <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: totalCount > LIMIT ? '15px' : '0px' }}>
+          <Box p={2}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", fontSize: "16px" }}
+            >
+              Drafts
+            </Typography>
+          </Box>
+          {/* <Typography mb={2}>
+          Create, organize, and manage all types of content in one place.
+        </Typography> */}
 
-        <Box mb={3}>
-          <SearchBox
-            placeholder="Search by title..."
-            onSearch={handleSearch}
-            // onFilterChange={handleFilterChange}
-            // onSortChange={handleSortChange}
-          />
-        </Box>
-
-        <Box display="flex" flexWrap="wrap" gap={3}>
-          {loading ? (
-            <Loader showBackdrop={true} loadingText={"Loading"} />
-          ) : contentList && contentList.length > 0 ? (
-            contentList?.map((content, index) => (
-              <Box
-                key={content?.identifier}
-                sx={{
-                  minWidth: "250px",
-                  maxWidth: "250px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <CourseCard
-                  title={content?.name}
-                  description={content?.description}
-                  type={content?.primaryCategory}
-                  imageUrl={content.appIcon}
-                  status={content.status}
-                  identifier={content?.identifier}
-                  mimeType={content?.mimeType}
-                  onDelete={() => handleDelete(index)}
-                />
-              </Box>
-            ))
-          ) : (
-            <NoDataFound />
+          <Box pb={3}>
+            <SearchBox
+              placeholder="Search by title..."
+              onSearch={handleSearch}
+              onFilterChange={handleFilterChange}
+              onSortChange={handleSortChange}
+            />
+          </Box>
+         {loading ? (
+            <Box display="flex" justifyContent="center" my={5}>
+              <CircularProgress />
+            </Box>
+          ) :(<>
+           <Box className="table-ka-container">
+              <KaTableComponent columns={columns} data={data} tableTitle="draft"  />
+            </Box>
+          </>
+          )}
+          {totalCount > LIMIT && (
+            <PaginationComponent
+              count={Math.ceil(totalCount / LIMIT)}
+              page={page}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
+            />
           )}
         </Box>
-        {totalCount > LIMIT && (
-          <PaginationComponent
-            count={Math.ceil(totalCount / LIMIT)}
-            page={page}
-            onPageChange={handleChangePage}
-          />
-        )}
       </Box>
+
     </Layout>
   );
 };

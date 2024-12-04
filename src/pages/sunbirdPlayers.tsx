@@ -28,6 +28,13 @@ const SunbirdQuMLPlayer = dynamic(
   }
 );
 
+const SunbirdV1Player = dynamic(
+  () => import("@/components/V1-Player/V1Player"),
+  {
+    ssr: false,
+  }
+);
+
 interface PlayerProps {
   "player-config": any;
   identifier: string;
@@ -46,6 +53,12 @@ const SunbirdPlayers = ({ "player-config": playerConfig }: PlayerProps) => {
       return <SunbirdQuMLPlayer playerConfig={playerConfig} />;
     case "application/epub":
       return <SunbirdEpubPlayer playerConfig={playerConfig} />;
+    case "application/vnd.ekstep.h5p-archive":
+    case "application/vnd.ekstep.html-archive":
+    case "video/youtube":
+    case "video/x-youtube":
+      // return <SunbirdV1Player playerConfig={playerConfig} />;
+      return <SunbirdV1Player playerConfig={playerConfig} />;
     default:
       return <div>Unsupported media type</div>;
   }

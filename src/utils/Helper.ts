@@ -39,3 +39,26 @@ export const debounce = <T extends (...args: any[]) => any>(
     }, wait);
   };
 };
+
+export const handleExitEvent = () => {
+  const previousPage = sessionStorage.getItem("previousPage");
+  if (previousPage) {
+    window.location.href = previousPage;
+  } else {
+    window.history.go(-1);
+  }
+};
+
+export const getOptionsByCategory = (frameworks: any, categoryCode: string) => {
+  // Find the category by code
+  const category = frameworks.categories.find(
+    (category: any) => category.code === categoryCode
+  );
+
+  // Return the mapped terms
+  return category.terms.map((term: any) => ({
+    name: term.name,
+    code: term.code,
+    associations: term.associations,
+  }));
+};

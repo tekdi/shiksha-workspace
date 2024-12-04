@@ -1,72 +1,77 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-
+import { v4 as uuidv4 } from "uuid";
+import {
+  TENANT_ID,
+  CHANNEL_ID,
+  FRAMEWORK_ID,
+  CLOUD_STORAGE_URL,
+} from "@/utils/app.config";
+import {
+  getLocalStoredUserName,
+  getLocalStoredUserId,
+} from "@/services/LocalStorageService";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
-  const { identifier } = router.query;
+  const { identifier, mode } = router.query;
+
+  const [fullName, setFullName] = useState("Anonymous User");
+  const [userId, setUserId] = useState(TENANT_ID);
+  const [deviceId, setDeviceId] = useState("");
+
+  const [firstName, lastName] = fullName.split(" ");
+
+  useEffect(() => {
+    const storedFullName = getLocalStoredUserName();
+    const storedUserId = getLocalStoredUserId() || TENANT_ID;
+    setFullName(storedFullName ?? "Anonymous User");
+    setUserId(storedUserId);
+
+    const generatedDeviceId = uuidv4();
+    setDeviceId(generatedDeviceId);
+  }, []);
 
   const editorConfig = {
     context: {
       user: {
-        id: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
-        fullName: "Rahul",
-        firstName: "Tekdi",
-        lastName: "Rahul Tekdi",
-        orgIds: ["01309282781705830427"],
+        id: userId,
+        fullName: fullName,
+        firstName: firstName || "Anonymous",
+        lastName: lastName || "User",
+        orgIds: [CHANNEL_ID],
       },
       identifier: identifier,
-      channel: "test-k12-channel",
-      framework: "test_k12_framework",
-      authToken: " ",
-      sid: "iYO2K6dOSdA0rwq7NeT1TDzS-dbqduvV",
-      did: "7e85b4967aebd6704ba1f604f20056b6",
-      uid: "bf020396-0d7b-436f-ae9f-869c6780fc45",
-      additionalCategories: [
-        {
-          value: "Textbook",
-          label: "Textbook",
-        },
-        {
-          value: "Lesson Plan",
-          label: "Lesson Plan",
-        },
-      ],
+      channel: CHANNEL_ID,
+      framework: FRAMEWORK_ID,
+      sid: uuidv4(),
+      did: deviceId,
+      uid: getLocalStoredUserId() || TENANT_ID,
+      additionalCategories: [],
       pdata: {
-        id: "dev.dock.portal",
-        ver: "2.8.0",
-        pid: "creation-portal",
+        id: "pratham.admin.portal",
+        ver: "1.0.0",
+        pid: "pratham-portal",
       },
       contextRollup: {
-        l1: "01307938306521497658",
+        l1: CHANNEL_ID,
       },
-      tags: ["01307938306521497658"],
+      tags: [CHANNEL_ID],
       cdata: [
         {
-          id: "01307938306521497658",
-          type: "sourcing_organization",
-        },
-        {
-          type: "project",
-          id: "ec5cc850-3f71-11eb-aae1-fb99d9fb6737",
-        },
-        {
-          type: "linked_collection",
-          id: "do_113140468925825024117",
+          id: CHANNEL_ID,
+          type: "pratham-portal",
         },
       ],
       timeDiff: 5,
-      objectRollup: {
-        l1: "do_113140468925825024117",
-        l2: "do_113140468926914560125",
-      },
+      objectRollup: {},
       host: "",
       defaultLicense: "CC BY 4.0",
       endpoint: "/data/v3/telemetry",
       env: "collection_editor",
-      cloudStorageUrls: ["https://knowlg-public.s3-ap-south-1.amazonaws.com/"],
+      cloudStorageUrls: [CLOUD_STORAGE_URL],
     },
     config: {
-      mode: "edit", // edit / review / read / sourcingReview
+      mode: mode || "edit", // edit / review / read / sourcingReview
       maxDepth: 4,
       objectType: "Collection",
       primaryCategory: "Course", // Professional Development Course, Curriculum Course
@@ -166,6 +171,7 @@ const CollectionEditor: React.FC = () => {
       // Load Collection Editor CSS if not already loaded
       if (!document.getElementById("collection-editor-css")) {
         const link = document.createElement("link");
+        console.log("PDF Player loaded");
         link.id = "collection-editor-css";
         link.rel = "stylesheet";
         link.href =
@@ -190,6 +196,21 @@ const CollectionEditor: React.FC = () => {
           "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-pdf-player-web-component@1.4.0/styles.css";
         document.head.appendChild(pdfLink);
       }
+
+      const videoScript = document.createElement("script");
+      console.log("Video Player loaded");
+      videoScript.id = "sunbird-video-player.js";
+      videoScript.src =
+        "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/sunbird-video-player.js";
+      videoScript.async = true;
+      document.body.appendChild(videoScript);
+
+      const videoLink = document.createElement("link");
+      videoLink.id = "sunbird-video-player-css";
+      videoLink.rel = "stylesheet";
+      videoLink.href =
+        "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/styles.css";
+      document.head.appendChild(videoLink);
     };
 
     loadAssets();
@@ -218,7 +239,12 @@ const CollectionEditor: React.FC = () => {
         "editorEmitter",
         (event: any) => {
           console.log("Editor event:", event);
-          if (event.detail?.action === "backContent") {
+          if (
+            event.detail?.action === "backContent" ||
+            event.detail?.action === "submitContent" ||
+            event.detail?.action === "publishContent" ||
+            event.detail?.action === "rejectContent"
+          ) {
             window.history.back();
             window.addEventListener(
               "popstate",

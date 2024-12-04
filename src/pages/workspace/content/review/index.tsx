@@ -1,34 +1,41 @@
-import React, { useEffect, useState } from "react";
+import Players from "@/components/players/Players";
+import V1Player from "@/components/V1-Player/V1Player";
+import { publishContent, submitComment } from "@/services/ContentService";
+import { getLocalStoredUserName, getLocalStoredUserRole } from "@/services/LocalStorageService";
+import { fetchContent } from "@/services/PlayerService";
+import { CHANNEL_ID, MIME_TYPE } from "@/utils/app.config";
+import { Role } from "@/utils/app.constant";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
   Button,
   Card,
-  CardContent,
-  CardActions,
-  Typography,
-  IconButton,
   Grid,
+  IconButton,
+  Typography
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { fetchContent } from "@/services/PlayerService";
-import { useRouter } from "next/router";
-import ConfirmActionPopup from "../../../../components/ConfirmActionPopup";
-import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
-import { publishContent, submitComment } from "@/services/ContentService";
-import Players from "@/components/players/Players";
-import { playerConfig } from "../../../../components/players/PlayerConfig";
-import {
-  pdfMetadata,
-  videoMetadata,
-  quMLMetadata,
-  epubMetadata,
-} from "../../../../components/players/playerMetadata";
 import $ from "jquery";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import ConfirmActionPopup from "../../../../components/ConfirmActionPopup";
+import {
+  playerConfig,
+  V1PlayerConfig,
+} from "../../../../components/players/PlayerConfig";
+import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
+
+const userFullName = getLocalStoredUserName() || "Anonymous User";
+const [firstName, lastName] = userFullName.split(" ");
 
 const ReviewContentSubmissions = () => {
+  const [isContentInteractiveType, setIsContentInteractiveType] =
+    useState(false);
   const router = useRouter();
   const { identifier } = router.query;
-  // const identifier = "do_2141610327664312321258";
+  const { isDiscoverContent } = router.query;
+  const { isReadOnly } = router.query;
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const [contentDetails, setContentDetails] = useState<any>(undefined);
   const [openConfirmationPopup, setOpenConfirmationPopup] = useState(false);
@@ -51,8 +58,24 @@ const ReviewContentSubmissions = () => {
           // playerConfig.metadata = quMLMetadata;
           // playerConfig.metadata = epubMetadata;
           console.log("data ==>", data);
-          playerConfig.metadata = data;
-          console.log('playerConfig ==>', playerConfig);
+          if (MIME_TYPE.INTERACTIVE_MIME_TYPE.includes(data?.mimeType)) {
+            V1PlayerConfig.metadata = data;
+            V1PlayerConfig.context.contentId = data.identifier;
+            V1PlayerConfig.context.channel = CHANNEL_ID;
+            V1PlayerConfig.context.tags = [CHANNEL_ID];
+            V1PlayerConfig.context.app = [CHANNEL_ID];
+            V1PlayerConfig.context.userData.firstName = firstName;
+            V1PlayerConfig.context.userData.lastName = lastName || '';
+            setIsContentInteractiveType(true);
+          } else {
+            setIsContentInteractiveType(false);
+            playerConfig.metadata = data;
+            playerConfig.context.contentId = data.identifier;
+            playerConfig.context.channel = CHANNEL_ID;
+            playerConfig.context.tags = [CHANNEL_ID];
+            playerConfig.context.userData.firstName = firstName;
+            playerConfig.context.userData.lastName = lastName || '';
+          }
           setContentDetails(data);
         }
       } catch (error) {
@@ -66,7 +89,16 @@ const ReviewContentSubmissions = () => {
   }, [identifier]);
 
   const redirectToReviewPage = () => {
-    router.push({ pathname: `/workspace/content/submitted` });
+    if (isDiscoverContent === "true") {
+      router.push({ pathname: `/workspace/content/discover-contents` });
+
+    }
+    else if (getLocalStoredUserRole() === Role.CCTA) {
+      router.push({ pathname: `/workspace/content/up-review` });
+
+    }
+    else
+      router.push({ pathname: `/workspace/content/submitted` });
   };
 
   const closePublishPopup = () => {
@@ -94,7 +126,14 @@ const ReviewContentSubmissions = () => {
       console.log("Published successfully:", response);
       // Add toaster success message here
       setOpenConfirmationPopup(false);
-      router.push({ pathname: `/workspace/content/submitted` });
+      await delay(2000);
+
+      if (getLocalStoredUserRole() === Role.CCTA) {
+        router.push({ pathname: `/workspace/content/up-review` });
+
+      }
+      else
+        router.push({ pathname: `/workspace/content/submitted` });
     } catch (error) {
       console.error("Error during publishing:", error);
       // Add toaster error message here
@@ -107,7 +146,12 @@ const ReviewContentSubmissions = () => {
       console.log("Comment submitted successfully:", response);
       // Add toaster success message here
       setOpenCommentPopup(false);
-      router.push({ pathname: `/workspace/content/submitted` });
+      if (getLocalStoredUserRole() === Role.CCTA) {
+        router.push({ pathname: `/workspace/content/up-review` });
+
+      }
+      else
+        router.push({ pathname: `/workspace/content/submitted` });
     } catch (error) {
       console.error("Error submitting comment:", error);
       // Add toaster error message here
@@ -122,7 +166,9 @@ const ReviewContentSubmissions = () => {
       year: "numeric",
     });
   };
-
+  const handleBackClick = () => {
+    router.back();
+  };
   return (
     <Card sx={{ padding: 2, backgroundColor: "white" }}>
       <Box
@@ -131,11 +177,14 @@ const ReviewContentSubmissions = () => {
         alignItems="center"
         mb={2}
       >
-        <Typography
+        <IconButton onClick={handleBackClick}>
+          <ArrowBackIcon />
+        </IconButton>
+        {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" && isReadOnly !== "true" &&(<Typography
           variant="h5"
           sx={{
             fontFamily: "inherit",
-            fontWeight: 400,
+            fontWeight: "bold",
             fontSize: "22px",
             lineHeight: "24px",
             letterSpacing: "0.5px",
@@ -146,7 +195,7 @@ const ReviewContentSubmissions = () => {
           color="primary"
         >
           Review Content Submissions
-        </Typography>
+        </Typography>)}
         <IconButton onClick={redirectToReviewPage}>
           <CloseIcon />
         </IconButton>
@@ -162,7 +211,7 @@ const ReviewContentSubmissions = () => {
                   borderRadius: "16px",
                   padding: 2,
                   backgroundColor: "white",
-                  mb: 2,
+
                 }}
               >
                 <Typography
@@ -184,7 +233,7 @@ const ReviewContentSubmissions = () => {
                 <Box
                   sx={{
                     // border: "1px solid #D0C5B4",
-                    height: "500px",
+                    height: "100%",
                     marginBottom: "16px",
                     display: "flex",
                     alignItems: "center",
@@ -193,30 +242,35 @@ const ReviewContentSubmissions = () => {
                   }}
                 >
                   <div style={{ height: "100%", width: "100%" }}>
-                    <Players playerConfig={playerConfig} />
+                    {isContentInteractiveType ? (
+                      <V1Player playerConfig={V1PlayerConfig} />
+                    ) : (
+                      <Players playerConfig={playerConfig} />
+                    )}
                   </div>
                 </Box>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <CardContent
+              <Box
                 sx={{
                   border: "1px solid #ccc",
                   borderRadius: "16px",
                   backgroundColor: "white",
-                  height: "607px",
+                  height: "100%",
                   overflow: "auto",
+
                 }}
               >
                 <Typography
-                  sx={{ color: "#1F1B13", fontSize: "22px", mb: 2 }}
+                  sx={{ color: "#1F1B13", fontSize: "22px", padding: '16px' }}
                   variant="h6"
                   color="primary"
                 >
                   Content Details
                 </Typography>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -238,7 +292,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -260,7 +314,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -282,7 +336,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -304,7 +358,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -326,7 +380,7 @@ const ReviewContentSubmissions = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, padding: ' 0 16px' }}>
                   <Box
                     sx={{
                       fontWeight: "600",
@@ -347,26 +401,39 @@ const ReviewContentSubmissions = () => {
                     {formatDate(contentDetails.lastUpdatedOn)}
                   </Box>
                 </Box>
-              </CardContent>
+              </Box>
             </Grid>
           </Grid>
 
-          <CardActions
-            disableSpacing
-            sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}
+          {getLocalStoredUserRole() === Role.CCTA && isDiscoverContent !== "true" && isReadOnly !== "true" && (<Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              mt: 2,
+              mb: 2,
+              padding: "8px",
+              borderRadius: "16px",
+            }}
           >
             <Button
               variant="contained"
               color="primary"
               onClick={handlePublish}
-              sx={{ marginRight: 1 }}
+              sx={{ marginRight: 1, minWidth: "120px" }}
+              className="Request-btn"
             >
               Publish
             </Button>
-            <Button variant="contained" color="primary" onClick={handleReject}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleReject}
+              sx={{ minWidth: "120px" }}
+              className="Request-btn"
+            >
               Request Changes
             </Button>
-          </CardActions>
+          </Box>)}
         </>
       ) : (
         <Typography>No content details available</Typography>

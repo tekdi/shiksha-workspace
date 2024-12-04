@@ -5,7 +5,8 @@ import _ from 'lodash';
 import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
-import { getLocalStoredUserData } from "@/services/LocalStorageService";
+import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
+import { CHANNEL_ID, FRAMEWORK_ID, TENANT_ID } from "@/utils/app.config";
 
 const GenericEditor: React.FC = () => {
     const router = useRouter();
@@ -16,9 +17,35 @@ const GenericEditor: React.FC = () => {
     const videoMaxSize = "150";
     const defaultContentFileSize = "150";
     let isLargeFileUpload = false;
+
     if (editorforlargecontent) {
         isLargeFileUpload = true;
     }
+
+    const handlePopState = (event: any) => {
+
+        console.log('popstate event fired', event.state);
+        window.location.hash = 'no';
+        if (event.state) {
+            // Push the current state back to prevent navigation
+            // window.history.pushState(null, '', window.location.href);
+            alert('Please use the "x" button to exit this page.');
+            window.location.hash = 'no';
+        }
+        window.location.hash = 'no';
+    };
+
+    useEffect(() => {
+        // Listen for the popstate event
+        window.location.hash = 'no';
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            // Clean up event listener
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -98,9 +125,19 @@ const GenericEditor: React.FC = () => {
             if (identifier) {
                 window['context'].contentId = identifier;
             }
-            window['context'].user.id = getLocalStoredUserData();
-            window['context'].uid = getLocalStoredUserData();
-
+            window['context'].user = {
+                id: getLocalStoredUserId() || TENANT_ID,
+                name: getLocalStoredUserName() || "Anonymous User",
+                orgIds: [CHANNEL_ID],
+                organisations: {
+                    [CHANNEL_ID]: CHANNEL_ID + " Channel"
+                }
+            }
+            window['context'].uid = getLocalStoredUserId() || TENANT_ID;
+            window['context'].contextRollUp.l1 = CHANNEL_ID;
+            window['context'].tags = [CHANNEL_ID];
+            window['context'].channel = CHANNEL_ID;
+            window['context'].framework = FRAMEWORK_ID;
             if (isLargeFileUpload || (_.get(data, 'contentDisposition') === 'online-only')) {
                 window.context['uploadInfo'] = {
                     isLargeFileUpload: true
@@ -114,7 +151,7 @@ const GenericEditor: React.FC = () => {
         if (typeof window !== 'undefined') {
             window['config'] = _.cloneDeep(editorConfig.GENERIC_EDITOR.WINDOW_CONFIG);
             window['config'].build_number = buildNumber;
-            window['config'].headerLogo = 'https://staging.sunbirded.org/assets/images/sunbird_logo.png';
+            window['config'].headerLogo = '/logo.png';
             window['config'].lock = {};
             window['config'].extContWhitelistedDomains = extContWhitelistedDomains;
             window['config'].enableTelemetryValidation = false;
@@ -130,11 +167,23 @@ const GenericEditor: React.FC = () => {
     // Function to close the modal and navigate away
     const closeModal = () => {
         setShowLoader(false);
+
+        const previousPage = sessionStorage.getItem("previousPage");
         const editorElement = document.getElementById('genericEditor');
         if (editorElement) {
             editorElement.remove();
         }
-        window.history.back();
+        console.log("history", window.history.length);
+        // window.history.back();
+
+
+        if (previousPage) {
+            // window.location.href = previousPage; // Navigate to the previous URL
+            router.replace(previousPage);
+        } else {
+            // window.location.href = '/workspace/content/create';
+            router.replace('/workspace/content/create');
+        }
     };
 
     return (

@@ -13,12 +13,18 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
   onPageChange,
 }) => {
   return (
-    <Box display="flex" justifyContent="center" mt={2}>
+    <Box display="flex" className="pagination-bottom" justifyContent="end" mt={2}>
       <Pagination
         count={count}
         page={page + 1}
         color="primary"
         onChange={onPageChange}
+        sx={{
+
+          "& .Mui-selected": {
+            backgroundColor: "#FDBE16 !important",
+          },
+        }}
       />
     </Box>
   );

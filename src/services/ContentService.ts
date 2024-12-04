@@ -1,46 +1,138 @@
-import { stringify } from "json5";
-import { getLocalStoredUserData } from "./LocalStorageService";
-import { delApi, deleteApi, post } from "./RestClient";
+import { getLocalStoredUserId , getLocalStoredUserRole} from "./LocalStorageService";
+import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE } from "@/utils/app.config";
-const authToken = process.env.NEXT_PUBLIC_AUTH_API_TOKEN;
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+import { MIME_TYPE, CHANNEL_ID, TENANT_ID, FRAMEWORK_ID } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
+import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
 
-const userId = getLocalStoredUserData();
+const userId = getLocalStoredUserId();
 console.log("userId ==>", userId);
+
+export const getPrimaryCategory = async () => {
+  const apiURL = `/api/channel/v1/read/${CHANNEL_ID}`;
+  try {
+    const response = await get(apiURL);
+    return response?.data?.result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// const PrimaryCategoryData = async () => {
+//   const response = await getPrimaryCategory();
+//   const collectionPrimaryCategories =
+//     response?.channel?.collectionPrimaryCategories;
+//   const contentPrimaryCategories = response?.channel?.contentPrimaryCategories;
+
+//   const PrimaryCategory = [
+//     ...collectionPrimaryCategories,
+//     ...contentPrimaryCategories,
+//   ];
+//   return PrimaryCategory;
+// };
 
 const defaultReqBody = {
   request: {
     filters: {
       createdBy: userId,
-      primaryCategory: [
-        "Course Assessment",
-        "eTextbook",
-        "Explanation Content",
-        "Learning Resource",
-        "Practice Question Set",
-        "Teacher Resource",
-        "Exam Question",
-        "Content Playlist",
-        "Course",
-        "Digital Textbook",
-        "Question paper",
-      ],
     },
-    // query: "",
     sort_by: {
       lastUpdatedOn: "desc",
     },
   },
 };
-
+const upForReviewReqBody = {
+  request: {
+    filters: {
+    //  createdBy: { userId},
+    },
+    sort_by: {
+      lastUpdatedOn: "desc",
+    },
+  },
+}
 const getReqBodyWithStatus = (
   status: string[],
   query: string,
   limit: number,
-  offset: number
+  offset: number,
+  primaryCategory: any,
+  sort_by: any,
+  contentType?: string,
+  state?: string
 ) => {
+  if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+    var PrimaryCategory =
+      JSON.parse(localStorage.getItem("PrimaryCategory") as string) ||
+      PrimaryCategoryValue;
+  }
+  primaryCategory =
+    primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;
+    if(contentType==="discover-contents")
+{
+  const userRole = getLocalStoredUserRole();
+
+   if(state)
+   {
+    return {
+      ...upForReviewReqBody,
+      request: {
+        ...upForReviewReqBody.request,
+        filters: {
+          ...upForReviewReqBody.request.filters,
+          status,
+          primaryCategory,
+          createdBy:{"!=": getLocalStoredUserId()},
+        state:state
+  
+        },
+  
+        query,
+        limit,
+        offset,
+        sort_by,
+      },
+    };
+   }
+
+  return {
+    ...upForReviewReqBody,
+    request: {
+      ...upForReviewReqBody.request,
+      filters: {
+        ...upForReviewReqBody.request.filters,
+        status,
+        primaryCategory,
+        createdBy:{"!=":getLocalStoredUserId()}
+
+      },
+
+      query,
+      limit,
+      offset,
+      sort_by,
+    },
+  };
+}
+else if(contentType==="upReview")
+{
+  return {
+    ...upForReviewReqBody,
+    request: {
+      ...upForReviewReqBody.request,
+      filters: {
+        ...upForReviewReqBody.request.filters,
+        status,
+        primaryCategory,
+      },
+      query,
+      limit,
+      offset,
+      sort_by,
+    },
+  };
+}
+
   return {
     ...defaultReqBody,
     request: {
@@ -48,10 +140,12 @@ const getReqBodyWithStatus = (
       filters: {
         ...defaultReqBody.request.filters,
         status,
+        primaryCategory,
       },
       query,
       limit,
       offset,
+      sort_by,
     },
   };
 };
@@ -60,11 +154,24 @@ export const getContent = async (
   status: string[],
   query: string,
   limit: number,
-  offset: number
+  offset: number,
+  primaryCategory: string[],
+  sort_by: any,
+  contentType?: string,
+  state?: string
 ) => {
   const apiURL = "/action/composite/v3/search";
   try {
-    const reqBody = getReqBodyWithStatus(status, query, limit, offset);
+    const reqBody = getReqBodyWithStatus(
+      status,
+      query,
+      limit,
+      offset,
+      primaryCategory,
+      sort_by,
+      contentType,
+      state
+    );
     const response = await post(apiURL, reqBody);
     return response?.data?.result;
   } catch (error) {
@@ -80,7 +187,7 @@ export const createQuestionSet = async () => {
         name: "Untitled QuestionSet",
         mimeType: "application/vnd.sunbird.questionset",
         primaryCategory: "Practice Question Set",
-        code: "de1508e3-cd30-48ba-b4de-25a98d8cfdd2",
+        code: uuidv4(),
         createdBy: userId,
       },
     },
@@ -90,7 +197,7 @@ export const createQuestionSet = async () => {
     const response = await axios.post(apiURL, reqBody, {
       headers: {
         "Content-Type": "application/json",
-        tenantId: "ef99949b-7f3a-4a5f-806a-e67e683e38f3",
+        "tenantId": TENANT_ID,
       },
     });
     return response?.data;
@@ -106,8 +213,8 @@ export const deleteContent = async (identifier: string, mimeType: string) => {
   if (mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
     apiURL = questionsetRetireURL;
   } else if (
-    mimeType !== MIME_TYPE.QUESTIONSET_MIME_TYPE &&
-    mimeType !== MIME_TYPE.COLLECTION_MIME_TYPE
+    mimeType !== MIME_TYPE.QUESTIONSET_MIME_TYPE
+    // mimeType !== MIME_TYPE.COLLECTION_MIME_TYPE
   ) {
     apiURL = contentRetireURL;
   }
@@ -129,9 +236,8 @@ export const createCourse = async (userId: any) => {
         name: "Untitled Course",
         description: "Enter description for Course",
         createdBy: userId,
-        createdFor: ["test-k12-channel"],
+        createdFor: [CHANNEL_ID],
         mimeType: MIME_TYPE.COURSE_MIME_TYPE,
-
         resourceType: "Course",
         primaryCategory: "Course",
         contentType: "Course",
@@ -152,13 +258,16 @@ export const publishContent = async (identifier: any) => {
   const requestBody = {
     request: {
       content: {
-        lastPublishedBy: userId
-      }
-    }
+        lastPublishedBy: userId,
+      },
+    },
   };
 
   try {
-    const response = await axios.post(`/action/content/v3/publish/${identifier}`, requestBody);
+    const response = await axios.post(
+      `/action/content/v3/publish/${identifier}`,
+      requestBody
+    );
     return response.data;
   } catch (error) {
     console.error("Error during publishing:", error);
@@ -170,16 +279,48 @@ export const submitComment = async (identifier: any, comment: any) => {
   const requestBody = {
     request: {
       content: {
-        rejectComment: comment
-      }
-    }
+        rejectComment: comment,
+      },
+    },
   };
 
   try {
-    const response = await axios.post(`/action/content/v3/reject/${identifier}`, requestBody);
+    const response = await axios.post(
+      `/action/content/v3/reject/${identifier}`,
+      requestBody
+    );
     return response.data;
   } catch (error) {
     console.error("Error submitting comment:", error);
     throw error;
+  }
+};
+
+export const getContentHierarchy = async ({
+  doId,
+}: {
+  doId: string;
+}): Promise<any> => {
+  const apiUrl: string = `/action/content/v3/hierarchy/${doId}`;
+
+  try {
+    console.log('Request data', apiUrl);
+    const response = await get(apiUrl);
+    // console.log('response', response);
+    return response;
+  } catch (error) {
+    console.error('Error in getContentHierarchy Service', error);
+    throw error;
+  }
+};
+export const getFrameworkDetails = async (): Promise<any> => {
+  const apiUrl: string = `/api/framework/v1/read/${FRAMEWORK_ID}`;
+
+  try {
+    const response = await axios.get(apiUrl);
+    return response?.data;
+  } catch (error) {
+    console.error('Error in getting Framework Details', error);
+    return error;
   }
 };

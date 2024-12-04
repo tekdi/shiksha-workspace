@@ -37,25 +37,26 @@ import useSharedStore from "@/utils/useSharedState";
 
 // ]
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "200px" },
+  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "350px" },
+  { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
+
+  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "100px" },
+  { key: 'state', title: 'STATE', dataType: DataType.String, width: "100px" },
+
   { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
-  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'contentAction', title: 'ACTION', dataType: DataType.String, width: "100px" },
+  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "100px" },
 
 
 ]
-const AllContentsPage = () => {
+const ContentsPage = () => {
   const theme = useTheme<any>();
 
-  const [selectedKey, setSelectedKey] = useState("allContents");
+  const [selectedKey, setSelectedKey] = useState("discover-contents");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("Modified On");
-  const [statusBy, setStatusBy] = useState("All");
-
  const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
 
@@ -67,7 +68,8 @@ const AllContentsPage = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
   const [totalCount, setTotalCount] = useState(0);
-  
+  const [state, setState] = useState("All");
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
   };
@@ -101,51 +103,23 @@ const AllContentsPage = () => {
     console.log("sortBy", sortBy)
     setSortBy(sortBy);
   };
-  const handleStatusChange = (statusBy: string) => {
-    setStatusBy(statusBy);
+  const handleStateChange = (state: string) => {
+    setState(state)
   };
-
 
   useEffect(() => {
     const getContentList = async () => {
       try {
         setLoading(true);
-        let status=[
-          "Draft",
-          "FlagDraft",
-          "Review",
-          "Processing",
+        const status = [
+          // "Draft",
+          // "FlagDraft",
+          // "Review",
+          // "Processing",
           "Live",
-          "Unlisted",
-          "FlagReview",
+          // "Unlisted",
+          // "FlagReview",
         ];
-        if (statusBy === "" || statusBy === "All") {
-           status = [
-            "Draft",
-            "FlagDraft",
-            "Review",
-            "Processing",
-            "Live",
-            "Unlisted",
-            "FlagReview",
-          ];
-        }
-        else if (statusBy === "Live") {
-          status = ["Live"];
-        }
-        else if (statusBy === "Review") {
-          status = ["Review"];
-        }
-        else if (statusBy === "Draft") {
-          status = ["Draft"];
-        }
-        else if (statusBy === "Unlisted") {
-          status = ["Unlisted"];
-        }
-        else if (statusBy === "FlagReview") {
-          status = ["FlagReview"];
-        }
-     
         const query = debouncedSearchTerm || "";
         const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
@@ -153,14 +127,33 @@ const AllContentsPage = () => {
           lastUpdatedOn: order,
         };
         const offset = page * LIMIT;
-        const response = await getContent(
-          status,
-          query,
-          LIMIT,
-          offset,
-          primaryCategory,
-          sort_by
-        );
+        const contentType="discover-contents"
+let response;
+if(state!=="All")
+{
+  response = await getContent(
+    status,
+    query,
+    LIMIT,
+    offset,
+    primaryCategory,
+    sort_by,
+    contentType,
+    state
+  );
+}
+else{
+  response = await getContent(
+    status,
+    query,
+    LIMIT,
+    offset,
+    primaryCategory,
+    sort_by,
+    contentType
+  );
+}
+        
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
@@ -172,7 +165,7 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, statusBy, page]);
+  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, state, page]);
 
   useEffect(() => {
     const filteredArray = contentList.map(item => ({
@@ -185,8 +178,10 @@ const AllContentsPage = () => {
       identifier: item.identifier,
       mimeType: item.mimeType,
       mode: item.mode,
-      description: item?.description
-
+      creator: item.creator,
+      description: item?.description,
+      state: item?.state,
+      author: item.author
     }));
     setData(filteredArray)
     console.log(filteredArray)
@@ -216,7 +211,7 @@ const AllContentsPage = () => {
       <Box p={3}>
         <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: totalCount > LIMIT ? '15px' : '0px' }}>
           <Box p={2}>
-            <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "16px" }}>All My Contents</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "16px" }}>Discover Contents</Typography>
           </Box>
           {/* <Typography mb={2}>Here you see all your content.</Typography> */}
 
@@ -226,8 +221,8 @@ const AllContentsPage = () => {
               onSearch={handleSearch}
               onFilterChange={handleFilterChange}
               onSortChange={handleSortChange}
-              onStatusChange={handleStatusChange}
-              allContents={true}
+              onStateChange={handleStateChange}
+              discoverContents={true}
             />
           </Box>
               {loading ? (
@@ -235,7 +230,7 @@ const AllContentsPage = () => {
           ) : (
             <>
                 <Box className="table-ka-container">
-                  <KaTableComponent columns={columns} tableTitle="all-content" data={data} />
+                  <KaTableComponent columns={columns} tableTitle="discover-contents" data={data} />
                 </Box>
               </>
           )}
@@ -255,4 +250,4 @@ const AllContentsPage = () => {
   );
 };
 
-export default AllContentsPage;
+export default ContentsPage;
