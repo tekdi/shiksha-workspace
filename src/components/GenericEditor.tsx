@@ -73,7 +73,9 @@ const GenericEditor: React.FC = () => {
             $('#genericEditor').iziModal({
                 title: '',
                 iframe: true,
-                iframeURL: `generic-editor/index.html?${buildNumber}`,
+                //online from tekdinext
+                iframeURL: `https://sunbird-editor.tekdinext.com/index.html`,
+                //iframeURL: `generic-editor/index.html?${buildNumber}`,
                 navigateArrows: false,
                 fullscreen: true,
                 openFullscreen: true,

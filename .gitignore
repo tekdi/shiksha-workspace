@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#generic editor
+public/content-plugins
+public/generic-editor
+.env

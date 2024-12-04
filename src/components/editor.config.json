@@ -1,6 +1,7 @@
 {
     "GENERIC_EDITOR": {
         "WINDOW_CONFIG": {
+            "baseURL": "http://localhost:3000",
             "corePluginsPackaged": true,
             "modalId": "genericEditor",
             "dispatcher": "local",
