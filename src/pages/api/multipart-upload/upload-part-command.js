@@ -1,10 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import {
-  S3Client,
-  CreateMultipartUploadCommand,
-  UploadPartCommand,
-  CompleteMultipartUploadCommand,
-} from "@aws-sdk/client-s3";
+import { S3Client, UploadPartCommand } from "@aws-sdk/client-s3";
 
 // Initialize AWS S3 client
 const s3Client = new S3Client({
