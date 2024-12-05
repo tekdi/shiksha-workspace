@@ -17,9 +17,35 @@ const GenericEditor: React.FC = () => {
     const videoMaxSize = "150";
     const defaultContentFileSize = "150";
     let isLargeFileUpload = false;
+
     if (editorforlargecontent) {
         isLargeFileUpload = true;
     }
+
+    const handlePopState = (event: any) => {
+
+        console.log('popstate event fired', event.state);
+        window.location.hash = 'no';
+        if (event.state) {
+            // Push the current state back to prevent navigation
+            // window.history.pushState(null, '', window.location.href);
+            alert('Please use the "x" button to exit this page.');
+            window.location.hash = 'no';
+        }
+        window.location.hash = 'no';
+    };
+
+    useEffect(() => {
+        // Listen for the popstate event
+        window.location.hash = 'no';
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            // Clean up event listener
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -45,21 +71,6 @@ const GenericEditor: React.FC = () => {
                     console.error('Error:', error);
                     closeModal();
                 });
-
-            const popstateListener = (event: PopStateEvent) => {
-                window.location.hash = 'no';
-                if (event.state) {
-                    console.log('popstate', event.state);
-                    alert('To close this resource, save and click the X icon');
-                    window.location.hash = 'no';
-                }
-            };
-            window.addEventListener('popstate', popstateListener);
-
-            // Cleanup function
-            return () => {
-                window.removeEventListener('popstate', popstateListener);
-            };
         }
     }, [identifier]);
 
@@ -154,11 +165,23 @@ const GenericEditor: React.FC = () => {
     // Function to close the modal and navigate away
     const closeModal = () => {
         setShowLoader(false);
+
+        const previousPage = sessionStorage.getItem("previousPage");
         const editorElement = document.getElementById('genericEditor');
         if (editorElement) {
             editorElement.remove();
         }
-        window.history.back();
+        console.log("history", window.history.length);
+        // window.history.back();
+
+
+        if (previousPage) {
+            // window.location.href = previousPage; // Navigate to the previous URL
+            router.replace(previousPage);
+        } else {
+            // window.location.href = '/workspace/content/create';
+            router.replace('/workspace/content/create');
+        }
     };
 
     return (
