@@ -73,7 +73,8 @@
             ],
             "headerConfig": {
                 "managecollaborator": false
-            }
+            },
+            "branding" : "Pratham"
         },
         "WINDOW_CONTEXT": {
             "user": {
