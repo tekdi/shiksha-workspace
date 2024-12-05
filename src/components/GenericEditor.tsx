@@ -101,8 +101,7 @@ const GenericEditor: React.FC = () => {
                 title: '',
                 iframe: true,
                 //online from tekdinext
-                iframeURL: `https://sunbird-editor.tekdinext.com/index.html`,
-                //iframeURL: `generic-editor/index.html?${buildNumber}`,
+                iframeURL: `generic-editor/index.html?${buildNumber}`,
                 navigateArrows: false,
                 fullscreen: true,
                 openFullscreen: true,
@@ -159,7 +158,9 @@ const GenericEditor: React.FC = () => {
             window['config'].defaultContentFileSize = defaultContentFileSize;
             window['config'].cloudStorage = {
                 provider: 'aws',
-                presigned_headers: {}
+                presigned_headers: {
+                    "x-amz-acl": "private" // This header sets access control; it's specific to AWS S3.
+                }
             };
         }
     };
