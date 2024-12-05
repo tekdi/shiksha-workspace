@@ -2,7 +2,7 @@ import "reflect-metadata";
 import React, { useEffect } from "react";
 import { useRef } from "react";
 import $ from "jquery";
-import { handleExitEvent } from "@/utils/Helper";
+import { getTelemetryEvents, handleExitEvent } from "@/utils/Helper";
 interface PlayerConfigProps {
   playerConfig: any;
 }
@@ -38,8 +38,8 @@ const SunbirdQuMLPlayer = ({ playerConfig }: PlayerConfigProps) => {
     };
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
+      getTelemetryEvents(event.detail, "quml");
     };
-
     // Ensure the script has loaded before adding event listeners
     script.onload = () => {
       playerElement?.addEventListener("playerEvent", handlePlayerEvent);
