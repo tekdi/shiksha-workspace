@@ -25,6 +25,10 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
   const theme = useTheme<any>();
   const [open, setOpen] = useState(false);
 
+
+  console.log(data)
+  console.log(columns)
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -59,42 +63,42 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       case 'publish':
         mode = "read";
         break;
-        case 'discover-contents':
+      case 'discover-contents':
         mode = "read";
         break;
       case 'submitted':
         mode = "read";
         break;
-        case 'upForReview':
+      case 'upForReview':
         mode = "review";
         break;
-        case 'all-content':
-          mode=content?.status==="Draft"|| content?.status==="Live" ?"edit":"review"
-          break;
+      case 'all-content':
+        mode = content?.status === "Draft" || content?.status === "Live" ? "edit" : "review"
+        break;
       // Default case for "all-content" or any other values if mode is already defined in content
       default:
-        mode = mode ||"read" ;
+        mode = mode || "read";
         break;
     }
 
     // Generic routing for cases other than 'draft'
-   
-    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE ) {
+
+    if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
       router.push({ pathname: `/editor`, query: { identifier, mode } });
     }
-    else if ( tableTitle==='submitted')  {
-      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode }}) : 
-      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
+    else if (tableTitle === 'submitted') {
+      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode } }) :
+        router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
     }
-    else if ( tableTitle==='all-content' && mode==="review")  {
-      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isReadOnly: true } }) : 
+    else if (tableTitle === 'all-content' && mode === "review") {
+      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isReadOnly: true } }) :
         router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isReadOnly: true } });
     }
-    else if ( tableTitle==='discover-contents')  {
-      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isDiscoverContent: true } }) : 
-      router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
+    else if (tableTitle === 'discover-contents') {
+      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isDiscoverContent: true } }) :
+        router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
     }
-     else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
+    else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
       localStorage.setItem('contentCreatedBy', content?.createdBy);
       console.log(content)
       const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
@@ -104,195 +108,215 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
       router.push({ pathname: `/collection`, query: { identifier, mode } });
     }
   };
- return (
+  return (
     <>
-     <KaTable
-      columns={columns}
-      data={data}
-      // editingMode={EditingMode.Cell}
-      rowKeyField={'id'}
-      sortingMode={SortingMode.Single}
-      childComponents={{
-        cellText: {
-          content: (props) => {
-            if (props.column.key === 'name' || props.column.key === "title_and_description") {
-              return (
-                <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }} onClick={() => openEditor(props.rowData)} >
-                  <Grid container alignItems="center" spacing={1}>
-                    <Grid item xs={3} md={3} lg={3} xl={2}>
-                      {props.rowData.image ? (
-                        <Box
-                          style={{
-                            width: "60px",
-                            height: "40px",
-                            padding: "10px",
-                            borderRadius: "8px",
-                            overflow: "hidden",
-                            // background: '#F1E6D6'
-                          }}
-                        >
-                          <img
-                            src={props.rowData.image || '/logo.png'}
-                            alt="Image"
+      <KaTable
+        columns={columns}
+        data={data}
+        // editingMode={EditingMode.Cell}
+        rowKeyField={'id'}
+        sortingMode={SortingMode.Single}
+        childComponents={{
+          cellText: {
+            content: (props) => {
+              if (props.column.key === 'name' || props.column.key === "title_and_description") {
+                return (
+                  <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }} onClick={() => openEditor(props.rowData)} >
+                    <Grid container alignItems="center" spacing={1}>
+                      <Grid item xs={3} md={3} lg={3} xl={2}>
+                        {props.rowData.image ? (
+                          <Box
                             style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
+                              width: "60px",
+                              height: "40px",
+                              padding: "10px",
                               borderRadius: "8px",
+                              overflow: "hidden",
+                              // background: '#F1E6D6'
                             }}
-                          />
-                        </Box>
-                      ) : props.column.key === 'name' ? (
-                        <Box
-                          style={{
-                            width: "60px",
-                            height: "40px",
-                            padding: "10px",
-                            borderRadius: "8px",
-                            
-                            overflow: "hidden",
-                            // background: '#F1E6D6'
-                          }}
-                        >
-                          <img
-                            src={'/logo.png'}
-                            height="25px"
-                            alt="Image"
+                          >
+                            <img
+                              src={props.rowData.image || '/logo.png'}
+                              alt="Image"
+                              style={{
+                                maxWidth: "100%",
+                                height: "auto%",
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                              }}
+                            />
+                          </Box>
+                        ) : props.column.key === 'name' ? (
+                          <Box
                             style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
+                              width: "60px",
+                              height: "40px",
+                              padding: "10px",
                               borderRadius: "8px",
-                            }}
 
-                          />
-                        </Box>
-                      ) : (
-                        <Box
-                          style={{
-                            width: "60px",
-                            height: "40px",
-                            padding: "10px", // Fixed casing
-                            borderRadius: "8px",
-                            
-                            overflow: "hidden", // Ensures content doesn't overflow the box
-                            // background: '#F1E6D6'
-                          }}
-                        >
-                          <img
-                            src={'/logo.png'}
-                            height="25px"
-                            alt="Image"
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              borderRadius: "8px",
+                              overflow: "hidden",
+                              // background: '#F1E6D6'
                             }}
+                          >
+                            <img
+                              src={'/logo.png'}
+                              height="25px"
+                              alt="Image"
+                              style={{
+                                maxWidth: "100%",
+                                height: "auto%",
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                              }}
 
-                          />
-                        </Box>
-                      )}
-                    </Grid>
-                    <Grid item xs={9} md={9} lg={9} xl={10}>
-                      <div>
+                            />
+                          </Box>
+                        ) : (
+                          <Box
+                            style={{
+                              width: "60px",
+                              height: "40px",
+                              padding: "10px", // Fixed casing
+                              borderRadius: "8px",
+
+                              overflow: "hidden", // Ensures content doesn't overflow the box
+                              // background: '#F1E6D6'
+                            }}
+                          >
+                            <img
+                              src={'/logo.png'}
+                              height="25px"
+                              alt="Image"
+                              style={{
+                                maxWidth: "100%",
+                                height: "auto",
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                              }}
+
+                            />
+                          </Box>
+                        )}
+                      </Grid>
+                      <Grid item xs={9} md={9} lg={9} xl={10}>
                         <div>
-                          <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
+                          <div>
+                            <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
+                          </div>
+                          <div>
+                            <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px' }} className='two-line-text' color={theme.palette.warning['A200']}>
+                              {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
+                            </Typography>
+                          </div>
                         </div>
-                        <div>
-                          <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px' }} className='two-line-text' color={theme.palette.warning['A200']}>
-                            {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
-                          </Typography>
-                        </div>
-                      </div>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                  
-                  
-                </div>
-              );
-            }
-            else if (props.column.key === "status") {
-              if (props.rowData.status === "Draft") {
-                return (
-                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
-                    {props.rowData.status}
-                  </Typography>
-                )
-              }
-              if (props.rowData.status === "Review") {
-                return (
-                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#BA1A1A'}>
-                    {props.rowData.status}
-                  </Typography>
-                )
-              }
-              if (props.rowData.status === "Live") {
-                return (
-                  <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#06A816'}>
-                    {props.rowData.status}
-                  </Typography>
-                )
-              }
-            }
-            else if(props.column.key === "create-by")
-            {
-              console.log('props.rowData ====>', props.rowData)
-              if(props?.rowData?.creator || props?.rowData?.author)
-              return (
-                <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
-                  {props?.rowData?.creator || props?.rowData?.author}
-                </Typography>
-              )
-              else
-              return (
-                <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
-                  -
-                </Typography>
-              )
 
-            }
-            else if (props.column.key === 'contentAction') {
-               {
-                return (
-                  <>
-                  
-                  
-                  
-                   <ActionIcon
-                   rowData={props.rowData}
-                 /></>
-                  
+
+                  </div>
                 );
               }
-            }
-            else if (props.column.key === 'action') {
+              else if (props.column.key === "status") {
+                if (props.rowData.status === "Draft") {
+                  return (
+                    <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" className='one-line-text' color={'#987100'}>
+                      {props.rowData.status}
+                    </Typography>
+                  )
+                }
+                if (props.rowData.status === "Review") {
+                  return (
+                    <Typography className='one-line-text' sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#BA1A1A'}>
+                      {props.rowData.status}
+                    </Typography>
+                  )
+                }
+                if (props.rowData.status === "Live") {
+                  return (
+                    <Typography className='one-line-text' sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#06A816'}>
+                      {props.rowData.status}
+                    </Typography>
+                  )
+                }
+              }
+
+              else if (props.column.key === "create-by") {
+                console.log('props.rowData ====>', props.rowData)
+                if (props?.rowData?.creator || props?.rowData?.author)
+                  return (
+                    <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
+                      {props?.rowData?.creator || props?.rowData?.author}
+                    </Typography>
+                  )
+                else
+                  return (
+                    <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
+                      -
+                    </Typography>
+                  )
+
+              }
+              else if (props.column.key === 'contentAction') {
+                {
+                  return (
+                    <>
 
 
-              return (
-                <Box
-                  onClick={handleOpen}
 
-                >
-                  
-                         <ActionIcon
-                   rowData={props.rowData}
-                 
-                 />
+                      <ActionIcon
+                        rowData={props.rowData}
+                      /></>
 
-                </Box>
-              );
-            }
-            return props.children; 
+                  );
+                }
+              }
+              else if (props.column.key === 'action') {
+
+
+                return (
+                  <Box
+                    onClick={handleOpen}
+
+                  >
+
+                    <ActionIcon
+                      rowData={props.rowData}
+
+                    />
+
+                  </Box>
+                );
+              }
+
+
+              else if (props.column.key === "contentType") {
+                return (
+                  <Typography className='one-line-text' sx={{ fontSize: '14px', }} variant="body2" >
+                    {props?.rowData?.contentType}
+
+                  </Typography>
+                );
+
+              } else if (props.column.key === "lastUpdatedOn") {
+                return (
+                  <Typography className='one-line-text' sx={{ fontSize: '14px', }} variant="body2" >
+                    {props?.rowData?.lastUpdatedOn}
+
+                  </Typography>
+                );
+
+              }
+
+              return props.children;
+            },
           },
-        },
-      }}
-      noData={{
-        text: "No data found",
-      }}
-    />
+        }}
+        noData={{
+          text: "No data found",
+        }}
+      />
     </>
-   
+
   );
 };
 
