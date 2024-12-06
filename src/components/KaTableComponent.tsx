@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Table as KaTable } from 'ka-table';
-import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
-import { Typography, useTheme, IconButton, Box, Grid } from '@mui/material';
-import UpReviewTinyImage from '@mui/icons-material/LibraryBooks';
+import React, { useState } from "react";
+import { Table as KaTable } from "ka-table";
+import { DataType, EditingMode, SortingMode } from "ka-table/enums";
+import { Typography, useTheme, IconButton, Box, Grid } from "@mui/material";
+import UpReviewTinyImage from "@mui/icons-material/LibraryBooks";
 import "ka-table/style.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import router from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
 import Image from "next/image";
-import ActionIcon from './ActionIcon';
-import { Padding } from '@mui/icons-material';
+import ActionIcon from "./ActionIcon";
+import { Padding } from "@mui/icons-material";
 interface CustomTableProps {
   data: any[]; // Define a more specific type for your data if needed
   columns: Array<{
@@ -18,16 +18,19 @@ interface CustomTableProps {
     dataType: DataType;
   }>;
   handleDelete?: any;
-  tableTitle?: string
+  tableTitle?: string;
 }
 
-const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitle }) => {
+const KaTableComponent: React.FC<CustomTableProps> = ({
+  data,
+  columns,
+  tableTitle,
+}) => {
   const theme = useTheme<any>();
   const [open, setOpen] = useState(false);
 
-
-  console.log(data)
-  console.log(columns)
+  console.log(data);
+  console.log(columns);
 
   const handleClose = () => {
     setOpen(false);
@@ -35,17 +38,18 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
   const handleOpen = () => setOpen(true);
 
   const openEditor = (content: any) => {
-    console.log("content", content)
+    console.log("content", content);
     const identifier = content?.identifier;
     let mode = content?.mode; // default mode from content, can be overwritten by tableTitle
-    switch (tableTitle) {
-      case 'draft':
-        mode = !mode ? "edit" : mode;
 
+    switch (tableTitle) {
+      case "draft":
+        mode = !mode ? "edit" : mode;
+        localStorage.setItem("contentMode", mode);
 
         // Use draft-specific routing
         if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
-          router.push({ pathname: `/editor`, query: { identifier, mode } });
+          router.push({ pathname: `/editor`, query: { identifier } });
         } else if (
           content?.mimeType &&
           MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
@@ -56,72 +60,111 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
           content?.mimeType &&
           MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
         ) {
-          router.push({ pathname: `/collection`, query: { identifier, mode } });
+          router.push({ pathname: `/collection`, query: { identifier } });
         }
         return; // Exit early since draft has specific routing logic
 
-      case 'publish':
+      case "publish":
+      case "discover-contents":
+      case "submitted":
         mode = "read";
         break;
-      case 'discover-contents':
-        mode = "read";
-        break;
-      case 'submitted':
-        mode = "read";
-        break;
-      case 'upForReview':
+
+      case "upForReview":
         mode = "review";
         break;
-      case 'all-content':
-        mode = content?.status === "Draft" || content?.status === "Live" ? "edit" : "review"
+
+      case "all-content":
+        mode =
+          content?.status === "Draft" || content?.status === "Live"
+            ? "edit"
+            : "review";
         break;
-      // Default case for "all-content" or any other values if mode is already defined in content
+
       default:
         mode = mode || "read";
         break;
     }
 
-    // Generic routing for cases other than 'draft'
+    // Save mode in localStorage
+    localStorage.setItem("contentMode", mode);
 
+    // Generic routing for cases other than 'draft'
     if (content?.mimeType === MIME_TYPE.QUESTIONSET_MIME_TYPE) {
-      router.push({ pathname: `/editor`, query: { identifier, mode } });
-    }
-    else if (tableTitle === 'submitted') {
-      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode } }) :
-        router.push({ pathname: `/workspace/content/review`, query: { identifier, mode } });
-    }
-    else if (tableTitle === 'all-content' && mode === "review") {
-      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isReadOnly: true } }) :
-        router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isReadOnly: true } });
-    }
-    else if (tableTitle === 'discover-contents') {
-      content.contentType === "Course" ? router.push({ pathname: `/course-hierarchy/${identifier}`, query: { identifier, mode, isDiscoverContent: true } }) :
-        router.push({ pathname: `/workspace/content/review`, query: { identifier, mode, isDiscoverContent: true } });
-    }
-    else if (content?.mimeType && MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)) {
-      localStorage.setItem('contentCreatedBy', content?.createdBy);
-      console.log(content)
-      const pathname = tableTitle === 'upForReview' ? `/workspace/content/review` : `/upload-editor`;
-      // content.contentType === "Course" ? router.push({ pathname:`/course-hierarchy/${identifier}`, query: { identifier, mode } }) :
-      router.push({ pathname, query: { identifier, mode } });
-    } else if (content?.mimeType && MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)) {
-      router.push({ pathname: `/collection`, query: { identifier, mode } });
+      router.push({ pathname: `/editor`, query: { identifier } });
+    } else if (tableTitle === "submitted") {
+      content.contentType === "Course"
+        ? router.push({
+            pathname: `/course-hierarchy/${identifier}`,
+            query: { identifier },
+          })
+        : router.push({
+            pathname: `/workspace/content/review`,
+            query: { identifier },
+          });
+    } else if (tableTitle === "all-content" && mode === "review") {
+      content.contentType === "Course"
+        ? router.push({
+            pathname: `/course-hierarchy/${identifier}`,
+            query: { identifier, isReadOnly: true },
+          })
+        : router.push({
+            pathname: `/workspace/content/review`,
+            query: { identifier, isReadOnly: true },
+          });
+    } else if (tableTitle === "discover-contents") {
+      content.contentType === "Course"
+        ? router.push({
+            pathname: `/course-hierarchy/${identifier}`,
+            query: { identifier, isDiscoverContent: true },
+          })
+        : router.push({
+            pathname: `/workspace/content/review`,
+            query: { identifier, isDiscoverContent: true },
+          });
+    } else if (
+      content?.mimeType &&
+      MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
+    ) {
+      localStorage.setItem("contentCreatedBy", content?.createdBy);
+      console.log(content);
+      const pathname =
+        tableTitle === "upForReview"
+          ? `/workspace/content/review`
+          : `/upload-editor`;
+      router.push({ pathname, query: { identifier } });
+    } else if (
+      content?.mimeType &&
+      MIME_TYPE.COLLECTION_MIME_TYPE.includes(content?.mimeType)
+    ) {
+      router.push({ pathname: `/collection`, query: { identifier } });
     }
   };
+
   return (
     <>
       <KaTable
         columns={columns}
         data={data}
         // editingMode={EditingMode.Cell}
-        rowKeyField={'id'}
+        rowKeyField={"id"}
         sortingMode={SortingMode.Single}
         childComponents={{
           cellText: {
             content: (props) => {
-              if (props.column.key === 'name' || props.column.key === "title_and_description") {
+              if (
+                props.column.key === "name" ||
+                props.column.key === "title_and_description"
+              ) {
                 return (
-                  <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }} onClick={() => openEditor(props.rowData)} >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => openEditor(props.rowData)}
+                  >
                     <Grid container alignItems="center" spacing={1}>
                       <Grid item xs={3} md={3} lg={3} xl={2}>
                         {props.rowData.image ? (
@@ -136,7 +179,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             }}
                           >
                             <img
-                              src={props.rowData.image || '/logo.png'}
+                              src={props.rowData.image || "/logo.png"}
                               alt="Image"
                               style={{
                                 maxWidth: "100%",
@@ -146,7 +189,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                               }}
                             />
                           </Box>
-                        ) : props.column.key === 'name' ? (
+                        ) : props.column.key === "name" ? (
                           <Box
                             style={{
                               width: "60px",
@@ -159,7 +202,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             }}
                           >
                             <img
-                              src={'/logo.png'}
+                              src={"/logo.png"}
                               height="25px"
                               alt="Image"
                               style={{
@@ -168,7 +211,6 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                                 objectFit: "cover",
                                 borderRadius: "8px",
                               }}
-
                             />
                           </Box>
                         ) : (
@@ -184,7 +226,7 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                             }}
                           >
                             <img
-                              src={'/logo.png'}
+                              src={"/logo.png"}
                               height="25px"
                               alt="Image"
                               style={{
@@ -193,7 +235,6 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                                 objectFit: "cover",
                                 borderRadius: "8px",
                               }}
-
                             />
                           </Box>
                         )}
@@ -201,110 +242,132 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
                       <Grid item xs={9} md={9} lg={9} xl={10}>
                         <div>
                           <div>
-                            <Typography variant="body1" sx={{ fontWeight: 500, color: '#1F1B13', fontSize: '14px' }} className='one-line-text'>{props.rowData.name}</Typography>
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                fontWeight: 500,
+                                color: "#1F1B13",
+                                fontSize: "14px",
+                              }}
+                              className="one-line-text"
+                            >
+                              {props.rowData.name}
+                            </Typography>
                           </div>
                           <div>
-                            <Typography variant="body2" sx={{ fontWeight: 400, color: '#635E57', fontSize: '12px' }} className='two-line-text' color={theme.palette.warning['A200']}>
-                              {props.column.key === 'name' ? props.rowData.primaryCategory : props.rowData.description}
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                fontWeight: 400,
+                                color: "#635E57",
+                                fontSize: "12px",
+                              }}
+                              className="two-line-text"
+                              color={theme.palette.warning["A200"]}
+                            >
+                              {props.column.key === "name"
+                                ? props.rowData.primaryCategory
+                                : props.rowData.description}
                             </Typography>
                           </div>
                         </div>
                       </Grid>
                     </Grid>
-
-
                   </div>
                 );
-              }
-              else if (props.column.key === "status") {
+              } else if (props.column.key === "status") {
                 if (props.rowData.status === "Draft") {
                   return (
-                    <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" className='one-line-text' color={'#987100'}>
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500 }}
+                      variant="body2"
+                      className="one-line-text"
+                      color={"#987100"}
+                    >
                       {props.rowData.status}
                     </Typography>
-                  )
+                  );
                 }
                 if (props.rowData.status === "Review") {
                   return (
-                    <Typography className='one-line-text' sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#BA1A1A'}>
+                    <Typography
+                      className="one-line-text"
+                      sx={{ fontSize: "14px", fontWeight: 500 }}
+                      variant="body2"
+                      color={"#BA1A1A"}
+                    >
                       {props.rowData.status}
                     </Typography>
-                  )
+                  );
                 }
                 if (props.rowData.status === "Live") {
                   return (
-                    <Typography className='one-line-text' sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#06A816'}>
+                    <Typography
+                      className="one-line-text"
+                      sx={{ fontSize: "14px", fontWeight: 500 }}
+                      variant="body2"
+                      color={"#06A816"}
+                    >
                       {props.rowData.status}
                     </Typography>
-                  )
+                  );
                 }
-              }
-
-              else if (props.column.key === "create-by") {
-                console.log('props.rowData ====>', props.rowData)
+              } else if (props.column.key === "create-by") {
+                console.log("props.rowData ====>", props.rowData);
                 if (props?.rowData?.creator || props?.rowData?.author)
                   return (
-                    <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500 }}
+                      variant="body2"
+                      color={"#987100"}
+                    >
                       {props?.rowData?.creator || props?.rowData?.author}
                     </Typography>
-                  )
+                  );
                 else
                   return (
-                    <Typography sx={{ fontSize: '14px', fontWeight: 500 }} variant="body2" color={'#987100'}>
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500 }}
+                      variant="body2"
+                      color={"#987100"}
+                    >
                       -
                     </Typography>
-                  )
-
-              }
-              else if (props.column.key === 'contentAction') {
+                  );
+              } else if (props.column.key === "contentAction") {
                 {
                   return (
                     <>
-
-
-
-                      <ActionIcon
-                        rowData={props.rowData}
-                      /></>
-
+                      <ActionIcon rowData={props.rowData} />
+                    </>
                   );
                 }
-              }
-              else if (props.column.key === 'action') {
-
-
+              } else if (props.column.key === "action") {
                 return (
-                  <Box
-                    onClick={handleOpen}
-
-                  >
-
-                    <ActionIcon
-                      rowData={props.rowData}
-
-                    />
-
+                  <Box onClick={handleOpen}>
+                    <ActionIcon rowData={props.rowData} />
                   </Box>
                 );
-              }
-
-
-              else if (props.column.key === "contentType") {
+              } else if (props.column.key === "contentType") {
                 return (
-                  <Typography className='one-line-text' sx={{ fontSize: '14px', }} variant="body2" >
+                  <Typography
+                    className="one-line-text"
+                    sx={{ fontSize: "14px" }}
+                    variant="body2"
+                  >
                     {props?.rowData?.contentType}
-
                   </Typography>
                 );
-
               } else if (props.column.key === "lastUpdatedOn") {
                 return (
-                  <Typography className='one-line-text' sx={{ fontSize: '14px', }} variant="body2" >
+                  <Typography
+                    className="one-line-text"
+                    sx={{ fontSize: "14px" }}
+                    variant="body2"
+                  >
                     {props?.rowData?.lastUpdatedOn}
-
                   </Typography>
                 );
-
               }
 
               return props.children;
@@ -316,7 +379,6 @@ const KaTableComponent: React.FC<CustomTableProps> = ({ data, columns, tableTitl
         }}
       />
     </>
-
   );
 };
 
