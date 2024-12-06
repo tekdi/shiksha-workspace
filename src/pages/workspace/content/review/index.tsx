@@ -189,7 +189,7 @@ const ReviewContentSubmissions = () => {
   return (
     <Card sx={{ padding: 2, backgroundColor: "white" }}>
            { publishOpenToast && (<ToastNotification message="Content published Successfully" type= "success" />)}
-           { requestOpenToast && (<ToastNotification message="Requested changes Successfully" type= "success" />)}
+           { requestOpenToast && (<ToastNotification message="Requested for changes successfully" type= "success" />)}
 
 
       <Box
