@@ -180,7 +180,8 @@ const UpForReviewPage = () => {
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
-              onPageChange={(event, newPage) => setPage(newPage - 1)}
+              setPage={setPage}
+               onPageChange={(event, newPage) => setPage(newPage - 1)}
             />
           )}
         </Box>

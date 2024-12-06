@@ -172,6 +172,7 @@ const SubmittedForReviewPage = () => {
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
+              setPage={setPage}
               onPageChange={(event, newPage) => setPage(newPage - 1)}
             />
           )}
