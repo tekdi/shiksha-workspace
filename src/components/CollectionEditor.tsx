@@ -13,8 +13,8 @@ import {
 } from "@/services/LocalStorageService";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
-  const { identifier, mode } = router.query;
-
+  const { identifier } = router.query;
+  const [mode, setMode] = useState<any>();
   const [fullName, setFullName] = useState("Anonymous User");
   const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("");
@@ -24,6 +24,8 @@ const CollectionEditor: React.FC = () => {
   useEffect(() => {
     const storedFullName = getLocalStoredUserName();
     const storedUserId = getLocalStoredUserId() || TENANT_ID;
+    const storedMode = localStorage.getItem("contentMode");
+    setMode(storedMode || "edit");
     setFullName(storedFullName ?? "Anonymous User");
     setUserId(storedUserId);
 
