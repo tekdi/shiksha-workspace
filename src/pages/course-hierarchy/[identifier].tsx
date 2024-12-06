@@ -132,14 +132,3 @@ export async function getStaticPaths() {
     fallback: "blocking",
   };
 }
-
-export async function getStaticProps({ locale, params }: any) {
-  const { identifier } = params;
-
-  return {
-    props: {
-      identifier,
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
-}
