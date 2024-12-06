@@ -125,21 +125,3 @@ export default function CourseHierarchy() {
 
   return <RecursiveAccordion data={courseHierarchyData} />
 }
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-}
-
-export async function getStaticProps({ locale, params }: any) {
-  const { identifier } = params;
-
-  return {
-    props: {
-      identifier,
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
-}
