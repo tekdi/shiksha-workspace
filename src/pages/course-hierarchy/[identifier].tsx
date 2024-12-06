@@ -119,7 +119,7 @@ export default function CourseHierarchy() {
 
   if (loading) {
     return (
-      <Loader showBackdrop={true} loadingText="Loading..." />
+      <Loader showBackdrop={true} loadingText="Loading" />
     );
   }
 
