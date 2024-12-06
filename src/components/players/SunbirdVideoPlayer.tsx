@@ -1,4 +1,5 @@
-import { handleExitEvent } from "@/utils/Helper";
+import { getTelemetryEvents, handleExitEvent } from "@/utils/Helper";
+import { Height } from "@mui/icons-material";
 import React, { useEffect, useRef } from "react";
 
 interface PlayerConfigProps {
@@ -32,6 +33,7 @@ const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
+      getTelemetryEvents(event.detail, "video");
     };
 
     script.onload = () => {

@@ -119,9 +119,27 @@ export default function CourseHierarchy() {
 
   if (loading) {
     return (
-      <Loader showBackdrop={true} loadingText="Loading..." />
+      <Loader showBackdrop={true} loadingText="Loading" />
     );
   }
 
   return <RecursiveAccordion data={courseHierarchyData} />
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+}
+
+export async function getStaticProps({ locale, params }: any) {
+  const { identifier } = params;
+
+  return {
+    props: {
+      identifier,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }

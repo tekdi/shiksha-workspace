@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import React, { useEffect } from "react";
 import { useRef } from "react";
-import { handleExitEvent } from "@/utils/Helper";
+import { getTelemetryEvents, handleExitEvent } from "@/utils/Helper";
 
 interface PlayerConfigProps {
   playerConfig: any;
@@ -36,6 +36,7 @@ const SunbirdPdfPlayer = ({ playerConfig }: PlayerConfigProps) => {
     };
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
+      getTelemetryEvents(event.detail, "pdf");
     };
 
     // Ensure the script has loaded before adding event listeners
