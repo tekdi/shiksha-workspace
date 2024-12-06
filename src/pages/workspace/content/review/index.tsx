@@ -24,7 +24,7 @@ import {
   V1PlayerConfig,
 } from "../../../../components/players/PlayerConfig";
 import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
-
+import ToastNotification from "@/components/CommonToast";
 const userFullName = getLocalStoredUserName() || "Anonymous User";
 const [firstName, lastName] = userFullName.split(" ");
 
@@ -43,6 +43,10 @@ const ReviewContentSubmissions = () => {
     "publish" | ""
   >("");
   const [openCommentPopup, setOpenCommentPopup] = useState<boolean>(false);
+  const [publishOpenToast, setPublishOpenToast] = useState<boolean>(false);
+  const [requestOpenToast, setRequestOpenToast] = useState<boolean>(false);
+
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -129,11 +133,18 @@ const ReviewContentSubmissions = () => {
       await delay(2000);
 
       if (getLocalStoredUserRole() === Role.CCTA) {
+        setPublishOpenToast(true)
+
         router.push({ pathname: `/workspace/content/up-review` });
 
       }
       else
+      {
+        setPublishOpenToast(true)
+
         router.push({ pathname: `/workspace/content/submitted` });
+
+      }
     } catch (error) {
       console.error("Error during publishing:", error);
       // Add toaster error message here
@@ -147,11 +158,17 @@ const ReviewContentSubmissions = () => {
       // Add toaster success message here
       setOpenCommentPopup(false);
       if (getLocalStoredUserRole() === Role.CCTA) {
+        setRequestOpenToast(true)
         router.push({ pathname: `/workspace/content/up-review` });
 
       }
       else
+      {
+        setRequestOpenToast(true)
+
         router.push({ pathname: `/workspace/content/submitted` });
+
+      }
     } catch (error) {
       console.error("Error submitting comment:", error);
       // Add toaster error message here
@@ -171,6 +188,10 @@ const ReviewContentSubmissions = () => {
   };
   return (
     <Card sx={{ padding: 2, backgroundColor: "white" }}>
+           { publishOpenToast && (<ToastNotification message="Published Content Successfully" type= "success" />)}
+           { requestOpenToast && (<ToastNotification message="Requested changes Successfully" type= "success" />)}
+
+
       <Box
         display="flex"
         justifyContent="space-between"

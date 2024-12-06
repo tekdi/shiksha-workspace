@@ -14,6 +14,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteContent } from "@/services/ContentService";
 import useSharedStore from "@/utils/useSharedState";
+import { toast } from "react-hot-toast";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 interface DeleteConfirmationProps {
   open: boolean;
@@ -41,9 +43,19 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       try {
         await deleteContent(rowData?.identifier, rowData?.mimeType);
         console.log(`Deleted item with identifier - ${rowData?.identifier}`);
-        await delay(2000); 
 
-        // Update the fetchContentAPI state after the delay
+        await delay(2000); 
+        toast.success("Delete Content Successfully", {
+          icon: <CheckCircleIcon style={{ color: "white" }} />,
+          style: {
+            backgroundColor: "green", 
+            color: "white", 
+      },
+      position: "bottom-center",
+
+        });
+
+
         setFetchContentAPI(!fetchContentAPI);
       } catch (error) {
         console.error("Failed to delete content:", error);
