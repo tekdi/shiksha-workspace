@@ -23,6 +23,16 @@ const V1Player = ({ playerConfig }: PlayerProps) => {
           preview.contentWindow.addEventListener("message", (event: any) => {
             console.log("V1 player event", event);
           });
+
+          preview.addEventListener("renderer:telemetry:event", (event: any) => {
+            console.log("V1 player telemetry event ===>", event);
+            if (event.detail.telemetryData.eid === 'START') {
+              console.log("V1 player telemetry START event ===>", event);
+            }
+            if (event.detail.telemetryData.eid === 'END') {
+              console.log("V1 player telemetry END event ===>", event);
+            }
+          });
         }, 100);
       };
 
@@ -32,9 +42,10 @@ const V1Player = ({ playerConfig }: PlayerProps) => {
         preview.removeEventListener("load", handleLoad);
 
         // Reset iframe to prevent residual styles or memory leaks
-        if (preview) {
-          preview.src = "";
-        }
+        // Commenting below code - Content Preview is only work due to below code
+        // if (preview) {
+        //   preview.src = "";
+        // }
       };
     }
   }, [playerConfig]);

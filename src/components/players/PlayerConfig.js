@@ -89,12 +89,7 @@ export const V1PlayerConfig = {
         id: "org.sunbird.iframeEvent",
         ver: 1,
         type: "plugin",
-      },
-      {
-        id: "org.sunbird.player.endpage",
-        ver: 1.1,
-        type: "plugin",
-      },
+      }
     ],
     sideMenu: {
       showShare: true,
