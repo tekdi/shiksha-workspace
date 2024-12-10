@@ -152,7 +152,8 @@ const AllContentsPage = () => {
         const sort_by = {
           lastUpdatedOn: order,
         };
-        const offset = page * LIMIT;
+        const offset =debouncedSearchTerm!==""? 0: page * LIMIT;
+        console.log("seraching", debouncedSearchTerm)
         const response = await getContent(
           status,
           query,
