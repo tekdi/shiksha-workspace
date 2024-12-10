@@ -152,7 +152,8 @@ const AllContentsPage = () => {
         const sort_by = {
           lastUpdatedOn: order,
         };
-        const offset = page * LIMIT;
+        const offset =debouncedSearchTerm!==""? 0: page * LIMIT;
+        console.log("seraching", debouncedSearchTerm)
         const response = await getContent(
           status,
           query,
@@ -243,6 +244,7 @@ const AllContentsPage = () => {
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
+              setPage={setPage}
               onPageChange={(event, newPage) => setPage(newPage - 1)}
             />
           )}

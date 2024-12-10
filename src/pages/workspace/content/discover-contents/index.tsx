@@ -126,7 +126,8 @@ const ContentsPage = () => {
         const sort_by = {
           lastUpdatedOn: order,
         };
-        const offset = page * LIMIT;
+        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+
         const contentType="discover-contents"
 let response;
 if(state!=="All")
@@ -238,7 +239,8 @@ else{
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
-              onPageChange={(event, newPage) => setPage(newPage - 1)}
+              setPage={setPage}
+             onPageChange={(event, newPage) => setPage(newPage - 1)}
             />
           )}
         </Box>
