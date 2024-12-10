@@ -100,7 +100,7 @@ const UpForReviewPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset = page * LIMIT;
+        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
