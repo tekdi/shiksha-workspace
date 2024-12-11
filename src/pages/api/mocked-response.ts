@@ -356,12 +356,12 @@ export const genericEditorReviewFormResponse = {
                         "name": "Program",
                         "range": [
                             {
-                                "key": "secondchance",
-                                "name": "Second Chance"
+                                "name": "Second Chance",
+                                "Value": "secondchance"
                             },
                             {
-                                "key": "youthnet",
-                                "name": "Youthnet"
+                                "name": "Youthnet",
+                                "value": "youthnet"
                             }
                         ],
                         "placeholder": "Please select an option",

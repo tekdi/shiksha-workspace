@@ -1,7 +1,7 @@
 import { getLocalStoredUserId , getLocalStoredUserRole} from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE, CHANNEL_ID, TENANT_ID } from "@/utils/app.config";
+import { MIME_TYPE, CHANNEL_ID, TENANT_ID, FRAMEWORK_ID } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
 
@@ -58,7 +58,8 @@ const getReqBodyWithStatus = (
   offset: number,
   primaryCategory: any,
   sort_by: any,
-  contentType?: string
+  contentType?: string,
+  state?: string
 ) => {
   if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
     var PrimaryCategory =
@@ -71,7 +72,7 @@ const getReqBodyWithStatus = (
 {
   const userRole = getLocalStoredUserRole();
 
-   if(userRole===Role.SCTA && localStorage.getItem("stateName"))
+   if(state)
    {
     return {
       ...upForReviewReqBody,
@@ -81,8 +82,8 @@ const getReqBodyWithStatus = (
           ...upForReviewReqBody.request.filters,
           status,
           primaryCategory,
-          createdBy:{"!=":localStorage.getItem("userId")},
-          state:localStorage.getItem("stateName"),
+          createdBy:{"!=": getLocalStoredUserId()},
+        state:state
   
         },
   
@@ -102,7 +103,7 @@ const getReqBodyWithStatus = (
         ...upForReviewReqBody.request.filters,
         status,
         primaryCategory,
-        createdBy:{"!=":localStorage.getItem("userId")}
+        createdBy:{"!=":getLocalStoredUserId()}
 
       },
 
@@ -156,7 +157,8 @@ export const getContent = async (
   offset: number,
   primaryCategory: string[],
   sort_by: any,
-  contentType?: string
+  contentType?: string,
+  state?: string
 ) => {
   const apiURL = "/action/composite/v3/search";
   try {
@@ -167,7 +169,8 @@ export const getContent = async (
       offset,
       primaryCategory,
       sort_by,
-      contentType
+      contentType,
+      state
     );
     const response = await post(apiURL, reqBody);
     return response?.data?.result;
@@ -290,5 +293,34 @@ export const submitComment = async (identifier: any, comment: any) => {
   } catch (error) {
     console.error("Error submitting comment:", error);
     throw error;
+  }
+};
+
+export const getContentHierarchy = async ({
+  doId,
+}: {
+  doId: string;
+}): Promise<any> => {
+  const apiUrl: string = `/action/content/v3/hierarchy/${doId}`;
+
+  try {
+    console.log('Request data', apiUrl);
+    const response = await get(apiUrl);
+    // console.log('response', response);
+    return response;
+  } catch (error) {
+    console.error('Error in getContentHierarchy Service', error);
+    throw error;
+  }
+};
+export const getFrameworkDetails = async (): Promise<any> => {
+  const apiUrl: string = `/api/framework/v1/read/${FRAMEWORK_ID}`;
+
+  try {
+    const response = await axios.get(apiUrl);
+    return response?.data;
+  } catch (error) {
+    console.error('Error in getting Framework Details', error);
+    return error;
   }
 };
