@@ -1,7 +1,15 @@
-import { getLocalStoredUserId , getLocalStoredUserRole} from "./LocalStorageService";
+import {
+  getLocalStoredUserId,
+  getLocalStoredUserRole,
+} from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
 import axios from "axios";
-import { MIME_TYPE, CHANNEL_ID, TENANT_ID, FRAMEWORK_ID } from "@/utils/app.config";
+import {
+  MIME_TYPE,
+  CHANNEL_ID,
+  TENANT_ID,
+  FRAMEWORK_ID,
+} from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
 
@@ -44,13 +52,13 @@ const defaultReqBody = {
 const upForReviewReqBody = {
   request: {
     filters: {
-    //  createdBy: { userId},
+      //  createdBy: { userId},
     },
     sort_by: {
       lastUpdatedOn: "desc",
     },
   },
-}
+};
 const getReqBodyWithStatus = (
   status: string[],
   query: string,
@@ -68,12 +76,30 @@ const getReqBodyWithStatus = (
   }
   primaryCategory =
     primaryCategory.length === 0 ? PrimaryCategory : primaryCategory;
-    if(contentType==="discover-contents")
-{
-  const userRole = getLocalStoredUserRole();
+  if (contentType === "discover-contents") {
+    const userRole = getLocalStoredUserRole();
 
-   if(state)
-   {
+    if (state) {
+      return {
+        ...upForReviewReqBody,
+        request: {
+          ...upForReviewReqBody.request,
+          filters: {
+            ...upForReviewReqBody.request.filters,
+            status,
+            primaryCategory,
+            createdBy: { "!=": getLocalStoredUserId() },
+            state: state,
+          },
+
+          query,
+          limit,
+          offset,
+          sort_by,
+        },
+      };
+    }
+
     return {
       ...upForReviewReqBody,
       request: {
@@ -82,56 +108,32 @@ const getReqBodyWithStatus = (
           ...upForReviewReqBody.request.filters,
           status,
           primaryCategory,
-          createdBy:{"!=": getLocalStoredUserId()},
-        state:state
-  
+          createdBy: { "!=": getLocalStoredUserId() },
         },
-  
+
         query,
         limit,
         offset,
         sort_by,
       },
     };
-   }
-
-  return {
-    ...upForReviewReqBody,
-    request: {
-      ...upForReviewReqBody.request,
-      filters: {
-        ...upForReviewReqBody.request.filters,
-        status,
-        primaryCategory,
-        createdBy:{"!=":getLocalStoredUserId()}
-
+  } else if (contentType === "upReview") {
+    return {
+      ...upForReviewReqBody,
+      request: {
+        ...upForReviewReqBody.request,
+        filters: {
+          ...upForReviewReqBody.request.filters,
+          status,
+          primaryCategory,
+        },
+        query,
+        limit,
+        offset,
+        sort_by,
       },
-
-      query,
-      limit,
-      offset,
-      sort_by,
-    },
-  };
-}
-else if(contentType==="upReview")
-{
-  return {
-    ...upForReviewReqBody,
-    request: {
-      ...upForReviewReqBody.request,
-      filters: {
-        ...upForReviewReqBody.request.filters,
-        status,
-        primaryCategory,
-      },
-      query,
-      limit,
-      offset,
-      sort_by,
-    },
-  };
-}
+    };
+  }
 
   return {
     ...defaultReqBody,
@@ -189,6 +191,7 @@ export const createQuestionSet = async () => {
         primaryCategory: "Practice Question Set",
         code: uuidv4(),
         createdBy: userId,
+        framework: FRAMEWORK_ID,
       },
     },
   };
@@ -197,7 +200,7 @@ export const createQuestionSet = async () => {
     const response = await axios.post(apiURL, reqBody, {
       headers: {
         "Content-Type": "application/json",
-        "tenantId": TENANT_ID,
+        tenantId: TENANT_ID,
       },
     });
     return response?.data;
@@ -241,6 +244,7 @@ export const createCourse = async (userId: any) => {
         resourceType: "Course",
         primaryCategory: "Course",
         contentType: "Course",
+        framework: FRAMEWORK_ID,
       },
     },
   };
@@ -304,12 +308,12 @@ export const getContentHierarchy = async ({
   const apiUrl: string = `/action/content/v3/hierarchy/${doId}`;
 
   try {
-    console.log('Request data', apiUrl);
+    console.log("Request data", apiUrl);
     const response = await get(apiUrl);
     // console.log('response', response);
     return response;
   } catch (error) {
-    console.error('Error in getContentHierarchy Service', error);
+    console.error("Error in getContentHierarchy Service", error);
     throw error;
   }
 };
@@ -320,7 +324,7 @@ export const getFrameworkDetails = async (): Promise<any> => {
     const response = await axios.get(apiUrl);
     return response?.data;
   } catch (error) {
-    console.error('Error in getting Framework Details', error);
+    console.error("Error in getting Framework Details", error);
     return error;
   }
 };
