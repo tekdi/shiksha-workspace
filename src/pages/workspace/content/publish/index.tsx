@@ -104,6 +104,7 @@ const PublishPage = () => {
       content?.mimeType &&
       MIME_TYPE.GENERIC_MIME_TYPE.includes(content?.mimeType)
     ) {
+      sessionStorage.setItem("previousPage", window.location.href);
       router.push({ pathname: `/upload-editor`, query: { identifier } });
     } else if (
       content?.mimeType &&
@@ -118,7 +119,7 @@ const PublishPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset = page * LIMIT;
+        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
@@ -181,7 +182,8 @@ const PublishPage = () => {
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
-              onPageChange={(event, newPage) => setPage(newPage - 1)}
+              setPage={setPage}
+                onPageChange={(event, newPage) => setPage(newPage - 1)}
             />
           )}
         </Box>

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import Sidebar from "./SideBar";
 import { Toaster, toast } from "react-hot-toast";
-import CloseIcon from '@mui/icons-material/Close';
-import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
+import CloseIcon from "@mui/icons-material/Close";
+import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,16 +15,41 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedKey, onSelect }) => {
   const [toastShown, setToastShown] = useState(false);
 
   useEffect(() => {
+    // Check localStorage to see if the toast has been dismissed
+    const isToastDismissed = localStorage.getItem("desktopToastDismissed") === "true";
+
+    
+
+
     const handleResize = () => {
-      if (window.innerWidth < 768 && !toastShown) {
+      if (window.innerWidth < 768 && !isToastDismissed && !toastShown && !toastShown ) {
         toast((t) => (
-          <Box style={{ display: "flex", alignItems: "center", gap:'15px', justifyContent: "space-between" }}>
-            <Box sx={{display:'flex', alignItems:'flex-start', gap:'15px'}}>
-              <PersonalVideoIcon sx={{ color:'#FFFFFF'}}/>
-              <Box sx={{ fontSize: '14px', color: '#F4F4F4', fontWeight: '500' }}>Switch to desktop for a better experience</Box>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "15px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "flex-start", gap: "15px" }}>
+              <PersonalVideoIcon sx={{ color: "#FFFFFF" }} />
+              <Box
+                sx={{
+                  fontSize: "14px",
+                  color: "#F4F4F4",
+                  fontWeight: "500",
+                }}
+              >
+                Switch to desktop for a better experience
+              </Box>
             </Box>
             <Button
-              onClick={() => toast.dismiss(t.id)}
+              onClick={() => {
+                toast.dismiss(t.id);
+                localStorage.setItem("desktopToastDismissed", "true"); // Store dismissal in localStorage
+                setToastShown(true);
+              }}
               style={{
                 marginLeft: "10px",
                 background: "transparent",
@@ -33,7 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedKey, onSelect }) => {
                 cursor: "pointer",
               }}
             >
-              <CloseIcon/>
+              <CloseIcon />
             </Button>
           </Box>
         ), {
@@ -48,8 +73,13 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedKey, onSelect }) => {
       }
     };
 
-    handleResize();
+    // Check on initial load
+    if (!localStorage.getItem('isToastCalled')){
+      handleResize();
+      localStorage.setItem('isToastCalled',"true")
+    }
 
+    // Attach event listener for window resize
     window.addEventListener("resize", handleResize);
 
     return () => {

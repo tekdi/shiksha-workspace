@@ -62,3 +62,29 @@ export const getOptionsByCategory = (frameworks: any, categoryCode: string) => {
     associations: term.associations,
   }));
 };
+export const getTelemetryEvents = (eventData: any, contentType: string) => {
+  console.log("getTelemetryEvents hit");
+
+  if (!eventData || !eventData.object || !eventData.object.id) {
+    console.error("Invalid event data");
+    return;
+  }
+
+  const {
+    eid,
+    edata,
+    object: { id: identifier },
+  } = eventData;
+  const telemetryKey = `${contentType}_${identifier}_${eid}`;
+
+  const telemetryData = {
+    eid,
+    edata,
+    identifier,
+    contentType,
+  };
+
+  console.log(`${eid}Telemetry`, telemetryData);
+
+  localStorage.setItem(telemetryKey, JSON.stringify(telemetryData));
+};

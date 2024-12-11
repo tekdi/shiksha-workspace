@@ -87,17 +87,22 @@ const CreatePage = () => {
       title: "New Content",
       description: "Create new documents, PDF, video, QML, HTML, etc.",
       icon: <VideoLibraryOutlinedIcon fontSize="large" />,
-      onClick: () => router.push("/upload-editor"),
+      onClick: () => {
+        sessionStorage.setItem("previousPage", window.location.href);
+        router.push("/upload-editor")
+      },
     },
     {
-      title: "New Large Content",
-      description: "Create videos and documents larger than 150mb  ---- Create word needs to be added",
-      icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />,
-      onClick: () =>
+      title: "Create New Large Content", // Added "Create" to the title
+      description: "Create videos and documents larger than 150mb", // Updated description
+      icon: <img src={'/150+.png'} alt="large-video" height={35} width={70} />, // Correct as is
+      onClick: () => {
+        sessionStorage.setItem("previousPage", window.location.href); // No change needed
         router.push({
           pathname: "/upload-editor",
-          query: { editorforlargecontent: "true" },
-        }),
+          query: { editorforlargecontent: "true" }, // No change needed
+        }); // Removed an extra comma
+      },
     },
   ];
 
@@ -127,7 +132,7 @@ const CreatePage = () => {
         >
           <Grid container spacing={2}>
             {cardData.map((card, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
                 <Paper
                   key={index}
                   elevation={3}

@@ -1,16 +1,15 @@
-import { handleExitEvent } from "@/utils/Helper";
+import { getTelemetryEvents, handleExitEvent } from "@/utils/Helper";
 import { Height } from "@mui/icons-material";
 import React, { useEffect, useRef } from "react";
 
 interface PlayerConfigProps {
   playerConfig: any;
 }
+
 const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
   const sunbirdVideoPlayerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Dynamically load the Sunbird PDF Player script from CDN
-
     const script = document.createElement("script");
     script.src =
       "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-video-player-web-component@1.2.5/sunbird-video-player.js";
@@ -34,9 +33,9 @@ const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const handleTelemetryEvent = (event: any) => {
       console.log("Telemetry Event", event.detail);
+      getTelemetryEvents(event.detail, "video");
     };
 
-    // Ensure the script ha s loaded before adding event listeners
     script.onload = () => {
       playerElement?.addEventListener("playerEvent", handlePlayerEvent);
       playerElement?.addEventListener("telemetryEvent", handleTelemetryEvent);
@@ -48,7 +47,14 @@ const SunbirdVideoPlayer = ({ playerConfig }: PlayerConfigProps) => {
         "telemetryEvent",
         handleTelemetryEvent
       );
-      document.body.removeChild(script);
+
+      // Remove the script and CSS link
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
+      }
     };
   }, []);
 
