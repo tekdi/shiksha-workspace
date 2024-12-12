@@ -197,6 +197,7 @@ const QuestionSetEditor: React.FC = () => {
             event.detail?.action === "publishContent" ||
             event.detail?.action === "rejectContent"
           ) {
+            localStorage.removeItem("contentMode");
             window.history.back();
             window.addEventListener(
               "popstate",
