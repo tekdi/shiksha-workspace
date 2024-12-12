@@ -1,12 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import { TENANT_ID, CHANNEL_ID, FRAMEWORK_ID, CLOUD_STORAGE_URL } from "@/utils/app.config";
-import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
+import {
+  TENANT_ID,
+  CHANNEL_ID,
+  FRAMEWORK_ID,
+  CLOUD_STORAGE_URL,
+} from "@/utils/app.config";
+import {
+  getLocalStoredUserId,
+  getLocalStoredUserName,
+} from "@/services/LocalStorageService";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
-  const { identifier, mode } = router.query;
-
+  const { identifier } = router.query;
+  const [mode, setMode] = useState<any>();
   const [fullName, setFullName] = useState("Anonymous User");
   const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
@@ -16,6 +24,8 @@ const QuestionSetEditor: React.FC = () => {
   useEffect(() => {
     const storedFullName = getLocalStoredUserName();
     const storedUserId = getLocalStoredUserId() || TENANT_ID;
+    const storedMode = localStorage.getItem("contentMode");
+    setMode(storedMode || "edit");
     setFullName(storedFullName ?? "Anonymous User");
     setUserId(storedUserId);
 
@@ -50,7 +60,7 @@ const QuestionSetEditor: React.FC = () => {
         {
           id: CHANNEL_ID,
           type: "pratham-portal",
-        }
+        },
       ],
       timeDiff: 5,
       objectRollup: {},
@@ -68,7 +78,7 @@ const QuestionSetEditor: React.FC = () => {
       cloudStorage: {
         provider: "aws",
         presigned_headers: {},
-      }
+      },
     },
     config: {
       mode: mode || "edit",
@@ -181,8 +191,13 @@ const QuestionSetEditor: React.FC = () => {
         "editorEmitter",
         (event: any) => {
           console.log("Editor event:", event);
-          if (event.detail?.action === "backContent" || event.detail?.action === "submitContent" ||
-            event.detail?.action === "publishContent" || event.detail?.action === "rejectContent") {
+          if (
+            event.detail?.action === "backContent" ||
+            event.detail?.action === "submitContent" ||
+            event.detail?.action === "publishContent" ||
+            event.detail?.action === "rejectContent"
+          ) {
+            localStorage.removeItem("contentMode");
             window.history.back();
             window.addEventListener(
               "popstate",

@@ -1,3 +1,4 @@
+import { getTelemetryEvents } from "@/utils/Helper";
 import React, { useRef, useEffect } from "react";
 
 interface PlayerProps {
@@ -17,11 +18,25 @@ const V1Player = ({ playerConfig }: PlayerProps) => {
 
       const handleLoad = () => {
         setTimeout(() => {
-          if (preview.contentWindow && preview.contentWindow.initializePreview) {
+          if (
+            preview.contentWindow &&
+            preview.contentWindow.initializePreview
+          ) {
             preview.contentWindow.initializePreview(playerConfig);
           }
           preview.contentWindow.addEventListener("message", (event: any) => {
             console.log("V1 player event", event);
+          });
+
+          preview.addEventListener("renderer:telemetry:event", (event: any) => {
+            console.log("V1 player telemetry event ===>", event);
+            if (event.detail.telemetryData.eid === "START") {
+              console.log("V1 player telemetry START event ===>", event);
+            }
+            if (event.detail.telemetryData.eid === "END") {
+              console.log("V1 player telemetry END event ===>", event);
+            }
+            getTelemetryEvents(event.detail.telemetryData, "v1");
           });
         }, 100);
       };
@@ -32,9 +47,10 @@ const V1Player = ({ playerConfig }: PlayerProps) => {
         preview.removeEventListener("load", handleLoad);
 
         // Reset iframe to prevent residual styles or memory leaks
-        if (preview) {
-          preview.src = "";
-        }
+        // Commenting below code - Content Preview is only work due to below code
+        // if (preview) {
+        //   preview.src = "";
+        // }
       };
     }
   }, [playerConfig]);
