@@ -74,7 +74,10 @@ const UpForReviewPage = () => {
       mimeType: item.mimeType,
       mode: item.mode,
       createdBy: item.createdBy,
-      creator: item.creator
+      creator: item.creator,
+      author: item.author
+
+
 
 
     }));
