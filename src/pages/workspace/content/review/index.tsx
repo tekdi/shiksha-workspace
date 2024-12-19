@@ -124,9 +124,9 @@ const ReviewContentSubmissions = () => {
     setOpenConfirmationPopup(true);
   };
 
-  const confirmPublishContent = async () => {
+  const confirmPublishContent = async (checkedItems: string[]) => {
     try {
-      const response = await publishContent(identifier);
+      const response = await publishContent(identifier, checkedItems);
       console.log("Published successfully:", response);
       // Add toaster success message here
       setOpenConfirmationPopup(false);
@@ -151,9 +151,9 @@ const ReviewContentSubmissions = () => {
     }
   };
 
-  const handleSubmitComment = async (comment: string) => {
+  const handleSubmitComment = async (checkedItems: string[],comment: any) => {
     try {
-      const response = await submitComment(identifier, comment);
+      const response = await submitComment(identifier, comment, checkedItems);
       console.log("Comment submitted successfully:", response);
       // Add toaster success message here
       setOpenCommentPopup(false);
@@ -473,13 +473,19 @@ const ReviewContentSubmissions = () => {
         actionType={confirmationActionType}
         onConfirm={confirmPublishContent}
       />
+       <ConfirmActionPopup
+        open={openCommentPopup}
+        onClose={closeCommentPopup}
+        actionType={"reject"}
+        onConfirm={handleSubmitComment}
+      />
 
-      <ReviewCommentPopup
+{/* <ReviewCommentPopup
         open={openCommentPopup}
         onClose={closeCommentPopup}
         onSubmit={handleSubmitComment}
         title="Submit Your Comment"
-      />
+      /> */}
     </Card>
   );
 };
