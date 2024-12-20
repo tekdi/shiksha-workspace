@@ -258,11 +258,12 @@ export const createCourse = async (userId: any) => {
   }
 };
 
-export const publishContent = async (identifier: any) => {
+export const publishContent = async (identifier: any, publishChecklist?: any) => {
   const requestBody = {
     request: {
       content: {
         lastPublishedBy: userId,
+        publishChecklist:publishChecklist
       },
     },
   };
@@ -279,11 +280,12 @@ export const publishContent = async (identifier: any) => {
   }
 };
 
-export const submitComment = async (identifier: any, comment: any) => {
+export const submitComment = async (identifier: any, comment: any, rejectReasons?:any) => {
   const requestBody = {
     request: {
       content: {
         rejectComment: comment,
+        rejectReasons: rejectReasons,
       },
     },
   };
