@@ -71,29 +71,33 @@ export const genericEditorSaveFormResponse = {
                         "visible": true
                     },
                     {
-                        "code": "audience",
+                        "code": "primaryUser",
                         "dataType": "list",
-                        "description": "Audience",
+                        "description": "Primary User",
                         "editable": true,
                         "index": 5,
                         "inputType": "multiselect",
-                        "label": "Audience",
-                        "name": "Audience",
+                        "label": "Primary User",
+                        "name": "Primary User",
                         "range": [
                             {
-                                "key": "Student",
-                                "name": "Student"
+                                "key": "Parents",
+                                "name": "Parents"
                             },
                             {
-                                "key": "Teacher",
-                                "name": "Teacher"
+                                "key": "Educators",
+                                "name": "Educators"
                             },
                             {
-                                "key": "Administrator",
-                                "name": "Administrator"
+                                "key": "Children",
+                                "name": "Children"
+                            },
+                            {
+                                "key": "Volunteer",
+                                "name": "Volunteer"
                             }
                         ],
-                        "placeholder": "Select Audience",
+                        "placeholder": "Select Primary User",
                         "renderingHints": {},
                         "required": false,
                         "visible": true
@@ -183,140 +187,190 @@ export const genericEditorReviewFormResponse = {
                         "visible": true
                     },
                     {
-                        "code": "state",
+                        "code": "learningCategory",
                         "visible": true,
                         "depends": [
-                            "board",
-                            "medium",
-                            "gradeLevel",
-                            "courseType",
-                            "subject",
-                            "topic"
+                            "learningCategorySubset"
                         ],
                         "editable": true,
                         "dataType": "text",
                         "renderingHints": {},
-                        "description": "State",
+                        "description": "Learning Category",
                         "index": 5,
-                        "label": "State",
+                        "label": "Learning Category",
                         "required": true,
-                        "name": "State",
+                        "name": "Learning Category",
                         "inputType": "select",
-                        "placeholder": "State"
+                        "placeholder": "Select Learning Category"
                     },
                     {
-                        "code": "board",
+                        "code": "learningCategorySubset",
                         "visible": true,
                         "depends": [
-                            "medium",
-                            "gradeLevel",
-                            "courseType",
-                            "subject"
                         ],
                         "editable": true,
                         "dataType": "text",
                         "renderingHints": {},
-                        "description": "Board",
+                        "description": "Learning Category Subset",
                         "index": 6,
-                        "label": "Board/Syllabus",
+                        "label": "Learning Category Subset",
                         "required": true,
-                        "name": "Board/Syllabus",
+                        "name": "Learning Category Subset",
                         "inputType": "select",
-                        "placeholder": "Select Board/Syllabus"
+                        "placeholder": "Learning Category Subset"
                     },
                     {
-                        "code": "medium",
-                        "visible": true,
-                        "depends": [
-                            "gradeLevel",
-                            "courseType",
-                            "subject"
-                        ],
-                        "editable": true,
+                        "code": "targetAgeGroup",
                         "dataType": "list",
-                        "renderingHints": {},
-                        "description": "",
+                        "description": "Target Age group / Grade level (Who is the content targeted for?)",
+                        "editable": true,
                         "index": 7,
-                        "label": "Medium",
-                        "required": true,
-                        "name": "medium",
                         "inputType": "multiselect",
-                        "placeholder": "Select Medium"
-                    },
-                    {
-                        "code": "gradeLevel",
-                        "visible": true,
-                        "depends": [
-                            "courseType",
-                            "subject"
-                        ],
-                        "editable": true,
-                        "dataType": "list",
-                        "renderingHints": {},
-                        "description": "Class",
-                        "index": 8,
-                        "label": "Class",
-                        "required": true,
-                        "name": "Class",
-                        "inputType": "multiselect",
-                        "placeholder": "Select Class"
-                    },
-                    {
-                        "code": "courseType",
-                        "visible": true,
-                        "depends": [
-                            "subject"
-                        ],
-                        "editable": true,
-                        "dataType": "list",
-                        "renderingHints": {},
-                        "description": "",
-                        "index": 9,
-                        "label": "Course Type",
-                        "required": true,
-                        "name": "Course Type",
-                        "inputType": "multiselect",
-                        "placeholder": "Course Type"
-                    },
-                    {
-                        "code": "subject",
-                        "visible": true,
-                        "depends": [],
-                        "editable": true,
-                        "dataType": "list",
-                        "renderingHints": {},
-                        "description": "",
-                        "index": 10,
-                        "label": "Subject",
-                        "required": true,
-                        "name": "Subject",
-                        "inputType": "multiselect",
-                        "placeholder": "Select Subject"
-                    },
-                    {
-                        "code": "audience",
-                        "dataType": "list",
-                        "description": "Audience",
-                        "editable": true,
-                        "index": 11,
-                        "inputType": "multiselect",
-                        "label": "Audience",
-                        "name": "Audience",
+                        "label": "Target Age group",
+                        "name": "Target Age group",
                         "range": [
                             {
-                                "key": "Student",
-                                "name": "Student"
+                                "key": "0-3 Years",
+                                "name": "0-3 Years"
                             },
                             {
-                                "key": "Teacher",
-                                "name": "Teacher"
+                                "key": "3-6 Years",
+                                "name": "3-6 Years"
                             },
                             {
-                                "key": "Administrator",
-                                "name": "Administrator"
+                                "key": "6-8 Years",
+                                "name": "6-8 Years"
+                            },
+                            {
+                                "key": "8-11 Years",
+                                "name": "8-11 Years"
+                            },
+                            {
+                                "key": "11-14 Years",
+                                "name": "11-14 Years"
+                            },
+                            {
+                                "key": "14-18 Years",
+                                "name": "14-18 Years"
+                            },
+                            {
+                                "key": "18 and above",
+                                "name": "18 and above"
                             }
                         ],
-                        "placeholder": "Select Audience",
+                        "placeholder": "Target Age group",
+                        "renderingHints": {},
+                        "required": false,
+                        "visible": true
+                    },
+                    {
+                        "code": "primaryUser",
+                        "dataType": "list",
+                        "description": "Primary User",
+                        "editable": true,
+                        "index": 8,
+                        "inputType": "multiselect",
+                        "label": "Primary User",
+                        "name": "Primary User",
+                        "range": [
+                            {
+                                "key": "Parents",
+                                "name": "Parents"
+                            },
+                            {
+                                "key": "Educators",
+                                "name": "Educators"
+                            },
+                            {
+                                "key": "Children",
+                                "name": "Children"
+                            },
+                            {
+                                "key": "Volunteer",
+                                "name": "Volunteer"
+                            }
+                        ],
+                        "placeholder": "Select Primary User",
+                        "renderingHints": {},
+                        "required": false,
+                        "visible": true
+                    },
+                    {
+                        "code": "mediumOfLearning",
+                        "dataType": "text",
+                        "description": "Medium of Learning",
+                        "editable": true,
+                        "index": 8,
+                        "inputType": "select",
+                        "label": "Medium of Learning",
+                        "name": "Medium of Learning",
+                        "range": [
+                            {
+                                "key": "Hindi",
+                                "name": "Hindi"
+                            },
+                            {
+                                "key": "English",
+                                "name": "English"
+                            },
+                            {
+                                "key": "Urdu",
+                                "name": "Urdu"
+                            },
+                            {
+                                "key": "Sanskrit",
+                                "name": "Sanskrit"
+                            },
+                            {
+                                "key": "Punjabi",
+                                "name": "Punjabi"
+                            },
+                            {
+                                "key": "Gujarati",
+                                "name": "Gujarati"
+                            },
+                            {
+                                "key": "Marathi",
+                                "name": "Marathi"
+                            },
+                            {
+                                "key": "Tamil",
+                                "name": "Tamil"
+                            },
+                            {
+                                "key": "Telugu",
+                                "name": "Telugu"
+                            },
+                            {
+                                "key": "Kannada",
+                                "name": "Kannada"
+                            },
+                            {
+                                "key": "Malayalam",
+                                "name": "Malayalam"
+                            },
+                            {
+                                "key": "Odia",
+                                "name": "Odia"
+                            },
+                            {
+                                "key": "Assamese",
+                                "name": "Assamese"
+                            },
+                            {
+                                "key": "Bengali",
+                                "name": "Bengali"
+                            },
+                            {
+                                "key": "Manipuri",
+                                "name": "Manipuri"
+                            },
+                            {
+                                "key": "Kashmiri",
+                                "name": "Kashmiri"
+                            }
+                        ],
+                        "placeholder": "Medium of Learning",
                         "renderingHints": {},
                         "required": false,
                         "visible": true
@@ -326,7 +380,7 @@ export const genericEditorReviewFormResponse = {
                         "dataType": "text",
                         "description": "Indicate if this should be visible on open school",
                         "editable": true,
-                        "index": 12,
+                        "index": 9,
                         "inputType": "select",
                         "label": "Show on open school?",
                         "name": "Open School Visibility",
@@ -350,7 +404,7 @@ export const genericEditorReviewFormResponse = {
                         "dataType": "text",
                         "description": "Program",
                         "editable": true,
-                        "index": 13,
+                        "index": 10,
                         "inputType": "select",
                         "label": "Program",
                         "name": "Program",
