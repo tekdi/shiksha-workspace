@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Dialog,
     DialogTitle,
@@ -14,7 +14,7 @@ import {
     TextField,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
+import {getFormFields} from '@/services/ContentService';
 interface ConfirmActionPopupProps {
     open: boolean;
     onClose: () => void;
@@ -29,23 +29,9 @@ const ConfirmActionPopup: React.FC<ConfirmActionPopupProps> = ({
     actionType,
 }) => {
     const [checkedItems, setCheckedItems] = useState<string[]>([]);
-    const [comment, setComment] = useState<string>('');
-
-    const usabilityOptions = [
-        'Correct Spellings and Grammar',
-        'Simple Language',
-        'Content/Audio/Video quality',
-        'Suitable font size for app and portal',
-        'Copyright infringement (images and texts)',
-    ];
-
-    const contentDetailsOptions = [
-        'Appropriate Title',
-        'Standard description of the course/resource',
-        'Relevant tags and keywords',
-        'Appropriate image',
-    ];
-
+    const [usabilityOptions, setUsabilityOptions] = useState<string[]>([]);
+    const [contentDetailsOptions, setContentDetailsOptions] = useState<string[]>([]);
+     const [comment, setComment] = useState<string>('');
     const handleCheckboxChange = (item: string) => {
         setCheckedItems((prev) =>
             prev.includes(item)
@@ -66,7 +52,36 @@ const ConfirmActionPopup: React.FC<ConfirmActionPopupProps> = ({
 
     const allOptions = [...usabilityOptions, ...contentDetailsOptions];
     const allChecked = allOptions.every((option) => checkedItems.includes(option));
+    useEffect(() => {
+        const fetchFields = async () => {
+          try {
 
+            if(open){
+
+            const data = await getFormFields();
+           
+            const contents = data?.result?.form?.data?.fields[0]?.contents;
+            let usabilityCheckList: any = [];
+            let contentDetailsCheckList: any = [];
+            contents.forEach((item: any) => {
+              if (item.name === "Usability") {
+                usabilityCheckList = item.checkList;
+              } else if (item.name === "Content details") {
+                contentDetailsCheckList = item.checkList;
+              }
+            });
+            setUsabilityOptions(usabilityCheckList);
+            setContentDetailsOptions(contentDetailsCheckList);
+           
+
+                 }
+          } catch (err) {
+            console.error("data", err);
+          } finally {
+          }
+        };
+        fetchFields();
+      }, [open]);
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
             <DialogTitle
