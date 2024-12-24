@@ -258,12 +258,15 @@ export const createCourse = async (userId: any) => {
   }
 };
 
-export const publishContent = async (identifier: any, publishChecklist?: any) => {
+export const publishContent = async (
+  identifier: any,
+  publishChecklist?: any
+) => {
   const requestBody = {
     request: {
       content: {
         lastPublishedBy: userId,
-        publishChecklist:publishChecklist
+        publishChecklist: publishChecklist,
       },
     },
   };
@@ -280,7 +283,11 @@ export const publishContent = async (identifier: any, publishChecklist?: any) =>
   }
 };
 
-export const submitComment = async (identifier: any, comment: any, rejectReasons?:any) => {
+export const submitComment = async (
+  identifier: any,
+  comment: any,
+  rejectReasons?: any
+) => {
   const requestBody = {
     request: {
       content: {
@@ -324,6 +331,23 @@ export const getFrameworkDetails = async (): Promise<any> => {
 
   try {
     const response = await axios.get(apiUrl);
+    return response?.data;
+  } catch (error) {
+    console.error("Error in getting Framework Details", error);
+    return error;
+  }
+};
+export const getFormFields = async (): Promise<any> => {
+  const apiUrl: string = `/action/data/v1/form/read`;
+
+  try {
+    const response = await axios.post(apiUrl, {
+      request: {
+        action: "publish",
+        type: "content",
+        subType: "resource",
+      },
+    });
     return response?.data;
   } catch (error) {
     console.error("Error in getting Framework Details", error);
