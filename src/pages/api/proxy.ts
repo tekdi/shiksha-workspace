@@ -5,6 +5,7 @@ import {
   creatLockResponse,
   genericEditorReviewFormResponse,
   genericEditorRequestForChangesFormResponse,
+  publishResourceFormResponse,
 } from "./mocked-response";
 import * as cookie from "cookie";
 
@@ -41,7 +42,7 @@ export default async function handler(
   }
 
   if (pathString === "/action/data/v1/form/read") {
-    const { action, subType } = body.request;
+    const { action, subType, type } = body.request;
     if (action === "save" && subType === "resource") {
       return res.status(200).json(genericEditorSaveFormResponse);
     }
@@ -50,6 +51,9 @@ export default async function handler(
     }
     if (action === "requestforchanges" && subType === "resource") {
       return res.status(200).json(genericEditorRequestForChangesFormResponse);
+    }
+    if (action === "publish" && subType === "resource" && type === 'content') {
+      return res.status(200).json(publishResourceFormResponse); 
     }
   }
 
