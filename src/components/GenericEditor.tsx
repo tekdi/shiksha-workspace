@@ -80,7 +80,7 @@ const GenericEditor: React.FC = () => {
         }
 
         try {
-            const response = await fetch(`/action/content/v3/read/${contentId}?fields=createdBy,status,mimeType,contentType,resourceType,collaborators,contentDisposition,primaryCategory,framework,targetFWIds&mode=edit`);
+            const response = await fetch(`/action/content/v3/read/${contentId}?fields=createdBy,status,mimeType,contentType,resourceType,collaborators,contentDisposition,primaryCategory,framework,channel,targetFWIds&mode=edit`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch content');
@@ -119,6 +119,8 @@ const GenericEditor: React.FC = () => {
 
     // Set window context for the iframe
     const setWindowContext = (data: any) => {
+        const contentChannel = data?.channel || CHANNEL_ID;
+        const contentFramework = data?.framework || CONTENT_FRAMEWORK_ID;
         if (typeof window !== 'undefined') {
             window['context'] = _.cloneDeep(editorConfig.GENERIC_EDITOR.WINDOW_CONTEXT);
             if (identifier) {
@@ -127,16 +129,16 @@ const GenericEditor: React.FC = () => {
             window['context'].user = {
                 id: getLocalStoredUserId() || TENANT_ID,
                 name: getLocalStoredUserName() || "Anonymous User",
-                orgIds: [CHANNEL_ID],
+                orgIds: [contentChannel],
                 organisations: {
-                    [CHANNEL_ID]: CHANNEL_ID + " Channel"
+                    [contentChannel]: contentChannel
                 }
             }
             window['context'].uid = getLocalStoredUserId() || TENANT_ID;
-            window['context'].contextRollUp.l1 = CHANNEL_ID;
-            window['context'].tags = [CHANNEL_ID];
-            window['context'].channel = CHANNEL_ID;
-            window['context'].framework = CONTENT_FRAMEWORK_ID;
+            window['context'].contextRollUp.l1 = contentChannel;
+            window['context'].tags = [contentChannel];
+            window['context'].channel = contentChannel;
+            window['context'].framework = contentFramework;
             if (isLargeFileUpload || (_.get(data, 'contentDisposition') === 'online-only')) {
                 window.context['uploadInfo'] = {
                     isLargeFileUpload: true
