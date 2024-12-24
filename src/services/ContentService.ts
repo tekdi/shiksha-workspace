@@ -9,6 +9,7 @@ import {
   CHANNEL_ID,
   TENANT_ID,
   FRAMEWORK_ID,
+  CONTENT_FRAMEWORK_ID
 } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
@@ -244,7 +245,8 @@ export const createCourse = async (userId: any) => {
         resourceType: "Course",
         primaryCategory: "Course",
         contentType: "Course",
-        framework: FRAMEWORK_ID,
+        framework: CONTENT_FRAMEWORK_ID,
+        targetFWIds: [FRAMEWORK_ID]
       },
     },
   };
