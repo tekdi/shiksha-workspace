@@ -149,7 +149,10 @@ const AllContentsPage = () => {
         }
      
         const query = debouncedSearchTerm || "";
-        const primaryCategory = filter.length ? filter : [];
+        const localSelectedFilters= localStorage.getItem("selectedFilters");
+        const selectedFilters = localSelectedFilters?JSON.parse(localSelectedFilters ): null;
+        const primaryCategory = selectedFilters? selectedFilters : filter.length ? filter : [];
+ 
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = {
           lastUpdatedOn: order,

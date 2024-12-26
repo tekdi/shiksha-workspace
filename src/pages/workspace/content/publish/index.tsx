@@ -121,8 +121,10 @@ const PublishPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         let offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
-        const primaryCategory = filter.length ? filter : [];
-        if (prevFilterRef.current !== filter) {
+        const localSelectedFilters= localStorage.getItem("selectedFilters");
+        const selectedFilters = localSelectedFilters?JSON.parse(localSelectedFilters ): null;
+        const primaryCategory = selectedFilters? selectedFilters : filter.length ? filter : [];
+         if (prevFilterRef.current !== filter) {
           offset=0;
           setPage(0);
           router.push(
