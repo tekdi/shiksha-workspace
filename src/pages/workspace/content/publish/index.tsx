@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -54,6 +54,7 @@ const PublishPage = () => {
     useState<string>(searchTerm);
 
   const router = useRouter();
+  const prevFilterRef = useRef(filter);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -119,8 +120,21 @@ const PublishPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+        let offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
+        if (prevFilterRef.current !== filter) {
+          offset=0;
+          setPage(0);
+          router.push(
+            {
+              pathname: router.pathname,
+              query: { ...router.query, page: 1 }, 
+            },
+            undefined,
+            { shallow: true } 
+          );
+          prevFilterRef.current = filter;
+        }
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const response = await getContent(

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -49,6 +49,8 @@ const SubmittedForReviewPage = () => {
   const fetchContentAPI = useSharedStore(
     (state: any) => state.fetchContentAPI
   );
+  const prevFilterRef = useRef(filter);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -94,8 +96,21 @@ const SubmittedForReviewPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+        let offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
+        if (prevFilterRef.current !== filter) {
+          offset=0;
+          setPage(0);
+          router.push(
+            {
+              pathname: router.pathname,
+              query: { ...router.query, page: 1 }, 
+            },
+            undefined,
+            { shallow: true } 
+          );
+          prevFilterRef.current = filter;
+        }
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const response = await getContent(

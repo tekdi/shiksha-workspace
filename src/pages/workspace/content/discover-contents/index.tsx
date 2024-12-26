@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -59,6 +59,7 @@ const ContentsPage = () => {
   const [sortBy, setSortBy] = useState("Modified On");
  const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
+  const prevFilterRef = useRef(filter);
 
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = React.useState(false);
@@ -126,38 +127,46 @@ const ContentsPage = () => {
         const sort_by = {
           lastUpdatedOn: order,
         };
-        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+        let offset = debouncedSearchTerm !== "" ? 0 : page * LIMIT;
+        if (prevFilterRef.current !== filter) {
+          offset=0;
+          setPage(0);
+          router.push(
+            {
+              pathname: router.pathname,
+              query: { ...router.query, page: 1 }, 
+            },
+            undefined,
+            { shallow: true } 
+          );
+          prevFilterRef.current = filter;
+        }
+        const contentType = "discover-contents";
+        let response;
+        if (state !== "All") {
+          response = await getContent(
+            status,
+            query,
+            LIMIT,
+            offset,
+            primaryCategory,
+            sort_by,
+            contentType,
+            state
+          );
+        } else {
+          response = await getContent(
+            status,
+            query,
+            LIMIT,
+            offset,
+            primaryCategory,
+            sort_by,
+            contentType
+          );
+        }
 
-        const contentType="discover-contents"
-let response;
-if(state!=="All")
-{
-  response = await getContent(
-    status,
-    query,
-    LIMIT,
-    offset,
-    primaryCategory,
-    sort_by,
-    contentType,
-    state
-  );
-}
-else{
-  response = await getContent(
-    status,
-    query,
-    LIMIT,
-    offset,
-    primaryCategory,
-    sort_by,
-    contentType
-  );
-}
-        
-        const contentList = (response?.content || []).concat(
-          response?.QuestionSet || []
-        );
+        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
         setContentList(contentList);
         setTotalCount(response?.count);
         setLoading(false);
@@ -166,6 +175,7 @@ else{
       }
     };
     getContentList();
+ 
   }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, state, page]);
 
   useEffect(() => {

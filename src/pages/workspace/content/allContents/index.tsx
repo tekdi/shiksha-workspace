@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -61,6 +61,8 @@ const AllContentsPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = React.useState(false);
+  const prevFilterRef = useRef(filter);
+
   const fetchContentAPI = useSharedStore(
     (state: any) => state.fetchContentAPI
   );
@@ -152,7 +154,20 @@ const AllContentsPage = () => {
         const sort_by = {
           lastUpdatedOn: order,
         };
-        const offset =debouncedSearchTerm!==""? 0: page * LIMIT;
+        let offset =debouncedSearchTerm!==""? 0: page * LIMIT;
+        if (prevFilterRef.current !== filter) {
+          offset=0;
+          setPage(0);
+          router.push(
+            {
+              pathname: router.pathname,
+              query: { ...router.query, page: 1 }, 
+            },
+            undefined,
+            { shallow: true } 
+          );
+          prevFilterRef.current = filter;
+        }
         console.log("seraching", debouncedSearchTerm)
         const response = await getContent(
           status,

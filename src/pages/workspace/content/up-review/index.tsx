@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -48,6 +48,8 @@ const UpForReviewPage = () => {
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = React.useState<any[]>([]);
+  const prevFilterRef = useRef(filter);
+
   const fetchContentAPI = useSharedStore(
     (state: any) => state.fetchContentAPI
   );
@@ -103,8 +105,21 @@ const UpForReviewPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+        let offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
+        if (prevFilterRef.current !== filter) {
+          offset=0;
+          setPage(0);
+          router.push(
+            {
+              pathname: router.pathname,
+              query: { ...router.query, page: 1 }, 
+            },
+            undefined,
+            { shallow: true } 
+          );
+          prevFilterRef.current = filter;
+        }
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const contentType="upReview"
