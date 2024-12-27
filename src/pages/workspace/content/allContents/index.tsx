@@ -161,14 +161,7 @@ const AllContentsPage = () => {
         if (prevFilterRef.current !== filter) {
           offset=0;
           setPage(0);
-          router.push(
-            {
-              pathname: router.pathname,
-              query: { ...router.query, page: 1 }, 
-            },
-            undefined,
-            { shallow: true } 
-          );
+          
           prevFilterRef.current = filter;
         }
         console.log("seraching", debouncedSearchTerm)

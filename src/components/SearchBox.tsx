@@ -23,6 +23,7 @@ import {
   getPrimaryCategory,
 } from "@/services/ContentService";
 import { SortOptions, StatusOptions } from "@/utils/app.constant";
+import router from "next/router";
 
 export interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -136,6 +137,14 @@ const SearchBox: React.FC<SearchBarProps> = ({
   const handleFilterChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
     localStorage.setItem("selectedFilters", JSON.stringify(value));
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page: 1 }, 
+      },
+      undefined,
+      { shallow: true } 
+    );
     setSelectedFilters(value);
     onFilterChange && onFilterChange(value);
   };
