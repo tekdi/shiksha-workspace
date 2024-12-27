@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -24,8 +30,8 @@ import router from "next/router";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/utils/app.constant";
 import WorkspaceText from "@/components/WorkspaceText";
-import { Table as KaTable } from 'ka-table';
-import { DataType } from 'ka-table/enums';
+import { Table as KaTable } from "ka-table";
+import { DataType } from "ka-table/enums";
 import "ka-table/style.css";
 import KaTableComponent from "@/components/KaTableComponent";
 import useSharedStore from "@/utils/useSharedState";
@@ -37,17 +43,35 @@ import useSharedStore from "@/utils/useSharedState";
 
 // ]
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "350px" },
-  { key: 'create-by', title: 'CREATED BY', dataType: DataType.String, width: "100px" },
+  {
+    key: "title_and_description",
+    title: "TITLE & DESCRIPTION",
+    dataType: DataType.String,
+    width: "350px",
+  },
+  {
+    key: "create-by",
+    title: "CREATED BY",
+    dataType: DataType.String,
+    width: "100px",
+  },
 
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "100px" },
-  { key: 'state', title: 'STATE', dataType: DataType.String, width: "100px" },
+  {
+    key: "contentType",
+    title: "CONTENT TYPE",
+    dataType: DataType.String,
+    width: "100px",
+  },
+  { key: "state", title: "STATE", dataType: DataType.String, width: "100px" },
 
-  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
-  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "100px" },
-
-
-]
+  { key: "status", title: "STATUS", dataType: DataType.String, width: "100px" },
+  {
+    key: "lastUpdatedOn",
+    title: "LAST MODIFIED",
+    dataType: DataType.String,
+    width: "100px",
+  },
+];
 const ContentsPage = () => {
   const theme = useTheme<any>();
 
@@ -57,15 +81,13 @@ const ContentsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("Modified On");
- const [contentList, setContentList] = React.useState<content[]>([]);
+  const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
   const prevFilterRef = useRef(filter);
 
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = React.useState(false);
-  const fetchContentAPI = useSharedStore(
-    (state: any) => state.fetchContentAPI
-  );
+  const fetchContentAPI = useSharedStore((state: any) => state.fetchContentAPI);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
   const [totalCount, setTotalCount] = useState(0);
@@ -101,11 +123,11 @@ const ContentsPage = () => {
   };
 
   const handleSortChange = (sortBy: string) => {
-    console.log("sortBy", sortBy)
+    console.log("sortBy", sortBy);
     setSortBy(sortBy);
   };
   const handleStateChange = (state: string) => {
-    setState(state)
+    setState(state);
   };
 
   useEffect(() => {
@@ -122,25 +144,24 @@ const ContentsPage = () => {
           // "FlagReview",
         ];
         const query = debouncedSearchTerm || "";
-        const localSelectedFilters= localStorage.getItem("selectedFilters");
-        const selectedFilters = localSelectedFilters?JSON.parse(localSelectedFilters ): null;
-        const primaryCategory = selectedFilters? selectedFilters : filter.length ? filter : [];
+        const localSelectedFilters = localStorage.getItem("selectedFilters");
+        const selectedFilters = localSelectedFilters
+          ? JSON.parse(localSelectedFilters)
+          : null;
+        const primaryCategory = selectedFilters
+          ? selectedFilters
+          : filter.length
+          ? filter
+          : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = {
           lastUpdatedOn: order,
         };
         let offset = debouncedSearchTerm !== "" ? 0 : page * LIMIT;
         if (prevFilterRef.current !== filter) {
-          offset=0;
+          offset = 0;
           setPage(0);
-          // router.push(
-          //   {
-          //     pathname: router.pathname,
-          //     query: { ...router.query, page: 1 }, 
-          //   },
-          //   undefined,
-          //   { shallow: true } 
-          // );
+
           prevFilterRef.current = filter;
         }
         const contentType = "discover-contents";
@@ -168,7 +189,9 @@ const ContentsPage = () => {
           );
         }
 
-        const contentList = (response?.content || []).concat(response?.QuestionSet || []);
+        const contentList = (response?.content || []).concat(
+          response?.QuestionSet || []
+        );
         setContentList(contentList);
         setTotalCount(response?.count);
         setLoading(false);
@@ -177,11 +200,10 @@ const ContentsPage = () => {
       }
     };
     getContentList();
- 
-  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, state, page]);
+  }, [debouncedSearchTerm, filter, fetchContentAPI, sortBy, state, page]);
 
   useEffect(() => {
-    const filteredArray = contentList.map(item => ({
+    const filteredArray = contentList.map((item) => ({
       image: item?.appIcon,
       contentType: item.primaryCategory,
       name: item.name,
@@ -194,13 +216,11 @@ const ContentsPage = () => {
       creator: item.creator,
       description: item?.description,
       state: item?.state,
-      author: item.author
+      author: item.author,
     }));
-    setData(filteredArray)
-    console.log(filteredArray)
+    setData(filteredArray);
+    console.log(filteredArray);
   }, [contentList]);
-
-  
 
   const filteredData = useMemo(
     () =>
@@ -210,21 +230,32 @@ const ContentsPage = () => {
     [debouncedSearchTerm, contentList]
   );
 
-
   const displayedRows = filteredData.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
-  ); 
-  
-  console.log("contentList", contentList)
+  );
+
+  console.log("contentList", contentList);
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
-      
+
       <Box p={3}>
-        <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: totalCount > LIMIT ? '15px' : '0px' }}>
+        <Box
+          sx={{
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 2px 6px 2px #00000026",
+            pb: totalCount > LIMIT ? "15px" : "0px",
+          }}
+        >
           <Box p={2}>
-            <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "16px" }}>Discover Contents</Typography>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", fontSize: "16px" }}
+            >
+              Discover Contents
+            </Typography>
           </Box>
           {/* <Typography mb={2}>Here you see all your content.</Typography> */}
 
@@ -238,28 +269,29 @@ const ContentsPage = () => {
               discoverContents={true}
             />
           </Box>
-              {loading ? (
+          {loading ? (
             <Loader showBackdrop={true} loadingText={"Loading"} />
           ) : (
             <>
-                <Box className="table-ka-container">
-                  <KaTableComponent columns={columns} tableTitle="discover-contents" data={data} />
-                </Box>
-              </>
+              <Box className="table-ka-container">
+                <KaTableComponent
+                  columns={columns}
+                  tableTitle="discover-contents"
+                  data={data}
+                />
+              </Box>
+            </>
           )}
-           {totalCount > LIMIT && (
+          {totalCount > LIMIT && (
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
               setPage={setPage}
-             onPageChange={(event, newPage) => setPage(newPage - 1)}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
             />
           )}
         </Box>
-
-       
       </Box>
-
     </Layout>
   );
 };

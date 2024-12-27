@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -24,8 +30,8 @@ import router from "next/router";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/utils/app.constant";
 import WorkspaceText from "@/components/WorkspaceText";
-import { Table as KaTable } from 'ka-table';
-import { DataType } from 'ka-table/enums';
+import { Table as KaTable } from "ka-table";
+import { DataType } from "ka-table/enums";
 import "ka-table/style.css";
 import KaTableComponent from "@/components/KaTableComponent";
 import useSharedStore from "@/utils/useSharedState";
@@ -37,14 +43,32 @@ import useSharedStore from "@/utils/useSharedState";
 
 // ]
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "200px" },
-  { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
-  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'contentAction', title: 'ACTION', dataType: DataType.String, width: "100px" },
-
-
-]
+  {
+    key: "title_and_description",
+    title: "TITLE & DESCRIPTION",
+    dataType: DataType.String,
+    width: "450px",
+  },
+  {
+    key: "contentType",
+    title: "CONTENT TYPE",
+    dataType: DataType.String,
+    width: "200px",
+  },
+  { key: "status", title: "STATUS", dataType: DataType.String, width: "100px" },
+  {
+    key: "lastUpdatedOn",
+    title: "LAST MODIFIED",
+    dataType: DataType.String,
+    width: "180px",
+  },
+  {
+    key: "contentAction",
+    title: "ACTION",
+    dataType: DataType.String,
+    width: "100px",
+  },
+];
 const AllContentsPage = () => {
   const theme = useTheme<any>();
 
@@ -56,20 +80,18 @@ const AllContentsPage = () => {
   const [sortBy, setSortBy] = useState("Modified On");
   const [statusBy, setStatusBy] = useState("All");
 
- const [contentList, setContentList] = React.useState<content[]>([]);
+  const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const prevFilterRef = useRef(filter);
 
-  const fetchContentAPI = useSharedStore(
-    (state: any) => state.fetchContentAPI
-  );
+  const fetchContentAPI = useSharedStore((state: any) => state.fetchContentAPI);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
   const [totalCount, setTotalCount] = useState(0);
-  
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
   };
@@ -100,19 +122,18 @@ const AllContentsPage = () => {
   };
 
   const handleSortChange = (sortBy: string) => {
-    console.log("sortBy", sortBy)
+    console.log("sortBy", sortBy);
     setSortBy(sortBy);
   };
   const handleStatusChange = (statusBy: string) => {
     setStatusBy(statusBy);
   };
 
-
   useEffect(() => {
     const getContentList = async () => {
       try {
         setLoading(true);
-        let status=[
+        let status = [
           "Draft",
           "FlagDraft",
           "Review",
@@ -122,7 +143,7 @@ const AllContentsPage = () => {
           "FlagReview",
         ];
         if (statusBy === "" || statusBy === "All") {
-           status = [
+          status = [
             "Draft",
             "FlagDraft",
             "Review",
@@ -131,40 +152,41 @@ const AllContentsPage = () => {
             "Unlisted",
             "FlagReview",
           ];
-        }
-        else if (statusBy === "Live") {
+        } else if (statusBy === "Live") {
           status = ["Live"];
-        }
-        else if (statusBy === "Review") {
+        } else if (statusBy === "Review") {
           status = ["Review"];
-        }
-        else if (statusBy === "Draft") {
+        } else if (statusBy === "Draft") {
           status = ["Draft"];
-        }
-        else if (statusBy === "Unlisted") {
+        } else if (statusBy === "Unlisted") {
           status = ["Unlisted"];
-        }
-        else if (statusBy === "FlagReview") {
+        } else if (statusBy === "FlagReview") {
           status = ["FlagReview"];
         }
-     
+
         const query = debouncedSearchTerm || "";
-        const localSelectedFilters= localStorage.getItem("selectedFilters");
-        const selectedFilters = localSelectedFilters?JSON.parse(localSelectedFilters ): null;
-        const primaryCategory = selectedFilters? selectedFilters : filter.length ? filter : [];
- 
+        const localSelectedFilters = localStorage.getItem("selectedFilters");
+        const selectedFilters = localSelectedFilters
+          ? JSON.parse(localSelectedFilters)
+          : null;
+        const primaryCategory = selectedFilters
+          ? selectedFilters
+          : filter.length
+          ? filter
+          : [];
+
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = {
           lastUpdatedOn: order,
         };
-        let offset =debouncedSearchTerm!==""? 0: page * LIMIT;
+        let offset = debouncedSearchTerm !== "" ? 0 : page * LIMIT;
         if (prevFilterRef.current !== filter) {
-          offset=0;
+          offset = 0;
           setPage(0);
-          
+
           prevFilterRef.current = filter;
         }
-        console.log("seraching", debouncedSearchTerm)
+        console.log("seraching", debouncedSearchTerm);
         const response = await getContent(
           status,
           query,
@@ -184,10 +206,10 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter,fetchContentAPI, sortBy, statusBy, page]);
+  }, [debouncedSearchTerm, filter, fetchContentAPI, sortBy, statusBy, page]);
 
   useEffect(() => {
-    const filteredArray = contentList.map(item => ({
+    const filteredArray = contentList.map((item) => ({
       image: item?.appIcon,
       contentType: item.primaryCategory,
       name: item.name,
@@ -197,14 +219,11 @@ const AllContentsPage = () => {
       identifier: item.identifier,
       mimeType: item.mimeType,
       mode: item.mode,
-      description: item?.description
-
+      description: item?.description,
     }));
-    setData(filteredArray)
-    console.log(filteredArray)
+    setData(filteredArray);
+    console.log(filteredArray);
   }, [contentList]);
-
-  
 
   const filteredData = useMemo(
     () =>
@@ -214,21 +233,32 @@ const AllContentsPage = () => {
     [debouncedSearchTerm, contentList]
   );
 
-
   const displayedRows = filteredData.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
-  ); 
-  
-  console.log("contentList", contentList)
+  );
+
+  console.log("contentList", contentList);
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
-      
+
       <Box p={3}>
-        <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: totalCount > LIMIT ? '15px' : '0px' }}>
+        <Box
+          sx={{
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 2px 6px 2px #00000026",
+            pb: totalCount > LIMIT ? "15px" : "0px",
+          }}
+        >
           <Box p={2}>
-            <Typography variant="h4" sx={{ fontWeight: "bold", fontSize: "16px" }}>All My Contents</Typography>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", fontSize: "16px" }}
+            >
+              All My Contents
+            </Typography>
           </Box>
           {/* <Typography mb={2}>Here you see all your content.</Typography> */}
 
@@ -242,16 +272,20 @@ const AllContentsPage = () => {
               allContents={true}
             />
           </Box>
-              {loading ? (
+          {loading ? (
             <Loader showBackdrop={true} loadingText={"Loading"} />
           ) : (
             <>
-                <Box className="table-ka-container">
-                  <KaTableComponent columns={columns} tableTitle="all-content" data={data} />
-                </Box>
-              </>
+              <Box className="table-ka-container">
+                <KaTableComponent
+                  columns={columns}
+                  tableTitle="all-content"
+                  data={data}
+                />
+              </Box>
+            </>
           )}
-           {totalCount > LIMIT && (
+          {totalCount > LIMIT && (
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
@@ -260,10 +294,7 @@ const AllContentsPage = () => {
             />
           )}
         </Box>
-
-       
       </Box>
-
     </Layout>
   );
 };
