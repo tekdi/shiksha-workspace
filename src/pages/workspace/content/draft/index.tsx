@@ -126,10 +126,7 @@ const DraftPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         let offset = debouncedSearchTerm !== "" ? 0 : page * LIMIT;
-        const localSelectedFilters = localStorage.getItem("selectedFilters");
-        const selectedFilters = localSelectedFilters
-          ? JSON.parse(localSelectedFilters)
-          : null;
+      
           const primaryCategory =filter.length? filter: [];
         if (prevFilterRef.current !== filter) {
           offset = 0;

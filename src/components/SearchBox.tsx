@@ -76,14 +76,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
 
 console.log("filterOption", filterOption);
   const [primaryCategory, setPrimaryCategory] = useState<string[]>();
-  // useEffect(() => {
-  //   const localSelectedFilters= localStorage.getItem("selectedFilters");
-  //       const selectedFilter = localSelectedFilters?JSON.parse(localSelectedFilters ): null;
-  //       if(selectedFilters){ 
-  //         setSelectedFilters(selectedFilter);
-  //        }
-       
-  // }, []);
+ 
   useEffect(() => {
     const PrimaryCategoryData = async () => {
       const response = await getPrimaryCategory();

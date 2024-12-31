@@ -153,10 +153,7 @@ const ContentsPage = () => {
           // "FlagReview",
         ];
         const query = debouncedSearchTerm || "";
-        const localSelectedFilters = localStorage.getItem("selectedFilters");
-        const selectedFilters = localSelectedFilters
-          ? JSON.parse(localSelectedFilters)
-          : null;
+        
           const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = {
