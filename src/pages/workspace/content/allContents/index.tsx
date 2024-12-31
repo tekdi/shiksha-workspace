@@ -26,7 +26,7 @@ import { timeAgo } from "@/utils/Helper";
 import Loader from "@/components/Loader";
 import NoDataFound from "@/components/NoDataFound";
 import { MIME_TYPE } from "@/utils/app.config";
-import router from "next/router";
+import { useRouter } from "next/router";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/utils/app.constant";
 import WorkspaceText from "@/components/WorkspaceText";
@@ -71,6 +71,7 @@ const columns = [
 ];
 const AllContentsPage = () => {
   const theme = useTheme<any>();
+  const router = useRouter();
 
   const [selectedKey, setSelectedKey] = useState("allContents");
   const [page, setPage] = useState(0);

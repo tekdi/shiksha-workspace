@@ -1,40 +1,28 @@
+import KaTableComponent from "@/components/KaTableComponent";
+import Loader from "@/components/Loader";
+import PaginationComponent from "@/components/PaginationComponent";
+import WorkspaceText from "@/components/WorkspaceText";
+import { timeAgo } from "@/utils/Helper";
+import { LIMIT } from "@/utils/app.constant";
+import useSharedStore from "@/utils/useSharedState";
+import {
+  Box,
+  Typography,
+  useTheme
+} from "@mui/material";
+import { DataType } from "ka-table/enums";
+import "ka-table/style.css";
+import { useRouter } from "next/router";
 import React, {
   useEffect,
   useMemo,
-  useState,
-  useCallback,
   useRef,
+  useState
 } from "react";
 import Layout from "../../../../components/Layout";
-import {
-  Typography,
-  Box,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TablePagination,
-  IconButton,
-  useTheme,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import UpReviewTinyImage from "@mui/icons-material/LibraryBooks";
 import SearchBox from "../../../../components/SearchBox";
-import { deleteContent, getContent } from "../../../../services/ContentService";
-import { timeAgo } from "@/utils/Helper";
-import Loader from "@/components/Loader";
-import NoDataFound from "@/components/NoDataFound";
-import { MIME_TYPE } from "@/utils/app.config";
-import router from "next/router";
-import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT } from "@/utils/app.constant";
-import WorkspaceText from "@/components/WorkspaceText";
-import { Table as KaTable } from "ka-table";
-import { DataType } from "ka-table/enums";
-import "ka-table/style.css";
-import KaTableComponent from "@/components/KaTableComponent";
-import useSharedStore from "@/utils/useSharedState";
+import { getContent } from "../../../../services/ContentService";
+
 // const columns = [
 //   { key: 'name', title: 'Content', dataType: DataType.String, width: "450px" },
 //   { key: 'lastUpdatedOn', title: 'Last Updated', dataType: DataType.String, width: "300px" },
@@ -74,6 +62,7 @@ const columns = [
 ];
 const ContentsPage = () => {
   const theme = useTheme<any>();
+  const router = useRouter();
 
   const [selectedKey, setSelectedKey] = useState("discover-contents");
   const [page, setPage] = useState(0);

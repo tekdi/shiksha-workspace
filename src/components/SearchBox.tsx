@@ -23,7 +23,7 @@ import {
   getPrimaryCategory,
 } from "@/services/ContentService";
 import { SortOptions, StatusOptions } from "@/utils/app.constant";
-import router from "next/router";
+import { useRouter } from "next/router";
 
 export interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -52,6 +52,8 @@ const SearchBox: React.FC<SearchBarProps> = ({
   allContents = false,
   discoverContents = false,
 }) => {
+  const router = useRouter();
+
   const theme = useTheme<any>();
   const [searchTerm, setSearchTerm] = useState(value);
   const sort: string = typeof router.query.sort === "string" 
