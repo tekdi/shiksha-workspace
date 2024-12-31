@@ -19,7 +19,7 @@ import PaginationComponent from "@/components/PaginationComponent";
 import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
 import { MIME_TYPE } from "@/utils/app.config";
-import router from "next/router";
+import  { useRouter } from "next/router";
 import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from "ka-table/enums";
 import KaTableComponent from "@/components/KaTableComponent";
@@ -48,6 +48,8 @@ const columns = [
   { key: "action", title: "ACTION", dataType: DataType.String, width: "100px" },
 ];
 const SubmittedForReviewPage = () => {
+  const router = useRouter();
+
   const [selectedKey, setSelectedKey] = useState("submitted");
   const filterOption: string[] = router.query.filterOptions
   ? JSON.parse(router.query.filterOptions as string)
