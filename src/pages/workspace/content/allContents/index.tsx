@@ -142,27 +142,47 @@ const AllContentsPage = () => {
           "Unlisted",
           "FlagReview",
         ];
-        if (statusBy === "" || statusBy === "All") {
-          status = [
-            "Draft",
-            "FlagDraft",
-            "Review",
-            "Processing",
-            "Live",
-            "Unlisted",
-            "FlagReview",
-          ];
-        } else if (statusBy === "Live") {
-          status = ["Live"];
-        } else if (statusBy === "Review") {
-          status = ["Review"];
-        } else if (statusBy === "Draft") {
-          status = ["Draft"];
-        } else if (statusBy === "Unlisted") {
-          status = ["Unlisted"];
-        } else if (statusBy === "FlagReview") {
-          status = ["FlagReview"];
+
+        switch (statusBy) {
+          case "":
+          case "All":
+            status = [
+              "Draft",
+              "FlagDraft",
+              "Review",
+              "Processing",
+              "Live",
+              "Unlisted",
+              "FlagReview",
+            ];
+            break;
+          case "Live":
+            status = ["Live"];
+            break;
+          case "Review":
+            status = ["Review"];
+            break;
+          case "Draft":
+            status = ["Draft"];
+            break;
+          case "Unlisted":
+            status = ["Unlisted"];
+            break;
+          case "FlagReview":
+            status = ["FlagReview"];
+            break;
+          default:
+             status = [
+              "Draft",
+              "FlagDraft",
+              "Review",
+              "Processing",
+              "Live",
+              "Unlisted",
+              "FlagReview",
+            ];; 
         }
+        
 
         const query = debouncedSearchTerm || "";
         const localSelectedFilters = localStorage.getItem("selectedFilters");

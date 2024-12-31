@@ -165,30 +165,18 @@ const ContentsPage = () => {
           prevFilterRef.current = filter;
         }
         const contentType = "discover-contents";
-        let response;
-        if (state !== "All") {
-          response = await getContent(
-            status,
-            query,
-            LIMIT,
-            offset,
-            primaryCategory,
-            sort_by,
-            contentType,
-            state
-          );
-        } else {
-          response = await getContent(
-            status,
-            query,
-            LIMIT,
-            offset,
-            primaryCategory,
-            sort_by,
-            contentType
-          );
-        }
-
+       
+        const response = await getContent(
+          status,
+          query,
+          LIMIT,
+          offset,
+          primaryCategory,
+          sort_by,
+          contentType,
+          state !== "All" ? state : undefined
+        );
+        
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
         );
