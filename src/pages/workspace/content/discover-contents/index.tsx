@@ -79,8 +79,15 @@ const ContentsPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("Modified On");
+
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+  const [filter, setFilter] = useState<string[]>(filterOption);
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+  const [sortBy, setSortBy] = useState(sort);
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
   const prevFilterRef = useRef(filter);
@@ -91,8 +98,10 @@ const ContentsPage = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
   const [totalCount, setTotalCount] = useState(0);
-  const [state, setState] = useState("All");
-
+  const stateQuery : string = typeof router.query.state === "string" 
+  ? router.query.state 
+  : "All";
+  const [state, setState] = useState<string>(stateQuery);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
   };
@@ -148,11 +157,7 @@ const ContentsPage = () => {
         const selectedFilters = localSelectedFilters
           ? JSON.parse(localSelectedFilters)
           : null;
-        const primaryCategory = selectedFilters
-          ? selectedFilters
-          : filter.length
-          ? filter
-          : [];
+          const primaryCategory = filter.length ? filter : [];
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = {
           lastUpdatedOn: order,

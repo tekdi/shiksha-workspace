@@ -50,12 +50,20 @@ const columns = [
 ];
 const DraftPage = () => {
   const [selectedKey, setSelectedKey] = useState("draft");
+  const router = useRouter();
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("Modified On");
-  const [contentList, setContentList] = React.useState([]);
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+  const [filter, setFilter] = useState<string[]>(filterOption);  
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+    const [sortBy, setSortBy] = useState(sort);
+      const [contentList, setContentList] = React.useState([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
@@ -111,7 +119,6 @@ const DraftPage = () => {
     setContentDeleted((prev) => !prev);
   };
 
-  const router = useRouter();
 
   useEffect(() => {
     const getDraftContentList = async () => {
@@ -123,11 +130,7 @@ const DraftPage = () => {
         const selectedFilters = localSelectedFilters
           ? JSON.parse(localSelectedFilters)
           : null;
-        const primaryCategory = selectedFilters
-          ? selectedFilters
-          : filter.length
-          ? filter
-          : [];
+          const primaryCategory =filter.length? filter: [];
         if (prevFilterRef.current !== filter) {
           offset = 0;
           setPage(0);

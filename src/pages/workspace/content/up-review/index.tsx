@@ -38,9 +38,15 @@ const columns = [
 ]
 const UpForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("up-review");
-  const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("Modified On");
-  const [searchTerm, setSearchTerm] = useState("");
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+  const [filter, setFilter] = useState<string[]>(filterOption);
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+    const [sortBy, setSortBy] = useState(sort);
+      const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = useState(false);
@@ -106,10 +112,7 @@ const UpForReviewPage = () => {
         setLoading(true);
         const query = debouncedSearchTerm || "";
         let offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
-        const localSelectedFilters= localStorage.getItem("selectedFilters");
-        const selectedFilters = localSelectedFilters?JSON.parse(localSelectedFilters ): null;
-        const primaryCategory = selectedFilters? selectedFilters : filter.length ? filter : [];
- 
+        const primaryCategory = filter.length ? filter : [];
         if (prevFilterRef.current !== filter) {
           offset=0;
           setPage(0);

@@ -76,9 +76,18 @@ const AllContentsPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("Modified On");
-  const [statusBy, setStatusBy] = useState("All");
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+  const [filter, setFilter] = useState<string[]>(filterOption);
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+    const [sortBy, setSortBy] = useState(sort);
+    const statusQuery : string = typeof router.query.status === "string" 
+    ? router.query.status 
+    : "All";
+    const [statusBy, setStatusBy] = useState<string>(statusQuery);
 
   const [contentList, setContentList] = React.useState<content[]>([]);
   const [data, setData] = React.useState<any[]>([]);
@@ -185,17 +194,8 @@ const AllContentsPage = () => {
         
 
         const query = debouncedSearchTerm || "";
-        const localSelectedFilters = localStorage.getItem("selectedFilters");
-        const selectedFilters = localSelectedFilters
-          ? JSON.parse(localSelectedFilters)
-          : null;
-        const primaryCategory = selectedFilters
-          ? selectedFilters
-          : filter.length
-          ? filter
-          : [];
-
-        const order = sortBy === "Created On" ? "asc" : "desc";
+          const primaryCategory = filter.length ? filter : [];
+         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = {
           lastUpdatedOn: order,
         };
