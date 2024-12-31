@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -21,24 +21,43 @@ import { LIMIT } from "@/utils/app.constant";
 import { MIME_TYPE } from "@/utils/app.config";
 import router from "next/router";
 import WorkspaceText from "@/components/WorkspaceText";
-import { DataType } from 'ka-table/enums';
+import { DataType } from "ka-table/enums";
 import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
 import useSharedStore from "@/utils/useSharedState";
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "200px" },
+  {
+    key: "title_and_description",
+    title: "TITLE & DESCRIPTION",
+    dataType: DataType.String,
+    width: "450px",
+  },
+  {
+    key: "contentType",
+    title: "CONTENT TYPE",
+    dataType: DataType.String,
+    width: "200px",
+  },
   // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
-  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
-
-
-]
+  {
+    key: "lastUpdatedOn",
+    title: "LAST MODIFIED",
+    dataType: DataType.String,
+    width: "180px",
+  },
+  { key: "action", title: "ACTION", dataType: DataType.String, width: "100px" },
+];
 const SubmittedForReviewPage = () => {
   const [selectedKey, setSelectedKey] = useState("submitted");
-  const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("Modified On");
-  const [searchTerm, setSearchTerm] = useState("");
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+  const [filter, setFilter] = useState<string[]>(filterOption);
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+    const [sortBy, setSortBy] = useState(sort);
+      const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = useState(false);
@@ -46,9 +65,9 @@ const SubmittedForReviewPage = () => {
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = React.useState<any[]>([]);
-  const fetchContentAPI = useSharedStore(
-    (state: any) => state.fetchContentAPI
-  );
+  const fetchContentAPI = useSharedStore((state: any) => state.fetchContentAPI);
+  const prevFilterRef = useRef(filter);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -70,10 +89,10 @@ const SubmittedForReviewPage = () => {
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
-      mode: item.mode
+      mode: item.mode,
     }));
-    setData(filteredArray)
-    console.log(filteredArray)
+    setData(filteredArray);
+    console.log(filteredArray);
   }, [contentList]);
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -87,15 +106,19 @@ const SubmittedForReviewPage = () => {
     setSortBy(sortBy);
   };
 
- 
-
   useEffect(() => {
     const getReviewContentList = async () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+        let offset = debouncedSearchTerm !== "" ? 0 : page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
+        if (prevFilterRef.current !== filter) {
+          offset = 0;
+          setPage(0);
+
+          prevFilterRef.current = filter;
+        }
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const response = await getContent(
@@ -118,14 +141,27 @@ const SubmittedForReviewPage = () => {
       }
     };
     getReviewContentList();
-  }, [debouncedSearchTerm, filter, sortBy, fetchContentAPI,contentDeleted, page]);
+  }, [
+    debouncedSearchTerm,
+    filter,
+    sortBy,
+    fetchContentAPI,
+    contentDeleted,
+    page,
+  ]);
 
-  
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-        <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: totalCount > LIMIT ? '15px' : '0px' }}>
+        <Box
+          sx={{
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 2px 6px 2px #00000026",
+            pb: totalCount > LIMIT ? "15px" : "0px",
+          }}
+        >
           <Box p={2}>
             <Typography
               variant="h4"
@@ -147,7 +183,6 @@ const SubmittedForReviewPage = () => {
             />
           </Box>
 
-
           {/* {loading ? (
             <Box display="flex" justifyContent="center" my={5}>
               <CircularProgress />
@@ -159,16 +194,20 @@ const SubmittedForReviewPage = () => {
           ) : (
             <NoDataFound />
           )} */}
-           {loading ? (
+          {loading ? (
             <Box display="flex" justifyContent="center" my={5}>
               <CircularProgress />
             </Box>
           ) : (
             <Box className="table-ka-container">
-              <KaTableComponent columns={columns} data={data} tableTitle="submitted"  />
+              <KaTableComponent
+                columns={columns}
+                data={data}
+                tableTitle="submitted"
+              />
             </Box>
           )}
-        {totalCount > LIMIT && (
+          {totalCount > LIMIT && (
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}

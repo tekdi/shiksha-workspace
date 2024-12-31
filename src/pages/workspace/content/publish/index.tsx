@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -21,39 +21,58 @@ import { LIMIT } from "@/utils/app.constant";
 import { useRouter } from "next/router";
 import { MIME_TYPE } from "@/utils/app.config";
 import WorkspaceText from "@/components/WorkspaceText";
-import { DataType } from 'ka-table/enums';
+import { DataType } from "ka-table/enums";
 import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
 import useSharedStore from "@/utils/useSharedState";
 
 const columns = [
-  { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "450px" },
-  { key: 'contentType', title: 'CONTENT TYPE', dataType: DataType.String, width: "200px" },
+  {
+    key: "title_and_description",
+    title: "TITLE & DESCRIPTION",
+    dataType: DataType.String,
+    width: "450px",
+  },
+  {
+    key: "contentType",
+    title: "CONTENT TYPE",
+    dataType: DataType.String,
+    width: "200px",
+  },
   // { key: 'status', title: 'STATUS', dataType: DataType.String, width: "100px" },
-  { key: 'lastUpdatedOn', title: 'LAST MODIFIED', dataType: DataType.String, width: "180px" },
-  { key: 'action', title: 'ACTION', dataType: DataType.String, width: "100px" },
-
-
-]
+  {
+    key: "lastUpdatedOn",
+    title: "LAST MODIFIED",
+    dataType: DataType.String,
+    width: "180px",
+  },
+  { key: "action", title: "ACTION", dataType: DataType.String, width: "100px" },
+];
 const PublishPage = () => {
+  const router = useRouter();
+
   const [selectedKey, setSelectedKey] = useState("publish");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("Modified On");
-  const [contentList, setContentList] = React.useState([]);
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+  const [filter, setFilter] = useState<string[]>(filterOption);
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+    const [sortBy, setSortBy] = useState(sort);
+      const [contentList, setContentList] = React.useState([]);
   const [contentDeleted, setContentDeleted] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = React.useState<any[]>([]);
-  const fetchContentAPI = useSharedStore(
-    (state: any) => state.fetchContentAPI
-  );
+  const fetchContentAPI = useSharedStore((state: any) => state.fetchContentAPI);
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
 
-  const router = useRouter();
+  const prevFilterRef = useRef(filter);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -76,10 +95,10 @@ const PublishPage = () => {
       status: item.status,
       identifier: item.identifier,
       mimeType: item.mimeType,
-      mode: item.mode
+      mode: item.mode,
     }));
-    setData(filteredArray)
-    console.log(filteredArray)
+    setData(filteredArray);
+    console.log(filteredArray);
   }, [contentList]);
   const handleSearch = (search: string) => {
     setSearchTerm(search.toLowerCase());
@@ -92,8 +111,6 @@ const PublishPage = () => {
   const handleSortChange = (sortBy: string) => {
     setSortBy(sortBy);
   };
-
- 
 
   const openEditor = (content: any) => {
     const identifier = content?.identifier;
@@ -119,8 +136,15 @@ const PublishPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+        let offset = debouncedSearchTerm !== "" ? 0 : page * LIMIT;
+        
         const primaryCategory = filter.length ? filter : [];
+        if (prevFilterRef.current !== filter) {
+          offset = 0;
+          setPage(0);
+
+          prevFilterRef.current = filter;
+        }
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const response = await getContent(
@@ -143,14 +167,27 @@ const PublishPage = () => {
       }
     };
     getPublishContentList();
-  }, [debouncedSearchTerm, filter, sortBy,fetchContentAPI, contentDeleted, page]);
-
+  }, [
+    debouncedSearchTerm,
+    filter,
+    sortBy,
+    fetchContentAPI,
+    contentDeleted,
+    page,
+  ]);
 
   return (
     <Layout selectedKey={selectedKey} onSelect={setSelectedKey}>
       <WorkspaceText />
       <Box p={3}>
-        <Box sx={{ background: "#fff", borderRadius: '8px', boxShadow: "0px 2px 6px 2px #00000026", pb: totalCount > LIMIT ? '15px' : '0px' }} >
+        <Box
+          sx={{
+            background: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 2px 6px 2px #00000026",
+            pb: totalCount > LIMIT ? "15px" : "0px",
+          }}
+        >
           <Box p={2}>
             <Typography
               variant="h4"
@@ -158,7 +195,6 @@ const PublishPage = () => {
             >
               Published
             </Typography>
-
           </Box>
           <Box mb={3}>
             <SearchBox
@@ -169,25 +205,30 @@ const PublishPage = () => {
             />
           </Box>
           {/* <Typography mb={2}>Here you see all your published content.</Typography> */}
-{loading ? (
+          {loading ? (
             <Box display="flex" justifyContent="center" my={5}>
               <CircularProgress />
             </Box>
-          ) : (<>
-          <Box className="table-ka-container">
-              <KaTableComponent columns={columns} data={data} tableTitle="publish" />
-            </Box>
-          </>)}
-            {totalCount > LIMIT && (
+          ) : (
+            <>
+              <Box className="table-ka-container">
+                <KaTableComponent
+                  columns={columns}
+                  data={data}
+                  tableTitle="publish"
+                />
+              </Box>
+            </>
+          )}
+          {totalCount > LIMIT && (
             <PaginationComponent
               count={Math.ceil(totalCount / LIMIT)}
               page={page}
               setPage={setPage}
-                onPageChange={(event, newPage) => setPage(newPage - 1)}
+              onPageChange={(event, newPage) => setPage(newPage - 1)}
             />
           )}
         </Box>
-     
       </Box>
     </Layout>
   );
