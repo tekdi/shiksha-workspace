@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import {
   genericEditorSaveFormResponse,
-  telemetryResponse,
   creatLockResponse,
   genericEditorReviewFormResponse,
   genericEditorRequestForChangesFormResponse,
@@ -36,10 +35,6 @@ export default async function handler(
 
   let pathString = Array.isArray(path) ? path.join("/") : (path as string);
 
-  // Handle mocked responses
-  if (pathString === "/action/data/v3/telemetry") {
-    return res.status(200).json(telemetryResponse);
-  }
 
   if (pathString === "/action/data/v1/form/read") {
     const { action, subType, type } = body.request;
