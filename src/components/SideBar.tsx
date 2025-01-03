@@ -210,8 +210,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             sx={{
               margin: 2,
               cursor: "pointer",
-              position: "relative",
-              zIndex: 99999,
               color: isAdmin ? "white" : "black",
             }}
             onClick={toggleDrawer}
