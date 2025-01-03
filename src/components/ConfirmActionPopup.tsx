@@ -100,7 +100,7 @@ const ConfirmActionPopup: React.FC<ConfirmActionPopupProps> = ({
 
             <DialogContent>
                 <Typography gutterBottom mt="20px">
-                    {actionType === 'publish' ? 'Please confirm that ALL the following items are verified (by ticking the checkboxes) before you can {actionType}':'Please select the reason(s) for rejection by ticking the checkboxes below and provide a comment to proceed with rejecting the action:'}
+                    {actionType === 'publish' ?`Please confirm that ALL the following items are verified (by ticking the checkboxes) before you can ${actionType}`:'Please select the reason(s) for rejection by ticking the checkboxes below and provide a comment to proceed with rejecting the action:'}
                 </Typography>
 
                 <Box mt={2}>
