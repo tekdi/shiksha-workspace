@@ -21,27 +21,49 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import logo from "/public/logo.png";
 import { Role } from "@/utils/app.constant";
 import { getLocalStoredUserRole } from "@/services/LocalStorageService";
 const userRole = getLocalStoredUserRole();
 
+let isAdmin: boolean;
+if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+  isAdmin = localStorage.getItem("adminInfo") ? true : false;
+}
 // Updated menu items with icons
 const menuItems = [
   { text: "Create", key: "create", icon: <AddOutlinedIcon /> },
   { text: "Drafts", key: "draft", icon: <CreateOutlinedIcon /> },
   ...(userRole !== Role.CCTA
-    ? [{ text: "Submitted for Review", key: "submitted", icon: <PreviewOutlinedIcon /> },
-  ]
+    ? [
+        {
+          text: "Submitted for Review",
+          key: "submitted",
+          icon: <PreviewOutlinedIcon />,
+        },
+      ]
     : []),
   ...(userRole === Role.CCTA
-    ? [{ text: "Up for Review", key: "up-review", icon: <PreviewOutlinedIcon /> }]
+    ? [
+        {
+          text: "Up for Review",
+          key: "up-review",
+          icon: <PreviewOutlinedIcon />,
+        },
+      ]
     : []),
-  { text: "My Published Contents", key: "publish", icon: <OutlinedFlagOutlinedIcon /> },
+  {
+    text: "My Published Contents",
+    key: "publish",
+    icon: <OutlinedFlagOutlinedIcon />,
+  },
   { text: "All My Contents", key: "allContents", icon: <AppsOutlinedIcon /> },
-  { text: "Discover Contents", key: "discover-contents", icon: <ManageSearchIcon /> },
-
+  {
+    text: "Discover Contents",
+    key: "discover-contents",
+    icon: <ManageSearchIcon />,
+  },
 ];
 
 interface SidebarProps {
@@ -68,18 +90,15 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
     setDrawerOpen(!drawerOpen);
   };
 
-
   const goBack = () => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userInfo = JSON.parse(localStorage.getItem("adminInfo") || "{}");
       console.log("userInfo", userInfo);
       if (userInfo?.role === Role.SCTA || userInfo?.role === Role.CCTA) {
         router.push("/course-planner");
-
-      }
-      else
-    router.push("/");
-  }};
+      } else router.push("/");
+    }
+  };
 
   const drawerContent = (
     <Box
@@ -88,15 +107,17 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
       width="284px !important"
       height="100%"
       sx={{
-        fontSize: '16px',
-        '@media (max-width: 900px)': {
-          background: 'linear-gradient(to bottom, white, #F8EFDA)',
-          fontSize: '12px',
+        fontSize: "16px",
+        "@media (max-width: 900px)": {
+          background: "linear-gradient(to bottom, white, #F8EFDA)",
+          fontSize: "12px",
         },
       }}
     >
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <img src={'/logo.png'} alt="logo" height={60} />
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <img src={"/logo.png"} alt="logo" height={60} />
       </Box>
       <Box
         display="flex"
@@ -104,7 +125,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
         justifyContent="space-between"
         paddingTop={"1rem"}
       >
-
         <Box display="flex" alignItems="center">
           <ListItemIcon>
             <IconButton onClick={goBack}>
@@ -139,8 +159,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
                   ? "var(--mui-palette-primary-main)"
                   : "transparent",
               color: "#000",
-               
-                  fontSize: '16px !important' ,
+
+              fontSize: "16px !important",
 
               "&:hover": {
                 background:
@@ -159,14 +179,23 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
                   selectedKey === item?.key
                     ? "#2E1500"
                     : theme.palette.warning.A200,
-                minWidth: '40px',
-                fontWeight: selectedKey === item?.key ? '500' : '500',
-                fontSize: '16px !important'
+                minWidth: "40px",
+                fontWeight: selectedKey === item?.key ? "500" : "500",
+                fontSize: "16px !important",
               }}
             >
               {item?.icon}
             </ListItemIcon>
-            <ListItemText className="menu-list-content" primaryTypographyProps={{ fontSize: '16px', fontFamily:'Poppins', fontWeight: selectedKey === item?.key ? '600' : '500', color:'black' }} primary={item?.text} />
+            <ListItemText
+              className="menu-list-content"
+              primaryTypographyProps={{
+                fontSize: "16px",
+                fontFamily: "Poppins",
+                fontWeight: selectedKey === item?.key ? "600" : "500",
+                color: "black",
+              }}
+              primary={item?.text}
+            />
           </ListItemButton>
         ))}
       </List>
@@ -177,8 +206,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
     <>
       {isMobile ? (
         <>
-
-          <MenuIcon sx={{ margin: 2, cursor: "pointer" }} onClick={toggleDrawer} />
+          <MenuIcon
+            sx={{
+              margin: 2,
+              cursor: "pointer",
+              color: isAdmin ? "white" : "black",
+            }}
+            onClick={toggleDrawer}
+          />
 
           <Drawer
             anchor="left"
@@ -201,7 +236,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             display: "flex",
             justifyContent: "flex-start",
             width: 284,
-       
           }}
         >
           {drawerContent}
