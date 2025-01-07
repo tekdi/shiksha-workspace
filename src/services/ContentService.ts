@@ -9,6 +9,7 @@ import {
   CHANNEL_ID,
   TENANT_ID,
   FRAMEWORK_ID,
+  CONTENT_FRAMEWORK_ID
 } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
@@ -244,7 +245,8 @@ export const createCourse = async (userId: any) => {
         resourceType: "Course",
         primaryCategory: "Course",
         contentType: "Course",
-        framework: FRAMEWORK_ID,
+        framework: CONTENT_FRAMEWORK_ID,
+        targetFWIds: [FRAMEWORK_ID]
       },
     },
   };
@@ -258,11 +260,15 @@ export const createCourse = async (userId: any) => {
   }
 };
 
-export const publishContent = async (identifier: any) => {
+export const publishContent = async (
+  identifier: any,
+  publishChecklist?: any
+) => {
   const requestBody = {
     request: {
       content: {
         lastPublishedBy: userId,
+        publishChecklist: publishChecklist,
       },
     },
   };
@@ -279,11 +285,16 @@ export const publishContent = async (identifier: any) => {
   }
 };
 
-export const submitComment = async (identifier: any, comment: any) => {
+export const submitComment = async (
+  identifier: any,
+  comment: any,
+  rejectReasons?: any
+) => {
   const requestBody = {
     request: {
       content: {
         rejectComment: comment,
+        rejectReasons: rejectReasons,
       },
     },
   };
@@ -322,6 +333,23 @@ export const getFrameworkDetails = async (): Promise<any> => {
 
   try {
     const response = await axios.get(apiUrl);
+    return response?.data;
+  } catch (error) {
+    console.error("Error in getting Framework Details", error);
+    return error;
+  }
+};
+export const getFormFields = async (): Promise<any> => {
+  const apiUrl: string = `/action/data/v1/form/read`;
+
+  try {
+    const response = await axios.post(apiUrl, {
+      request: {
+        action: "publish",
+        type: "content",
+        subType: "resource",
+      },
+    });
     return response?.data;
   } catch (error) {
     console.error("Error in getting Framework Details", error);

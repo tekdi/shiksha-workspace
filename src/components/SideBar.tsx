@@ -80,6 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
   const handleNavigation = (key: string) => {
     console.log(key);
     router.push(`/workspace/content/${key}`);
+    localStorage.setItem("selectedFilters", JSON.stringify([]))
     onSelect(key);
     if (isMobile) {
       setDrawerOpen(false); // Close drawer after selecting in mobile view

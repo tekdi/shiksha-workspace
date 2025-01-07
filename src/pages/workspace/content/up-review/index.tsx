@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../../../components/Layout";
 import {
   Typography,
@@ -19,7 +19,7 @@ import PaginationComponent from "@/components/PaginationComponent";
 import NoDataFound from "@/components/NoDataFound";
 import { LIMIT } from "@/utils/app.constant";
 import { MIME_TYPE } from "@/utils/app.config";
-import router from "next/router";
+import  { useRouter } from "next/router";
 import WorkspaceText from "@/components/WorkspaceText";
 import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
@@ -37,10 +37,18 @@ const columns = [
 
 ]
 const UpForReviewPage = () => {
+  const router = useRouter();
+
   const [selectedKey, setSelectedKey] = useState("up-review");
-  const [filter, setFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("Modified On");
-  const [searchTerm, setSearchTerm] = useState("");
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+  const [filter, setFilter] = useState<string[]>(filterOption);
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+    const [sortBy, setSortBy] = useState(sort);
+      const [searchTerm, setSearchTerm] = useState("");
   const [contentList, setContentList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [contentDeleted, setContentDeleted] = useState(false);
@@ -48,6 +56,8 @@ const UpForReviewPage = () => {
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [data, setData] = React.useState<any[]>([]);
+  const prevFilterRef = useRef(filter);
+
   const fetchContentAPI = useSharedStore(
     (state: any) => state.fetchContentAPI
   );
@@ -103,8 +113,14 @@ const UpForReviewPage = () => {
       try {
         setLoading(true);
         const query = debouncedSearchTerm || "";
-        const offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
+        let offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
         const primaryCategory = filter.length ? filter : [];
+        if (prevFilterRef.current !== filter) {
+          offset=0;
+          setPage(0);
+         
+          prevFilterRef.current = filter;
+        }
         const order = sortBy === "Created On" ? "asc" : "desc";
         const sort_by = { lastUpdatedOn: order };
         const contentType="upReview"

@@ -23,6 +23,7 @@ import {
   getPrimaryCategory,
 } from "@/services/ContentService";
 import { SortOptions, StatusOptions } from "@/utils/app.constant";
+import { useRouter } from "next/router";
 
 export interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -51,16 +52,33 @@ const SearchBox: React.FC<SearchBarProps> = ({
   allContents = false,
   discoverContents = false,
 }) => {
+  const router = useRouter();
+
   const theme = useTheme<any>();
   const [searchTerm, setSearchTerm] = useState(value);
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>("Modified On");
-  const [status, setStatus] = useState<string>("All");
-  const [state, setState] = useState<string>("All");
+  const sort: string = typeof router.query.sort === "string" 
+  ? router.query.sort 
+  : "Modified On";
+
+  const [sortBy, setSortBy] = useState<string>(sort);
+  const statusQuery : string = typeof router.query.status === "string" 
+  ? router.query.status 
+  : "All";
+  const [status, setStatus] = useState<string>(statusQuery);
+  const stateQuery : string = typeof router.query.state === "string" 
+  ? router.query.state 
+  : "All";
+  const [state, setState] = useState<string>(stateQuery);
   const [stateOptions, setStateOptions] = useState<string[]>([]);
 
-  const [primaryCategory, setPrimaryCategory] = useState<string[]>();
+  const filterOption: string[] = router.query.filterOptions
+  ? JSON.parse(router.query.filterOptions as string)
+  : [];
+    const [selectedFilters, setSelectedFilters] = useState<string[]>(filterOption);
 
+console.log("filterOption", filterOption);
+  const [primaryCategory, setPrimaryCategory] = useState<string[]>();
+ 
   useEffect(() => {
     const PrimaryCategoryData = async () => {
       const response = await getPrimaryCategory();
@@ -128,23 +146,55 @@ const SearchBox: React.FC<SearchBarProps> = ({
 
   const handleFilterChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page: 1 , filterOptions: JSON.stringify(value)}, 
+      },
+      undefined,
+      { shallow: true } 
+    );
     setSelectedFilters(value);
     onFilterChange && onFilterChange(value);
   };
 
   const handleSortChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value as string;
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query,  sort: value}, 
+      },
+      undefined,
+      { shallow: true } 
+    );
     setSortBy(value);
     onSortChange && onSortChange(value);
   };
 
   const handleStatusChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value as string;
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query,  status: value}, 
+      },
+      undefined,
+      { shallow: true } 
+    );
     setStatus(value);
     onStatusChange && onStatusChange(value);
   };
   const handleStateChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value as string;
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query,  state: value}, 
+      },
+      undefined,
+      { shallow: true } 
+    );
     setState(value);
     onStateChange && onStateChange(value);
   };
