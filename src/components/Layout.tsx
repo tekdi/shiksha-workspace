@@ -4,7 +4,6 @@ import Sidebar from "./SideBar";
 import { Toaster, toast } from "react-hot-toast";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
-import { useRouter } from "next/router";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,8 +13,6 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, selectedKey, onSelect }) => {
   const [toastShown, setToastShown] = useState(false);
-  const router = useRouter();
-  const isCreatePath = router.pathname === "/content/create";
 
   useEffect(() => {
     // Check localStorage to see if the toast has been dismissed
