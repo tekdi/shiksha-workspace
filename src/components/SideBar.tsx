@@ -27,10 +27,6 @@ import { Role } from "@/utils/app.constant";
 import { getLocalStoredUserRole } from "@/services/LocalStorageService";
 const userRole = getLocalStoredUserRole();
 
-let isAdmin: boolean;
-if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
-  isAdmin = localStorage.getItem("adminInfo") ? true : false;
-}
 // Updated menu items with icons
 const menuItems = [
   { text: "Create", key: "create", icon: <AddOutlinedIcon /> },
@@ -210,7 +206,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedKey, onSelect }) => {
             sx={{
               margin: 2,
               cursor: "pointer",
-              color: isAdmin ? "white" : "black",
             }}
             onClick={toggleDrawer}
           />
