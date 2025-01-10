@@ -261,11 +261,11 @@ export const genericEditorReviewFormResponse = {
                     },
                     {
                         "code": "contentLanguage",
-                        "dataType": "list",
+                        "dataType": "text",
                         "description": "Content Language",
                         "editable": true,
                         "index": 8,
-                        "inputType": "multiselect",
+                        "inputType": "select",
                         "label": "Content Language",
                         "name": "Content Language",
                         "range": [
