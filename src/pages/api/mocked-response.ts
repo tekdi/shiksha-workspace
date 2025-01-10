@@ -69,34 +69,6 @@ export const genericEditorSaveFormResponse = {
                         "placeholder": "Enter Keywords",
                         "required": false,
                         "visible": true
-                    },
-                    {
-                        "code": "primaryUser",
-                        "dataType": "list",
-                        "description": "Primary User",
-                        "editable": true,
-                        "index": 5,
-                        "inputType": "multiselect",
-                        "label": "Primary User",
-                        "name": "Primary User",
-                        "range": [
-                            {
-                                "key": "Parents/Care givers",
-                                "name": "Parents/Care givers"
-                            },
-                            {
-                                "key": "Educators",
-                                "name": "Educators"
-                            },
-                            {
-                                "key": "Learners/Children",
-                                "name": "Learners/Children"
-                            }
-                        ],
-                        "placeholder": "Select Primary User",
-                        "renderingHints": {},
-                        "required": false,
-                        "visible": true
                     }
                 ]
             },
@@ -289,11 +261,11 @@ export const genericEditorReviewFormResponse = {
                     },
                     {
                         "code": "contentLanguage",
-                        "dataType": "text",
+                        "dataType": "list",
                         "description": "Content Language",
                         "editable": true,
                         "index": 8,
-                        "inputType": "select",
+                        "inputType": "multiselect",
                         "label": "Content Language",
                         "name": "Content Language",
                         "range": [
@@ -369,11 +341,11 @@ export const genericEditorReviewFormResponse = {
                     },
                     {
                         "code": "program",
-                        "dataType": "text",
+                        "dataType": "list",
                         "description": "Program",
                         "editable": true,
                         "index": 10,
-                        "inputType": "select",
+                        "inputType": "multiselect",
                         "label": "Program",
                         "name": "Program",
                         "range": [
