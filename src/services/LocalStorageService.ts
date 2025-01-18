@@ -17,8 +17,18 @@ export const getLocalStoredUserId = () => {
 export const getLocalStoredUserName = () => {
   if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
     try {
-      const username = localStorage.getItem("name");
-      return username ?? "Anonymous User";
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+
+      if (userData?.firstName) {
+        const lastName = userData.lastName || "";
+        return `${userData.firstName} ${lastName}`.trim();
+      }
+
+      if (userData?.name) {
+        return userData.name;
+      }
+
+      return "Anonymous User";
     } catch (error) {
       console.error("Error retrieving user name from local storage:", error);
       return "Anonymous User";
@@ -29,6 +39,7 @@ export const getLocalStoredUserName = () => {
     return null;
   }
 };
+
 export const getLocalStoredUserRole = () => {
   if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
     try {
