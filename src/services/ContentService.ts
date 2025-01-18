@@ -238,7 +238,6 @@ export const createCourse = async (userId: any) => {
       content: {
         code: uuidv4(), // Generate a unique ID for 'code'
         name: "Untitled Course",
-        description: "Enter description for Course",
         createdBy: userId,
         createdFor: [CHANNEL_ID],
         mimeType: MIME_TYPE.COURSE_MIME_TYPE,
