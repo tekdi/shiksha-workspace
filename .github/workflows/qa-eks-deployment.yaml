@@ -1,12 +1,12 @@
-name: Deploy to EKS-Pratham
+name: Deploy to EKS-QA pratham-ms
 on:
   workflow_dispatch:
 env:
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME_DEV }}
+  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME_QA }}
   AWS_REGION: ${{ secrets.AWS_REGION_NAME }}
 jobs:
-  build_dev:
+  build_QA:
     name: Deployment
     runs-on: ubuntu-latest
     steps:
@@ -29,14 +29,8 @@ jobs:
         node-version: 21.1.0
     - name: Copy .env file
       env:
-       ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT_DEV }}
+       ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT_QA }}
       run: printf "%s" "$ENV_FILE_CONTENT" > manifest/configmap.yaml 
-      # run: echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
-    - name: Copy .env file in the code
-      env:
-       DEV_ENV: ${{ secrets.DEV_ENV }}
-      run:  rm -f .env && echo '${{ secrets.DEV_ENV }}' > .env
-      #echo "$ENV_FILE_CONTENT" > manifest/configmap.yaml
     - name: Show PWD and list content and Latest 3 commits 
       run: |
            echo "Fetching all branches to ensure complete history"
@@ -63,20 +57,20 @@ jobs:
         ECR_REGISTRY: ${{ secrets.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ secrets.ECR_IMAGE }}
       run: |
-        docker build -t ${{ secrets.ECR_REPOSITORY }}:${{ secrets.IMAGE_TAG_DEV }} .
-        docker push ${{ secrets.ECR_REPOSITORY }}:${{ secrets.IMAGE_TAG_DEV }}
+        docker build -t ${{ secrets.ECR_REPOSITORY }}:${{ secrets.IMAGE_TAG_QA }} .
+        docker push ${{ secrets.ECR_REPOSITORY }}:${{ secrets.IMAGE_TAG_QA }}
     - name: Update kube config
-      run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME_DEV }} --region ${{ secrets.AWS_REGION_NAME }}
+      run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME_QA }} --region ${{ secrets.AWS_REGION_NAME }}
     - name: Deploy to EKS
       env:
         ECR_REGISTRY: ${{ secrets.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ secrets.IMAGE_TAG_DEV }}
+        IMAGE_TAG: ${{ secrets.IMAGE_TAG_QA }}
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        ECR_IMAGE: ${{ secrets.ECR_IMAGE_DEV }}
+        ECR_IMAGE: ${{ secrets.ECR_IMAGE_QA }}
       run: |
         export ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY }}
-        export IMAGE_TAG=${{ secrets.IMAGE_TAG_DEV }}
-        export ECR_IMAGE=${{ secrets.ECR_IMAGE_DEV }}
+        export IMAGE_TAG=${{ secrets.IMAGE_TAG_QA }}
+        export ECR_IMAGE=${{ secrets.ECR_IMAGE_QA }}
         envsubst < manifest/workspace.yaml > manifest/workspace-updated.yaml
         cat manifest/workspace-updated.yaml
         rm -rf manifest/workspace-service.yaml
