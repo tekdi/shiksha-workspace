@@ -338,7 +338,7 @@ console.log("filterOption", filterOption);
             </FormControl>
           </Grid>
         )}
-        {discoverContents && (
+        {/* {discoverContents && (
           <Grid item xs={12} md={12} lg={2} justifySelf={"end"}>
             <FormControl sx={{ width: "100%", mt: 2 }}>
               <InputLabel>Filter By State</InputLabel>
@@ -355,7 +355,7 @@ console.log("filterOption", filterOption);
               </Select>
             </FormControl>
           </Grid>
-        )}
+        )} */}
       </Grid>
     </Box>
   );
