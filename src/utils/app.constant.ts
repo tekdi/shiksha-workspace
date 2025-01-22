@@ -8,8 +8,8 @@ export enum ContentType {
   QUESTION_SET = "QuestionSet",
 }
 export enum Role {
-  SCTA = "State Admin SCTA",
-  CCTA="Central Admin CCTA"
+  SCTA = "State Content Team Associate (SCTA)",
+  CCTA="Central Content Team Associate (CCTA)"
 }
 export const SortOptions = ["Modified On", "Created On"];
 export const StatusOptions = ["Live", "Review" ,  "Draft", "All"];
