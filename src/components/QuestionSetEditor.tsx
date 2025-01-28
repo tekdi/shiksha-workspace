@@ -82,6 +82,10 @@ const QuestionSetEditor: React.FC = () => {
     },
     config: {
       mode: mode || "edit",
+      userSpecificFrameworkField: {
+        code: "board",
+        value: localStorage.getItem('userSpecificBoard') ? localStorage.getItem('userSpecificBoard') : []
+      },
       enableQuestionCreation: true,
       enableAddFromLibrary: true,
       editableFields: {
@@ -137,6 +141,8 @@ const QuestionSetEditor: React.FC = () => {
     },
   };
 
+  console.log('questionSetEditorConfig ====>', questionSetEditorConfig)
+
   const editorRef = useRef<HTMLDivElement | null>(null);
   const isAppendedRef = useRef(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
@@ -148,7 +154,7 @@ const QuestionSetEditor: React.FC = () => {
         link.id = "sunbird-editor-css";
         link.rel = "stylesheet";
         link.href =
-          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.1/styles.css";
+          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.2/styles.css";
         document.head.appendChild(link);
       }
 
@@ -156,7 +162,7 @@ const QuestionSetEditor: React.FC = () => {
         const script = document.createElement("script");
         script.id = "sunbird-editor-js";
         script.src =
-          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.1/sunbird-questionset-editor.js";
+          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-questionset-editor-web-component@3.0.2/sunbird-questionset-editor.js";
         script.async = true;
         script.onload = () => setAssetsLoaded(true);
         document.body.appendChild(script);
