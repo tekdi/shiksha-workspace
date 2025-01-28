@@ -10,6 +10,7 @@ import {
 import {
   getLocalStoredUserId,
   getLocalStoredUserName,
+  getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
@@ -82,10 +83,7 @@ const QuestionSetEditor: React.FC = () => {
     },
     config: {
       mode: mode || "edit",
-      userSpecificFrameworkField: {
-        code: "board",
-        value: localStorage.getItem('userSpecificBoard') ? localStorage.getItem('userSpecificBoard') : []
-      },
+      userSpecificFrameworkField: getLocalStoredUserSpecificBoard(),
       enableQuestionCreation: true,
       enableAddFromLibrary: true,
       editableFields: {
