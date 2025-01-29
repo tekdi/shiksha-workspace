@@ -55,3 +55,23 @@ export const getLocalStoredUserRole = () => {
     return null;
   }
 };
+
+
+export const getLocalStoredUserSpecificBoard = () => {
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      const userSpecificBoard = localStorage.getItem("userSpecificBoard") || [];
+      return  {
+        code: "board",
+        value: userSpecificBoard
+      };
+    } catch (error) {
+      console.error("Error retrieving userSpecificBoard from local storage:", error);
+      return null;
+    }
+  } else {
+    // Running in SSR, return null
+    console.warn("Local storage is not available (SSR)");
+    return null;
+  }
+};

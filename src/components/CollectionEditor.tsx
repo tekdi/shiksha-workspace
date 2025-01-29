@@ -10,6 +10,7 @@ import {
 import {
   getLocalStoredUserName,
   getLocalStoredUserId,
+  getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
@@ -74,10 +75,7 @@ const CollectionEditor: React.FC = () => {
     },
     config: {
       mode: mode || "edit", // edit / review / read / sourcingReview
-      userSpecificFrameworkField: {
-        code: "board",
-        value: localStorage.getItem('userSpecificBoard') ? localStorage.getItem('userSpecificBoard') : []
-      },
+      userSpecificFrameworkField: getLocalStoredUserSpecificBoard(),
       maxDepth: 4,
       objectType: "Collection",
       primaryCategory: "Course", // Professional Development Course, Curriculum Course
