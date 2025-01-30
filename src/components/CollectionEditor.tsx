@@ -10,6 +10,7 @@ import {
 import {
   getLocalStoredUserName,
   getLocalStoredUserId,
+  getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
@@ -74,6 +75,7 @@ const CollectionEditor: React.FC = () => {
     },
     config: {
       mode: mode || "edit", // edit / review / read / sourcingReview
+      userSpecificFrameworkField: getLocalStoredUserSpecificBoard(),
       maxDepth: 4,
       objectType: "Collection",
       primaryCategory: "Course", // Professional Development Course, Curriculum Course
@@ -150,6 +152,8 @@ const CollectionEditor: React.FC = () => {
     },
   };
 
+  console.log('editorConfig ====>', editorConfig)
+
   const editorRef = useRef<HTMLDivElement | null>(null);
   const isAppendedRef = useRef(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
@@ -162,7 +166,7 @@ const CollectionEditor: React.FC = () => {
 
         script.id = "collection-editor-js";
         script.src =
-          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-collection-editor-web-component@6.1.0-beta.1/sunbird-collection-editor.js";
+          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-collection-editor-web-component@6.1.0-beta.2/sunbird-collection-editor.js";
         script.async = true;
         script.onload = () => setAssetsLoaded(true);
         document.body.appendChild(script);
@@ -177,7 +181,7 @@ const CollectionEditor: React.FC = () => {
         link.id = "collection-editor-css";
         link.rel = "stylesheet";
         link.href =
-          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-collection-editor-web-component@6.1.0-beta.1/styles.css";
+          "https://cdn.jsdelivr.net/npm/@tekdi/sunbird-collection-editor-web-component@6.1.0-beta.2/styles.css";
         document.head.appendChild(link);
       }
 
