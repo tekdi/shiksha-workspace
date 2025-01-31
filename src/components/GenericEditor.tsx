@@ -1,4 +1,11 @@
 import React, { useEffect, useState } from "react";
+
+// Extend the Window interface to include ecEditor
+declare global {
+    interface Window {
+        ecEditor?: any;
+    }
+}
 import { useRouter } from 'next/router';
 import $ from 'jquery';
 import _ from 'lodash';
@@ -7,6 +14,7 @@ import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
 import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
 import { CHANNEL_ID, CONTENT_FRAMEWORK_ID, TENANT_ID } from "@/utils/app.config";
+import { sendReviewNotification } from "@/services/notificationService";
 
 const GenericEditor: React.FC = () => {
     const router = useRouter();
@@ -112,10 +120,38 @@ const GenericEditor: React.FC = () => {
                 closeButton: true,
                 onClosing: () => {
                     closeModal();
+                },
+                onOpened: () => {
+                    // Wait for iframe to be injected
+                    const iframe = document.querySelector("#genericEditor iframe") as HTMLIFrameElement;
+
+                    if (iframe) {
+                        // Attach event listener when iframe loads
+                        iframe.onload = () => {
+                            console.log("Iframe loaded successfully!");
+
+                            try {
+                                const iframeWindow = iframe.contentWindow;
+
+                                if (iframeWindow && iframeWindow.ecEditor) {
+                                    iframeWindow.ecEditor.addEventListener(
+                                        "org.ekstep.contenteditor:review",
+                                        (event: any) => {
+                                            console.log("Review Event triggered inside iframe!", event);
+                                            sendReviewNotification({contentId: identifier, creator: getLocalStoredUserName()});
+                                        }
+                                    );
+                                }
+                            } catch (error) {
+                                console.error("Error accessing iframe content:", error);
+                            }
+                        };
+                    }
+
                 }
             });
-        }
-    };
+        };
+    }
 
     // Set window context for the iframe
     const setWindowContext = (data: any) => {
@@ -192,7 +228,7 @@ const GenericEditor: React.FC = () => {
     return (
         <div>
             <div id="genericEditor"></div>
-            {showLoader && <div>Loading.....</div>}
+            {showLoader && <div>Loading Editor.....</div>}
         </div>
     );
 
