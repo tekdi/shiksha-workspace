@@ -14,8 +14,8 @@ import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
 import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
 import { CHANNEL_ID, CONTENT_FRAMEWORK_ID, TENANT_ID } from "@/utils/app.config";
-import { sendReviewNotification } from "@/services/notificationService";
-
+import { fetchCCTAList } from "@/services/userServices";
+import { sendCredentialService } from "@/services/NotificationService";
 const GenericEditor: React.FC = () => {
     const router = useRouter();
     const { identifier, editorforlargecontent } = router.query;
@@ -41,6 +41,32 @@ const GenericEditor: React.FC = () => {
             window.location.hash = 'no';
         }
         window.location.hash = 'no';
+    };
+    const sendReviewNotification = async(notificationData: any) => {
+        const response= await fetchCCTAList()
+        const cctaList = response
+        console.log("response", response)
+        const isQueue = false;
+        const context="CMS"
+        const key= "onContentReview"
+        
+        cctaList?.map(async(user: any) => 
+        {
+            const replacements = {
+                "{reviewerName}": getLocalStoredUserName(),
+                "{creatorName}": notificationData?.creator,
+                "{contentId}":notificationData?.contentId
+               
+              };
+            const response = await sendCredentialService({
+                isQueue,
+                context,
+                key,
+                replacements,
+                email: user?.email,
+              });        }
+        )
+       
     };
 
     useEffect(() => {
@@ -138,7 +164,7 @@ const GenericEditor: React.FC = () => {
                                         "org.ekstep.contenteditor:review",
                                         (event: any) => {
                                             console.log("Review Event triggered inside iframe!", event);
-                                            sendReviewNotification({contentId: identifier, creator: getLocalStoredUserName()});
+                                            //sendReviewNotification({contentId: identifier, creator: getLocalStoredUserName()});
                                         }
                                     );
                                 }

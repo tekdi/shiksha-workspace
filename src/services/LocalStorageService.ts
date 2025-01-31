@@ -39,7 +39,26 @@ export const getLocalStoredUserName = () => {
     return null;
   }
 };
+export const getLocalStoredToken = () => {
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      const token = localStorage.getItem("token") || "";
 
+     
+console.log("token", token)
+      if (token) {
+        return token;
+       }
+
+    } catch (error) {
+      console.error("Error retrieving user name from local storage:", error);
+      return "Anonymous User";
+    }
+  } else {
+    console.warn("Local storage is not available (SSR)");
+    return null;
+  }
+};
 export const getLocalStoredUserRole = () => {
   if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
     try {
