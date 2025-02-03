@@ -372,6 +372,10 @@ export const genericEditorReviewFormResponse = {
                             {
                                 "name": "Open School",
                                 "value": "Open School"
+                            },
+                            {
+                              "name": "Other",
+                              "value": "Other"
                             }
                         ],
                         "placeholder": "Please select an option",
