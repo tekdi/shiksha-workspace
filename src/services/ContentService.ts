@@ -3,7 +3,6 @@ import {
   getLocalStoredUserRole,
 } from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
-import axios from "axios";
 import {
   MIME_TYPE,
   CHANNEL_ID,
@@ -198,12 +197,7 @@ export const createQuestionSet = async () => {
   };
 
   try {
-    const response = await axios.post(apiURL, reqBody, {
-      headers: {
-        "Content-Type": "application/json",
-        tenantId: TENANT_ID,
-      },
-    });
+    const response = await post(apiURL, reqBody);
     return response?.data;
   } catch (error) {
     throw error;
@@ -251,7 +245,7 @@ export const createCourse = async (userId: any) => {
   };
 
   try {
-    const response = await axios.post(apiURL, reqBody, {});
+    const response = await post(apiURL, reqBody);
     return response?.data;
   } catch (error) {
     console.error("Error creating course:", error);
@@ -273,7 +267,7 @@ export const publishContent = async (
   };
 
   try {
-    const response = await axios.post(
+    const response = await post(
       `/action/content/v3/publish/${identifier}`,
       requestBody
     );
@@ -299,7 +293,7 @@ export const submitComment = async (
   };
 
   try {
-    const response = await axios.post(
+    const response = await post(
       `/action/content/v3/reject/${identifier}`,
       requestBody
     );
@@ -331,7 +325,7 @@ export const getFrameworkDetails = async (): Promise<any> => {
   const apiUrl: string = `/api/framework/v1/read/${FRAMEWORK_ID}`;
 
   try {
-    const response = await axios.get(apiUrl);
+    const response = await get(apiUrl);
     return response?.data;
   } catch (error) {
     console.error("Error in getting Framework Details", error);
@@ -342,7 +336,7 @@ export const getFormFields = async (): Promise<any> => {
   const apiUrl: string = `/action/data/v1/form/read`;
 
   try {
-    const response = await axios.post(apiUrl, {
+    const response = await post(apiUrl, {
       request: {
         action: "publish",
         type: "content",
