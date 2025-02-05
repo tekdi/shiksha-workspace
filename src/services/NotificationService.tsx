@@ -1,6 +1,9 @@
 import { getLocalStoredToken } from './LocalStorageService';
 import axios from "axios";
-
+import {
+  TENANT_ID
+  
+} from "@/utils/app.config";
 export interface SendCredentialsRequest {
   isQueue: boolean;
   context: string;
@@ -25,11 +28,11 @@ export const sendCredentialService = async ({
 }: SendCredentialsRequest): Promise<any> => {
   console.log("sendcred");
 
-  const apiUrl: string = `${process.env.BASE_URL}/notification/send`;
+  const apiUrl: string = `${process.env.NEXT_PUBLIC_BASE_URL}/notification/send`;
 
   const headers: Record<string, string> = {
     Authorization: `Bearer ${getLocalStoredToken()}`,
-    tenantid: "ef99949b-7f3a-4a5f-806a-e67e683e38f3", 
+    tenantid: TENANT_ID, 
     "Content-Type": "application/json", 
   };
 

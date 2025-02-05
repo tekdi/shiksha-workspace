@@ -2,7 +2,10 @@
 import { getLocalStoredToken } from "./LocalStorageService";
 import { post } from "./RestClient";
 import axios from "axios";
-
+import {
+  TENANT_ID
+  
+} from "@/utils/app.config";
 export interface userListParam {
   limit?: number;
   //  page: number;
@@ -27,13 +30,13 @@ export const userList = async ({
   offset,
   fields,
 }: userListParam): Promise<any> => {
-  const apiUrl: string = `${process.env.BASE_URL}/user/v1/list`;
+  const apiUrl: string = `${process.env.NEXT_PUBLIC_BASE_URL}/user/v1/list`;
 
   try {
     console.log("Request data", apiUrl);
     const headers: Record<string, string> = {
       Authorization: `Bearer ${getLocalStoredToken()}`,
-    tenantid : "ef99949b-7f3a-4a5f-806a-e67e683e38f3"
+    tenantid : TENANT_ID
 
     };
     const response = await axios.post(
