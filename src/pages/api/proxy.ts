@@ -15,7 +15,7 @@ export default async function handler(
   const { method, body, query } = req;
   const { path } = query;
 
-  const BASE_URL = process.env.BASE_URL as string;
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
   const API_KEY = process.env.AUTH_API_TOKEN as string;
   const NEXT_PUBLIC_TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID as string;
   const NEXT_PUBLIC_CHANNEL_ID = process.env.NEXT_PUBLIC_CHANNEL_ID as string;

@@ -84,7 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const cookies = cookie.parse(req.headers.cookie || "");
 
       // Set your base URL
-      const baseURL = process.env.BASE_URL as string;
+      const baseURL = process.env.NEXT_PUBLIC_BASE_URL as string;
       const authApiToken = cookies?.authToken || process.env.AUTH_API_TOKEN;
       const tenantId = process.env.NEXT_PUBLIC_TENANT_ID as string;
 

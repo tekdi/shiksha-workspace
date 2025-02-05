@@ -7,7 +7,7 @@ export default async function handler(req, res) {
       const parts = contenturl.split("/");
       const doId = parts.length > 2 ? parts[parts.length - 2] : null;
       if (doId) {
-        const baseURL = process.env.BASE_URL;
+        const baseURL =process.env.NEXT_PUBLIC_BASE_URL;
         const authApiToken = process.env.AUTH_API_TOKEN;
         const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
 
