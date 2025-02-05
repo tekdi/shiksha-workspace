@@ -1,6 +1,11 @@
 
+import { getLocalStoredToken } from "./LocalStorageService";
 import { post } from "./RestClient";
-
+import axios from "axios";
+import {
+  TENANT_ID
+  
+} from "@/utils/app.config";
 export interface userListParam {
   limit?: number;
   //  page: number;
@@ -17,29 +22,38 @@ export interface userListParam {
 }
 
 
+
 export const userList = async ({
-    limit,
-    //  page,
-    filters,
-    sort,
-    offset,
-    fields,
-  }: userListParam): Promise<any> => {
-    const apiUrl: string = `${process.env.NEXT_PUBLIC_MIDDLEWARE_URL}/user/v1/list`;
-    try {
-      const response = await post(apiUrl, {
-        limit,
-        filters,
-        sort,
-        offset,
-        fields,
-      });
-      return response?.data?.result;
-    } catch (error) {
-      console.error("error in getting user list", error);
-      throw error;
-    }
-  };
+  limit,
+  filters,
+  sort,
+  offset,
+  fields,
+}: userListParam): Promise<any> => {
+  const apiUrl: string = `${process.env.NEXT_PUBLIC_BASE_URL}/user/v1/list`;
+
+  try {
+    console.log("Request data", apiUrl);
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${getLocalStoredToken()}`,
+    tenantid : TENANT_ID
+
+    };
+    const response = await axios.post(
+      apiUrl,
+      { limit, filters, sort, offset, fields },
+      
+        {headers}
+      
+    );
+
+    return response?.data?.result;
+  } catch (error) {
+    console.error("Error in getting user list", error);
+    throw error;
+  }
+};
+
   
 
  export const fetchCCTAList = async() => {
@@ -52,7 +66,7 @@ export const userList = async ({
             filters: filter,
            
         })
-        const extractedData = response.getUserDetails.map((user: any) => ({
+        const extractedData = response?.getUserDetails?.map((user: any) => ({
             email: user.email,
             name: user.firstName
         }));
