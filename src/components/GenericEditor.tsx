@@ -55,12 +55,14 @@ const GenericEditor: React.FC = () => {
     const isQueue = false;
     const context = "CMS";
     const key = "onContentReview";
+    const url = `${window.location.origin}/workspace/content/review?identifier=${notificationData?.contentId}`;
 
     cctaList?.map(async (user: any) => {
       const replacements = {
         "{reviewerName}": getLocalStoredUserName(),
         "{creatorName}": notificationData?.creator,
         "{contentId}": notificationData?.contentId,
+        "{appUrl}": url,
       };
       const response = await sendCredentialService({
         isQueue,
