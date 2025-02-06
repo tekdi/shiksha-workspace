@@ -12,6 +12,8 @@ import {
   getLocalStoredUserId,
   getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
+import { fetchCCTAList } from "@/services/userServices";
+import { sendCredentialService } from "@/services/NotificationService";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -21,7 +23,31 @@ const CollectionEditor: React.FC = () => {
   const [deviceId, setDeviceId] = useState("");
 
   const [firstName, lastName] = fullName.split(" ");
+  const sendReviewNotification = async (notificationData: any) => {
+    console.log("notificationData", notificationData);
+    const response = await fetchCCTAList();
+    const cctaList = response;
+    console.log("response", response);
+    const isQueue = false;
+    const context = "CMS";
+    const key = "onContentReview";
 
+    cctaList?.map(async (user: any) => {
+      const replacements = {
+        "{reviewerName}": getLocalStoredUserName(),
+        "{creatorName}": notificationData?.creator,
+        "{contentId}": notificationData?.contentId,
+      };
+      const response = await sendCredentialService({
+        isQueue,
+        context,
+        key,
+        replacements,
+        email:  
+        {receipients: [user?.email]},     
+       });
+    });
+  };
   useEffect(() => {
     const storedFullName = getLocalStoredUserName();
     const storedUserId = getLocalStoredUserId() || TENANT_ID;
@@ -251,6 +277,14 @@ const CollectionEditor: React.FC = () => {
             event.detail?.action === "publishContent" ||
             event.detail?.action === "rejectContent"
           ) {
+            if(event.detail?.action === "submitContent")
+            {
+              console.log("collection")
+               sendReviewNotification({
+                contentId: identifier,
+                creator: getLocalStoredUserName(),
+              });   
+            }
             localStorage.removeItem("contentMode");
             window.history.back();
             window.addEventListener(

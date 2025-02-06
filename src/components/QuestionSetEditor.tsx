@@ -12,6 +12,8 @@ import {
   getLocalStoredUserName,
   getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
+import { fetchCCTAList } from "@/services/userServices";
+import { sendCredentialService } from "@/services/NotificationService";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -144,7 +146,29 @@ const QuestionSetEditor: React.FC = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const isAppendedRef = useRef(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const sendReviewNotification = async (notificationData: any) => {
+    const response = await fetchCCTAList();
+    const cctaList = response;
+    console.log("response", response);
+    const isQueue = false;
+    const context = "CMS";
+    const key = "onContentReview";
 
+    cctaList?.map(async (user: any) => {
+      const replacements = {
+        "{reviewerName}": getLocalStoredUserName(),
+        "{creatorName}": notificationData?.creator,
+        "{contentId}": notificationData?.contentId,
+      };
+      const response = await sendCredentialService({
+        isQueue,
+        context,
+        key,
+        replacements,
+        email:  
+        {receipients: [user?.email]},      });
+    });
+  };
   useEffect(() => {
     const loadAssets = () => {
       if (!document.getElementById("sunbird-editor-css")) {
@@ -201,6 +225,13 @@ const QuestionSetEditor: React.FC = () => {
             event.detail?.action === "publishContent" ||
             event.detail?.action === "rejectContent"
           ) {
+            if(event.detail?.action === "submitContent")
+            {
+               sendReviewNotification({
+                contentId: identifier,
+                creator: getLocalStoredUserName(),
+              });            
+            }
             localStorage.removeItem("contentMode");
             window.history.back();
             window.addEventListener(
