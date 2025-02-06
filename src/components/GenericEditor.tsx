@@ -67,7 +67,8 @@ const GenericEditor: React.FC = () => {
         context,
         key,
         replacements,
-        email: user?.email,
+        email:  
+        {receipients: [user?.email]},
       });
     });
   };
