@@ -28,28 +28,42 @@ const CollectionEditor: React.FC = () => {
     const response = await fetchCCTAList();
     const cctaList = response;
     console.log("response", response);
+  
     const isQueue = false;
     const context = "CMS";
     const key = "onContentReview";
     const url = `${window.location.origin}/collection?identifier=${notificationData?.contentId}`;
-
-    cctaList?.map(async (user: any) => {
-      const replacements = {
-        "{reviewerName}": getLocalStoredUserName(),
-        "{creatorName}": notificationData?.creator,
-        "{contentId}": notificationData?.contentId,
-        "{appUrl}": url
-      };
-      const response = await sendCredentialService({
-        isQueue,
-        context,
-        key,
-        replacements,
-        email:  
-        {receipients: [user?.email]},     
-       });
-    });
+  
+    try {
+      const promises = cctaList.map(async (user: any) => {
+        const replacements = {
+          "{reviewerName}": getLocalStoredUserName(),
+          "{creatorName}": notificationData?.creator,
+          "{contentId}": notificationData?.contentId,
+          "{appUrl}": url
+        };
+  
+        return sendCredentialService({
+          isQueue,
+          context,
+          key,
+          replacements,
+          email: { receipients: [user?.email] },
+        });
+      });
+  
+      // Wait for all API calls to complete
+      await Promise.all(promises);
+  
+      console.log("All emails sent successfully.");
+      
+      window.history.back(); 
+    } catch (error) {
+      console.error("Error sending email notifications:", error);
+    }
   };
+  
+  
   useEffect(() => {
     const storedFullName = getLocalStoredUserName();
     const storedUserId = getLocalStoredUserId() || TENANT_ID;
