@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 import {
-  TENANT_ID,
   CHANNEL_ID,
   FRAMEWORK_ID,
   CLOUD_STORAGE_URL,
@@ -19,18 +18,17 @@ const QuestionSetEditor: React.FC = () => {
   const { identifier } = router.query;
   const [mode, setMode] = useState<any>();
   const [fullName, setFullName] = useState("Anonymous User");
-  const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
 
   const [firstName, lastName] = fullName.split(" ");
 
   useEffect(() => {
     const storedFullName = getLocalStoredUserName();
-    const storedUserId = getLocalStoredUserId() || TENANT_ID;
+    const storedUserId = getLocalStoredUserId();
     const storedMode = localStorage.getItem("contentMode");
     setMode(storedMode || "edit");
     setFullName(storedFullName ?? "Anonymous User");
-    setUserId(storedUserId);
+
 
     const generatedDeviceId = uuidv4();
     setDeviceId(generatedDeviceId);
@@ -39,7 +37,7 @@ const QuestionSetEditor: React.FC = () => {
   const questionSetEditorConfig = {
     context: {
       user: {
-        id: userId,
+        id: getLocalStoredUserId(),
         fullName: fullName,
         firstName: firstName || "Anonymous",
         lastName: lastName || "Anonymous",
@@ -48,7 +46,7 @@ const QuestionSetEditor: React.FC = () => {
       identifier: identifier,
       sid: uuidv4(),
       did: deviceId,
-      uid: userId,
+      uid: getLocalStoredUserId(),
       channel: CHANNEL_ID,
       pdata: {
         id: "pratham.admin.portal",

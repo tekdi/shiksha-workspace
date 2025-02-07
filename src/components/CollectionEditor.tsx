@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 import {
-  TENANT_ID,
   CHANNEL_ID,
   FRAMEWORK_ID,
   CLOUD_STORAGE_URL,
@@ -19,7 +18,6 @@ const CollectionEditor: React.FC = () => {
   const { identifier } = router.query;
   const [mode, setMode] = useState<any>();
   const [fullName, setFullName] = useState("Anonymous User");
-  const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("");
 
   const [firstName, lastName] = fullName.split(" ");
@@ -52,11 +50,9 @@ const CollectionEditor: React.FC = () => {
   };
   useEffect(() => {
     const storedFullName = getLocalStoredUserName();
-    const storedUserId = getLocalStoredUserId() || TENANT_ID;
     const storedMode = localStorage.getItem("contentMode");
     setMode(storedMode || "edit");
     setFullName(storedFullName ?? "Anonymous User");
-    setUserId(storedUserId);
 
     const generatedDeviceId = uuidv4();
     setDeviceId(generatedDeviceId);
@@ -65,7 +61,7 @@ const CollectionEditor: React.FC = () => {
   const editorConfig = {
     context: {
       user: {
-        id: userId,
+        id: getLocalStoredUserId(),
         fullName: fullName,
         firstName: firstName || "Anonymous",
         lastName: lastName || "User",
@@ -76,7 +72,7 @@ const CollectionEditor: React.FC = () => {
       framework: FRAMEWORK_ID,
       sid: uuidv4(),
       did: deviceId,
-      uid: getLocalStoredUserId() || TENANT_ID,
+      uid: getLocalStoredUserId(),
       additionalCategories: [],
       pdata: {
         id: "pratham.admin.portal",

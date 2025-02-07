@@ -6,7 +6,7 @@ import {
   genericEditorRequestForChangesFormResponse,
   publishResourceFormResponse,
 } from "./mocked-response";
-import * as cookie from "cookie";
+import { getCookie } from '../../utils/cookieHelper';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,16 +15,11 @@ export default async function handler(
   const { method, body, query } = req;
   const { path } = query;
 
+  const token = getCookie(req, 'authToken') || process.env.AUTH_API_TOKEN as string;
+
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
-  const API_KEY = process.env.AUTH_API_TOKEN as string;
-  const NEXT_PUBLIC_TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID as string;
+  const tenantId = getCookie(req, 'tenantId') || process.env.NEXT_PUBLIC_TENANT_ID as string;
   const NEXT_PUBLIC_CHANNEL_ID = process.env.NEXT_PUBLIC_CHANNEL_ID as string;
-
-  const cookies = cookie.parse(req.headers.cookie || "");
-
-  console.log(cookies?.authToken);
-
-  const token = cookies?.authToken || API_KEY;
 
   if (!token) {
     console.error("No valid token available");
@@ -76,7 +71,7 @@ export default async function handler(
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
-        "tenantId": NEXT_PUBLIC_TENANT_ID,
+        "tenantId": tenantId,
         "X-Channel-Id": NEXT_PUBLIC_CHANNEL_ID,
       },
       ...(method === "POST" || method === "PATCH"

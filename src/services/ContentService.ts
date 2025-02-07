@@ -6,7 +6,6 @@ import { delApi, get, post } from "./RestClient";
 import {
   MIME_TYPE,
   CHANNEL_ID,
-  TENANT_ID,
   FRAMEWORK_ID,
   CONTENT_FRAMEWORK_ID
 } from "@/utils/app.config";
