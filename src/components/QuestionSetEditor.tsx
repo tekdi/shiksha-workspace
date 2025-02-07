@@ -153,7 +153,7 @@ const QuestionSetEditor: React.FC = () => {
     const isQueue = false;
     const context = "CMS";
     const key = "onContentReview";
-    const url = `${window.location.origin}/workspace/editor?identifier=${notificationData?.contentId}`;
+    const url = `${window.location.origin}/editor?identifier=${notificationData?.contentId}`;
 
     
     cctaList?.map(async (user: any) => {
