@@ -279,16 +279,25 @@ const CollectionEditor: React.FC = () => {
             event.detail?.action === "publishContent" ||
             event.detail?.action === "rejectContent"
           ) {
-            if(event.detail?.action === "submitContent")
-            {
-              console.log("collection")
-               sendReviewNotification({
+            if (event.detail?.action === "submitContent") {
+              console.log("collection");
+            
+              sendReviewNotification({
                 contentId: identifier,
                 creator: getLocalStoredUserName(),
-              });   
+              })
+                .then(() => {
+                  window.history.back(); 
+                })
+                .catch((error) => {
+                  console.error("Error in sendReviewNotification:", error);
+                });
+            } else {
+              window.history.back();
             }
             localStorage.removeItem("contentMode");
-            window.history.back();
+
+            
             window.addEventListener(
               "popstate",
               () => {
