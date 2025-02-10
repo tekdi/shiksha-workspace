@@ -147,27 +147,37 @@ const QuestionSetEditor: React.FC = () => {
     const response = await fetchCCTAList();
     const cctaList = response;
     console.log("response", response);
+  
     const isQueue = false;
     const context = "CMS";
     const key = "onContentReview";
-    const url = `${window.location.origin}/workspace/editor?identifier=${notificationData?.contentId}`;
-
-    
-    cctaList?.map(async (user: any) => {
-      const replacements = {
-        "{reviewerName}": getLocalStoredUserName(),
-        "{creatorName}": notificationData?.creator,
-        "{contentId}": notificationData?.contentId,
-        "{appUrl}": url
-      };
-      const response = await sendCredentialService({
-        isQueue,
-        context,
-        key,
-        replacements,
-        email:  
-        {receipients: [user?.email]},      });
-    });
+    const url = `${window.location.origin}/editor?identifier=${notificationData?.contentId}`  
+    try {
+      const promises = cctaList.map(async (user: any) => {
+        const replacements = {
+          "{reviewerName}": getLocalStoredUserName(),
+          "{creatorName}": notificationData?.creator,
+          "{contentId}": notificationData?.contentId,
+          "{appUrl}": url
+        };
+  
+        return sendCredentialService({
+          isQueue,
+          context,
+          key,
+          replacements,
+          email: { receipients: [user?.email] },
+        });
+      });
+  
+      await Promise.all(promises);
+  
+      console.log("All emails sent successfully.");
+      
+      window.history.back(); 
+    } catch (error) {
+      console.error("Error sending email notifications:", error);
+    }
   };
   useEffect(() => {
     const loadAssets = () => {
@@ -225,12 +235,21 @@ const QuestionSetEditor: React.FC = () => {
             event.detail?.action === "publishContent" ||
             event.detail?.action === "rejectContent"
           ) {
-            if(event.detail?.action === "submitContent")
-            {
-               sendReviewNotification({
+            if (event.detail?.action === "submitContent") {
+              console.log("collection");
+            
+              sendReviewNotification({
                 contentId: identifier,
                 creator: getLocalStoredUserName(),
-              });            
+              })
+                .then(() => {
+                  window.history.back(); 
+                })
+                .catch((error) => {
+                  console.error("Error in sendReviewNotification:", error);
+                });
+            } else {
+              window.history.back();
             }
             localStorage.removeItem("contentMode");
             window.history.back();
