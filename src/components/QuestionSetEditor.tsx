@@ -21,7 +21,6 @@ const QuestionSetEditor: React.FC = () => {
   const [firstName, lastName] = fullName.split(" ");
 
   useEffect(() => {
-    if (!tenantConfig?.CHANNEL_ID) return;
     const storedFullName = getLocalStoredUserName();
     const storedUserId = getLocalStoredUserId();
     const storedMode = localStorage.getItem("contentMode");
