@@ -3,20 +3,14 @@ import {
   getLocalStoredUserRole,
 } from "./LocalStorageService";
 import { delApi, get, post } from "./RestClient";
-import {
-  MIME_TYPE,
-  CHANNEL_ID,
-  FRAMEWORK_ID,
-  CONTENT_FRAMEWORK_ID
-} from "@/utils/app.config";
+import { MIME_TYPE } from "@/utils/app.config";
 import { v4 as uuidv4 } from "uuid";
 import { PrimaryCategoryValue, Role } from "@/utils/app.constant";
-
 const userId = getLocalStoredUserId();
 console.log("userId ==>", userId);
 
-export const getPrimaryCategory = async () => {
-  const apiURL = `/api/channel/v1/read/${CHANNEL_ID}`;
+export const getPrimaryCategory = async (channelId: any) => {
+  const apiURL = `/api/channel/v1/read/${channelId}`;
   try {
     const response = await get(apiURL);
     return response?.data?.result;
@@ -180,7 +174,7 @@ export const getContent = async (
   }
 };
 
-export const createQuestionSet = async () => {
+export const createQuestionSet = async (frameworkId: any) => {
   const apiURL = `/action/questionset/v2/create`;
   const reqBody = {
     request: {
@@ -190,7 +184,7 @@ export const createQuestionSet = async () => {
         primaryCategory: "Practice Question Set",
         code: uuidv4(),
         createdBy: userId,
-        framework: FRAMEWORK_ID,
+        framework: frameworkId,
       },
     },
   };
@@ -223,7 +217,7 @@ export const deleteContent = async (identifier: string, mimeType: string) => {
   }
 };
 
-export const createCourse = async (userId: any) => {
+export const createCourse = async (userId: any, channelId: any, contentFW: any, targetFW: any) => {
   const apiURL = `/action/content/v3/create`;
 
   const reqBody = {
@@ -232,13 +226,13 @@ export const createCourse = async (userId: any) => {
         code: uuidv4(), // Generate a unique ID for 'code'
         name: "Untitled Course",
         createdBy: userId,
-        createdFor: [CHANNEL_ID],
+        createdFor: [channelId],
         mimeType: MIME_TYPE.COURSE_MIME_TYPE,
         resourceType: "Course",
         primaryCategory: "Course",
         contentType: "Course",
-        framework: CONTENT_FRAMEWORK_ID,
-        targetFWIds: [FRAMEWORK_ID]
+        framework: contentFW,
+        targetFWIds: [targetFW]
       },
     },
   };
@@ -320,8 +314,8 @@ export const getContentHierarchy = async ({
     throw error;
   }
 };
-export const getFrameworkDetails = async (): Promise<any> => {
-  const apiUrl: string = `/api/framework/v1/read/${FRAMEWORK_ID}`;
+export const getFrameworkDetails = async (frameworkId:any): Promise<any> => {
+  const apiUrl: string = `/api/framework/v1/read/${frameworkId}`;
 
   try {
     const response = await get(apiUrl);

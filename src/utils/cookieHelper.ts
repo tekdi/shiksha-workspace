@@ -6,7 +6,7 @@ import { parse } from 'cookie';
  * @param {string} cookieName - The name of the cookie to read
  * @returns {string|null} - The cookie value or null if not found
  */
-export function getCookie(req: any, cookieName:string) {
+export function getCookie(req: any, cookieName: string): string | null {
   if (!req.headers.cookie) {
     return null;
   }

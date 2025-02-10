@@ -13,10 +13,10 @@ import 'izimodal/css/iziModal.css';
 import 'izimodal/js/iziModal.js';
 import editorConfig from './editor.config.json';
 import { getLocalStoredUserId, getLocalStoredUserName } from "@/services/LocalStorageService";
-import { CHANNEL_ID, CONTENT_FRAMEWORK_ID } from "@/utils/app.config";
 import { sendReviewNotification } from "@/services/notificationService";
-
+import useTenantConfig from "@/hooks/useTenantConfig";
 const GenericEditor: React.FC = () => {
+    const tenantConfig = useTenantConfig();
     const router = useRouter();
     const { identifier, editorforlargecontent } = router.query;
     const [showLoader, setShowLoader] = useState(true);
@@ -155,8 +155,8 @@ const GenericEditor: React.FC = () => {
 
     // Set window context for the iframe
     const setWindowContext = (data: any) => {
-        const contentChannel = data?.channel || CHANNEL_ID;
-        const contentFramework = data?.framework || CONTENT_FRAMEWORK_ID;
+        const contentChannel = data?.channel || tenantConfig?.CHANNEL_ID;
+        const contentFramework = data?.framework || tenantConfig?.CONTENT_FRAMEWORK;
         if (typeof window !== 'undefined') {
             window['context'] = _.cloneDeep(editorConfig.GENERIC_EDITOR.WINDOW_CONTEXT);
             if (identifier) {

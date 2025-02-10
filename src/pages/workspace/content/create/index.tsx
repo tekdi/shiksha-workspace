@@ -14,8 +14,10 @@ import largeVideoIcon from '/public/150+.png';
 import Image from "next/image";
 import WorkspaceText from '../../../../components/WorkspaceText';
 import { getLocalStoredUserId } from "@/services/LocalStorageService";
+import useTenantConfig from "@/hooks/useTenantConfig";
 
 const CreatePage = () => {
+  const tenantConfig = useTenantConfig();
   const theme = useTheme();
   const [selectedKey, setSelectedKey] = useState("create");
   const router = useRouter();
@@ -32,7 +34,7 @@ const CreatePage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await createQuestionSet();
+      const response = await createQuestionSet(tenantConfig?.COLLECTION_FRAMEWORK);
       console.log("Question set created successfully:", response);
 
       const identifier = response?.result?.identifier;
@@ -52,7 +54,7 @@ const CreatePage = () => {
   const fetchCollectionData = async () => {
     try {
       const userId = getLocalStoredUserId();
-      const response = await createCourse(userId);
+      const response = await createCourse(userId, tenantConfig?.CHANNEL_ID, tenantConfig?.CONTENT_FRAMEWORK, tenantConfig?.COLLECTION_FRAMEWORK);
       console.log("Course set created successfully:", response);
 
       const identifier = response?.result?.identifier;

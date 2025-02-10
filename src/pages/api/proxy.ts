@@ -7,6 +7,7 @@ import {
   publishResourceFormResponse,
 } from "./mocked-response";
 import { getCookie } from '../../utils/cookieHelper';
+import { mockData } from "./tenantConfig";
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,7 +20,15 @@ export default async function handler(
 
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
   const tenantId = getCookie(req, 'tenantId') || process.env.NEXT_PUBLIC_TENANT_ID as string;
-  const NEXT_PUBLIC_CHANNEL_ID = process.env.NEXT_PUBLIC_CHANNEL_ID as string;
+
+  const tenantConfig = mockData[tenantId];
+
+  console.log('tenantConfig ==>', tenantConfig)
+
+  if (!tenantConfig) {
+    return res.status(404).json({ message: "Tenant configuration not found" });
+  }
+  const CHANNEL_ID  = tenantConfig?.CHANNEL_ID;
 
   if (!token) {
     console.error("No valid token available");
@@ -72,7 +81,7 @@ export default async function handler(
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
         "tenantId": tenantId,
-        "X-Channel-Id": NEXT_PUBLIC_CHANNEL_ID,
+        "X-Channel-Id": CHANNEL_ID,
       },
       ...(method === "POST" || method === "PATCH"
         ? { body: JSON.stringify(body) }

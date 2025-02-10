@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import {
-  CHANNEL_ID,
-  FRAMEWORK_ID,
-  CLOUD_STORAGE_URL,
-} from "@/utils/app.config";
+import { CLOUD_STORAGE_URL } from "@/utils/app.config";
 import {
   getLocalStoredUserName,
   getLocalStoredUserId,
@@ -13,6 +9,7 @@ import {
 } from "@/services/LocalStorageService";
 import { fetchCCTAList } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
+import useTenantConfig from "@/hooks/useTenantConfig";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -21,6 +18,8 @@ const CollectionEditor: React.FC = () => {
   const [deviceId, setDeviceId] = useState("");
 
   const [firstName, lastName] = fullName.split(" ");
+  const tenantConfig = useTenantConfig();
+
   const sendReviewNotification = async (notificationData: any) => {
     console.log("notificationData", notificationData);
     const response = await fetchCCTAList();
@@ -65,11 +64,11 @@ const CollectionEditor: React.FC = () => {
         fullName: fullName,
         firstName: firstName || "Anonymous",
         lastName: lastName || "User",
-        orgIds: [CHANNEL_ID],
+        orgIds: [tenantConfig?.CHANNEL_ID],
       },
       identifier: identifier,
-      channel: CHANNEL_ID,
-      framework: FRAMEWORK_ID,
+      channel: tenantConfig?.CHANNEL_ID,
+      framework: tenantConfig?.COLLECTION_FRAMEWORK,
       sid: uuidv4(),
       did: deviceId,
       uid: getLocalStoredUserId(),
@@ -80,12 +79,12 @@ const CollectionEditor: React.FC = () => {
         pid: "pratham-portal",
       },
       contextRollup: {
-        l1: CHANNEL_ID,
+        l1: tenantConfig?.CHANNEL_ID,
       },
-      tags: [CHANNEL_ID],
+      tags: [tenantConfig?.CHANNEL_ID],
       cdata: [
         {
-          id: CHANNEL_ID,
+          id: tenantConfig?.CHANNEL_ID,
           type: "pratham-portal",
         },
       ],
