@@ -37,7 +37,7 @@ const CollectionEditor: React.FC = () => {
     try {
       const promises = cctaList.map(async (user: any) => {
         const replacements = {
-          "{reviewerName}": getLocalStoredUserName(),
+          "{reviewerName}": user?.name,
           "{creatorName}": notificationData?.creator,
           "{contentId}": notificationData?.contentId,
           "{appUrl}": url

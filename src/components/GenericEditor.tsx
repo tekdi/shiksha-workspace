@@ -59,7 +59,7 @@ const GenericEditor: React.FC = () => {
 
     cctaList?.map(async (user: any) => {
       const replacements = {
-        "{reviewerName}": getLocalStoredUserName(),
+        "{reviewerName}": user?.name,
         "{creatorName}": notificationData?.creator,
         "{contentId}": notificationData?.contentId,
         "{appUrl}": url,
