@@ -2,7 +2,7 @@ name: Deploy to DEV-Server
 on:
   push:
     branches:
-      - release-1.1.0
+      - release-1.2.0
 jobs:
    deploy_DEV:
     runs-on: ubuntu-latest
