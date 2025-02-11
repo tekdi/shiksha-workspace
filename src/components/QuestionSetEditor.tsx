@@ -1,12 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import {
-  TENANT_ID,
-  CHANNEL_ID,
-  FRAMEWORK_ID,
-  CLOUD_STORAGE_URL,
-} from "@/utils/app.config";
+import { CLOUD_STORAGE_URL } from "@/utils/app.config";
 import {
   getLocalStoredUserId,
   getLocalStoredUserName,
@@ -14,23 +9,24 @@ import {
 } from "@/services/LocalStorageService";
 import { fetchCCTAList } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
+import useTenantConfig from "@/hooks/useTenantConfig";
 const QuestionSetEditor: React.FC = () => {
+  const tenantConfig = useTenantConfig();
   const router = useRouter();
   const { identifier } = router.query;
   const [mode, setMode] = useState<any>();
   const [fullName, setFullName] = useState("Anonymous User");
-  const [userId, setUserId] = useState(TENANT_ID);
   const [deviceId, setDeviceId] = useState("7e85b4967aebd6704ba1f604f20056b6");
 
   const [firstName, lastName] = fullName.split(" ");
 
   useEffect(() => {
     const storedFullName = getLocalStoredUserName();
-    const storedUserId = getLocalStoredUserId() || TENANT_ID;
+    const storedUserId = getLocalStoredUserId();
     const storedMode = localStorage.getItem("contentMode");
     setMode(storedMode || "edit");
     setFullName(storedFullName ?? "Anonymous User");
-    setUserId(storedUserId);
+
 
     const generatedDeviceId = uuidv4();
     setDeviceId(generatedDeviceId);
@@ -39,29 +35,29 @@ const QuestionSetEditor: React.FC = () => {
   const questionSetEditorConfig = {
     context: {
       user: {
-        id: userId,
+        id: getLocalStoredUserId(),
         fullName: fullName,
         firstName: firstName || "Anonymous",
         lastName: lastName || "Anonymous",
-        orgIds: [CHANNEL_ID],
+        orgIds: [tenantConfig?.CHANNEL_ID],
       },
       identifier: identifier,
       sid: uuidv4(),
       did: deviceId,
-      uid: userId,
-      channel: CHANNEL_ID,
+      uid: getLocalStoredUserId(),
+      channel: tenantConfig?.CHANNEL_ID,
       pdata: {
         id: "pratham.admin.portal",
         ver: "1.0.0",
         pid: "pratham-portal",
       },
       contextRollup: {
-        l1: CHANNEL_ID,
+        l1: tenantConfig?.CHANNEL_ID,
       },
-      tags: [CHANNEL_ID],
+      tags: [tenantConfig?.CHANNEL_ID],
       cdata: [
         {
-          id: CHANNEL_ID,
+          id: tenantConfig?.CHANNEL_ID,
           type: "pratham-portal",
         },
       ],
@@ -71,7 +67,7 @@ const QuestionSetEditor: React.FC = () => {
       defaultLicense: "CC BY 4.0",
       endpoint: "/data/v3/telemetry",
       env: "questionset_editor",
-      framework: FRAMEWORK_ID,
+      framework: tenantConfig?.COLLECTION_FRAMEWORK,
       cloudStorageUrls: [CLOUD_STORAGE_URL],
       labels: {
         save_collection_btn_label: "Save as Draft",

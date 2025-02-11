@@ -16,14 +16,11 @@ import {
   getLocalStoredUserId,
   getLocalStoredUserName,
 } from "@/services/LocalStorageService";
-import {
-  CHANNEL_ID,
-  CONTENT_FRAMEWORK_ID,
-  TENANT_ID,
-} from "@/utils/app.config";
 import { fetchCCTAList } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
+import useTenantConfig from "@/hooks/useTenantConfig";
 const GenericEditor: React.FC = () => {
+  const tenantConfig = useTenantConfig();
   const router = useRouter();
   const { identifier, editorforlargecontent } = router.query;
   const [showLoader, setShowLoader] = useState(true);
@@ -87,6 +84,7 @@ const GenericEditor: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (!tenantConfig?.CHANNEL_ID || !tenantConfig?.CONTENT_FRAMEWORK) return;
     if (typeof window !== "undefined") {
       // Attach jQuery to window and window.parent
       window.$ = window.jQuery = $;
@@ -111,7 +109,7 @@ const GenericEditor: React.FC = () => {
           closeModal();
         });
     }
-  }, [identifier]);
+  }, [tenantConfig?.CHANNEL_ID, tenantConfig?.CONTENT_FRAMEWORK, identifier]);
 
   const getContentDetails = async (contentId: any) => {
     if (!contentId) {
@@ -195,8 +193,8 @@ const GenericEditor: React.FC = () => {
 
   // Set window context for the iframe
   const setWindowContext = (data: any) => {
-    const contentChannel = data?.channel || CHANNEL_ID;
-    const contentFramework = data?.framework || CONTENT_FRAMEWORK_ID;
+    const contentChannel = data?.channel || tenantConfig?.CHANNEL_ID;
+    const contentFramework = data?.framework || tenantConfig?.CONTENT_FRAMEWORK;
     if (typeof window !== "undefined") {
       window["context"] = _.cloneDeep(
         editorConfig.GENERIC_EDITOR.WINDOW_CONTEXT
@@ -205,14 +203,14 @@ const GenericEditor: React.FC = () => {
         window["context"].contentId = identifier;
       }
       window["context"].user = {
-        id: getLocalStoredUserId() || TENANT_ID,
+        id: getLocalStoredUserId(),
         name: getLocalStoredUserName() || "Anonymous User",
         orgIds: [contentChannel],
         organisations: {
           [contentChannel]: contentChannel,
         },
       };
-      window["context"].uid = getLocalStoredUserId() || TENANT_ID;
+      window["context"].uid = getLocalStoredUserId();
       window["context"].contextRollUp.l1 = contentChannel;
       window["context"].tags = [contentChannel];
       window["context"].channel = contentChannel;

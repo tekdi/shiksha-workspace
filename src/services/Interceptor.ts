@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { refresh } from './LoginService';
-import { TENANT_ID } from '@/utils/app.config';
+import TenantService from './TenantService';
 
 const instance = axios.create();
 
@@ -31,7 +31,7 @@ instance.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
-    config.headers.tenantid = TENANT_ID;
+    config.headers.tenantid = TenantService.getTenantId();
     return config;
   },
   (error) => {

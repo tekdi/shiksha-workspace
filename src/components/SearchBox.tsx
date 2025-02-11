@@ -24,6 +24,7 @@ import {
 } from "@/services/ContentService";
 import { SortOptions, StatusOptions } from "@/utils/app.constant";
 import { useRouter } from "next/router";
+import useTenantConfig from "@/hooks/useTenantConfig";
 
 export interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -55,6 +56,7 @@ const SearchBox: React.FC<SearchBarProps> = ({
   const router = useRouter();
 
   const theme = useTheme<any>();
+  const tenantConfig = useTenantConfig();
   const [searchTerm, setSearchTerm] = useState(value);
   const sort: string = typeof router.query.sort === "string" 
   ? router.query.sort 
@@ -80,8 +82,10 @@ console.log("filterOption", filterOption);
   const [primaryCategory, setPrimaryCategory] = useState<string[]>();
  
   useEffect(() => {
+    if (!tenantConfig) return;
     const PrimaryCategoryData = async () => {
-      const response = await getPrimaryCategory();
+      const response = await getPrimaryCategory(tenantConfig.CHANNEL_ID);
+      if (!response?.channel) return;
       const collectionPrimaryCategories =
         response?.channel?.collectionPrimaryCategories;
       const contentPrimaryCategories =
@@ -91,17 +95,19 @@ console.log("filterOption", filterOption);
         ...collectionPrimaryCategories,
         ...contentPrimaryCategories,
       ];
-      setPrimaryCategory(PrimaryCategory);
+      setPrimaryCategory(PrimaryCategory || []);
       localStorage.setItem("PrimaryCategory", JSON.stringify(PrimaryCategory));
     };
     PrimaryCategoryData();
-  }, []);
+  }, [tenantConfig]);
 
   const filterOptions = primaryCategory;
   useEffect(() => {
+    if (!tenantConfig) return;
     const fetchStates = async (stateName?: string) => {
       try {
-        const data = await getFrameworkDetails();
+        const data = await getFrameworkDetails(tenantConfig?.COLLECTION_FRAMEWORK);
+        if (!data?.result?.framework) return;
         const framework = data?.result?.framework;
 
         const states = await getOptionsByCategory(framework, "state");
@@ -118,7 +124,7 @@ console.log("filterOption", filterOption);
       }
     };
     fetchStates();
-  }, []);
+  }, [tenantConfig]);
 
   const handleSearchClear = () => {
     onSearch("");

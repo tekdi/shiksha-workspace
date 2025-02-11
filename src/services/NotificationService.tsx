@@ -1,9 +1,6 @@
 import { getLocalStoredToken } from './LocalStorageService';
 import axios from "axios";
-import {
-  TENANT_ID
-  
-} from "@/utils/app.config";
+import TenantService from './TenantService';
 export interface SendCredentialsRequest {
   isQueue: boolean;
   context: string;
@@ -32,7 +29,7 @@ export const sendCredentialService = async ({
 
   const headers: Record<string, string> = {
     Authorization: `Bearer ${getLocalStoredToken()}`,
-    tenantid: TENANT_ID, 
+    tenantid: TenantService.getTenantId(),
     "Content-Type": "application/json", 
   };
 

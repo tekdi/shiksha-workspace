@@ -2,10 +2,7 @@
 import { getLocalStoredToken } from "./LocalStorageService";
 import { post } from "./RestClient";
 import axios from "axios";
-import {
-  TENANT_ID
-  
-} from "@/utils/app.config";
+import TenantService from "./TenantService";
 export interface userListParam {
   limit?: number;
   //  page: number;
@@ -36,7 +33,7 @@ export const userList = async ({
     console.log("Request data", apiUrl);
     const headers: Record<string, string> = {
       Authorization: `Bearer ${getLocalStoredToken()}`,
-    tenantid : TENANT_ID
+    tenantid : TenantService.getTenantId()
 
     };
     const response = await axios.post(
