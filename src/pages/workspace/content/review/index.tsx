@@ -3,7 +3,7 @@ import V1Player from "@/components/V1-Player/V1Player";
 import { publishContent, submitComment } from "@/services/ContentService";
 import { getLocalStoredUserName, getLocalStoredUserRole } from "@/services/LocalStorageService";
 import { fetchContent } from "@/services/PlayerService";
-import { CHANNEL_ID, MIME_TYPE } from "@/utils/app.config";
+import { MIME_TYPE } from "@/utils/app.config";
 import { Role } from "@/utils/app.constant";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
@@ -25,10 +25,13 @@ import {
 } from "../../../../components/players/PlayerConfig";
 import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import ToastNotification from "@/components/CommonToast";
+import useTenantConfig from "@/hooks/useTenantConfig";
+
 const userFullName = getLocalStoredUserName() || "Anonymous User";
 const [firstName, lastName] = userFullName.split(" ");
 
 const ReviewContentSubmissions = () => {
+  const tenantConfig = useTenantConfig();
   const [isContentInteractiveType, setIsContentInteractiveType] =
     useState(false);
   const router = useRouter();
@@ -49,6 +52,7 @@ const ReviewContentSubmissions = () => {
 
 
   useEffect(() => {
+    if (!tenantConfig?.CHANNEL_ID) return;
     if (typeof window !== "undefined") {
       window.$ = window.jQuery = $;
     }
@@ -65,9 +69,9 @@ const ReviewContentSubmissions = () => {
           if (MIME_TYPE.INTERACTIVE_MIME_TYPE.includes(data?.mimeType)) {
             V1PlayerConfig.metadata = data;
             V1PlayerConfig.context.contentId = data.identifier;
-            V1PlayerConfig.context.channel = CHANNEL_ID;
-            V1PlayerConfig.context.tags = [CHANNEL_ID];
-            V1PlayerConfig.context.app = [CHANNEL_ID];
+            V1PlayerConfig.context.channel = tenantConfig?.CHANNEL_ID;
+            V1PlayerConfig.context.tags = [tenantConfig?.CHANNEL_ID];
+            V1PlayerConfig.context.app = [tenantConfig?.CHANNEL_ID];
             V1PlayerConfig.context.userData.firstName = firstName;
             V1PlayerConfig.context.userData.lastName = lastName || '';
             setIsContentInteractiveType(true);
@@ -75,8 +79,8 @@ const ReviewContentSubmissions = () => {
             setIsContentInteractiveType(false);
             playerConfig.metadata = data;
             playerConfig.context.contentId = data.identifier;
-            playerConfig.context.channel = CHANNEL_ID;
-            playerConfig.context.tags = [CHANNEL_ID];
+            playerConfig.context.channel = tenantConfig?.CHANNEL_ID;
+            playerConfig.context.tags = [tenantConfig?.CHANNEL_ID];
             playerConfig.context.userData.firstName = firstName;
             playerConfig.context.userData.lastName = lastName || '';
           }
@@ -90,7 +94,7 @@ const ReviewContentSubmissions = () => {
     if (identifier) {
       loadContent();
     }
-  }, [identifier]);
+  }, [tenantConfig?.CHANNEL_ID, identifier]);
 
   const redirectToReviewPage = () => {
     if (isDiscoverContent === "true") {
