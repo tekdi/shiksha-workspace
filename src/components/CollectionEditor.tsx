@@ -25,9 +25,7 @@ const CollectionEditor: React.FC = () => {
   const [firstName, lastName] = fullName.split(" ");
   const sendReviewNotification = async (notificationData: any) => {
     console.log("notificationData", notificationData);
-    const response = await fetchCCTAList();
-    const cctaList = response;
-    console.log("response", response);
+   
   
     const isQueue = false;
     const context = "CMS";
@@ -35,12 +33,22 @@ const CollectionEditor: React.FC = () => {
     const url = `${window.location.origin}/collection?identifier=${notificationData?.contentId}`;
   
     try {
+      const response = await fetchCCTAList();
+      const cctaList = response;
+      const ContentDetail = await fetch(
+        `/action/content/v3/read/${notificationData?.contentId}`
+      );
+      const data = await ContentDetail.json();
+ 
       const promises = cctaList.map(async (user: any) => {
         const replacements = {
           "{reviewerName}": user?.name,
           "{creatorName}": notificationData?.creator,
           "{contentId}": notificationData?.contentId,
-          "{appUrl}": url
+          "{appUrl}": url,
+          "{submissionDate}": new Date().toLocaleDateString(),
+        "{contentType}":"Course",
+        "{contentTitle}":data?.result?.content?.name
         };
   
         return sendCredentialService({
