@@ -54,7 +54,23 @@ export const userList = async ({
   }
 };
 
-  
+export const getUserDetailsInfo = async (
+  userId?: string | string[],
+  fieldValue: boolean = true
+): Promise<any> => {
+  const apiUrl: string = `${process.env.NEXT_PUBLIC_BASE_URL}/user/v1/read/${userId}?fieldvalue=${fieldValue}`;
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${getLocalStoredToken()}`,
+    tenantid: TENANT_ID,
+  };
+  try {
+    const response = await axios.get(apiUrl, { headers });
+    return response?.data?.result;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return error;
+  }
+};
 
  export const fetchCCTAList = async() => {
     try{
