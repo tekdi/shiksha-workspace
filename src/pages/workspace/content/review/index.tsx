@@ -27,6 +27,7 @@ import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import ToastNotification from "@/components/CommonToast";
 import { sendCredentialService } from "@/services/NotificationService";
 import { getUserDetailsInfo } from "@/services/userServices";
+import { sendContentNotification } from "@/services/sendContentNotification";
 const userFullName = getLocalStoredUserName() || "Anonymous User";
 const [firstName, lastName] = userFullName.split(" ");
 
@@ -188,71 +189,12 @@ const ReviewContentSubmissions = () => {
   const handleBackClick = () => {
     router.back();
   };
-  const sendContentPublishNotification = async () => {
-    try {
-      const isQueue = false;
-      const context = "CMS";
-      const key = "onContentPublish";
-      let url = `${window.location.origin}/upload-editor?identifier=${identifier}`;
-
-      const userId = contentDetails?.createdBy;
-      const response = await getUserDetailsInfo(userId, true);
-      console.log("getUserDetailsInfo", response);
-      const replacements = {
-        "{reviewerName}": getLocalStoredUserName(),
-        "{creatorName}": response.userData?.firstName,
-        "{contentId}": identifier,
-        "{appUrl}": url,
-        "{submissionDate}": formatDate(new Date().toLocaleDateString()),
-        "{contentTitle}": contentDetails.name,
-        "{reviewDate}": formatDate(contentDetails.createdOn),
-        "{status}": "Published",
-      };
-      const emailResponse = await sendCredentialService({
-        isQueue,
-        context,
-        key,
-        replacements,
-        email: { receipients: [response?.userData?.email] },
-      });
-      router.push({ pathname: `/workspace/content/up-review` });
-    } catch (error) {
-      console.error("Error sending email notifications:", error);
-    }
-  };
-  const sendContentRejectNotification = async (comment: any) => {
-    try {
-      const isQueue = false;
-      const context = "CMS";
-      const key = "onContentReject";
-      let url = `${window.location.origin}/upload-editor?identifier=${identifier}`;
-
-      const userId = contentDetails?.createdBy;
-      const response = await getUserDetailsInfo(userId, true);
-      console.log("getUserDetailsInfo", response);
-      const replacements = {
-        "{reviewerName}": getLocalStoredUserName(),
-        "{creatorName}":  response.userData?.firstName,
-        "{contentId}": identifier,
-        "{appUrl}": url,
-        "{submissionDate}": formatDate(new Date().toLocaleDateString()),
-        "{contentTitle}": contentDetails.name,
-        "{reviewDate}": formatDate(contentDetails.createdOn),
-        "{status}": "Rejected",
-        "{reviwerComment}": comment,
-      };
-      const emailResponse = await sendCredentialService({
-        isQueue,
-        context,
-        key,
-        replacements,
-        email: { receipients: [response?.userData?.email] },
-      });
-      router.push({ pathname: `/workspace/content/up-review` });
-    } catch (error) {
-      console.error("Error sending email notifications:", error);
-    }
-  };
+ 
+  
+  
+  const sendContentPublishNotification = () => sendContentNotification("Published", "content","", identifier, contentDetails, router);
+  const sendContentRejectNotification = (comment: any) => sendContentNotification("Rejected","content",comment, identifier, contentDetails , router);
+  
 
   return (
     <Card sx={{ padding: 2, backgroundColor: "white" }}>

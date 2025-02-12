@@ -14,6 +14,7 @@ import {
 } from "@/services/LocalStorageService";
 import { fetchCCTAList, getUserDetailsInfo } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
+import { sendContentNotification } from "@/services/sendContentNotification";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -199,91 +200,11 @@ const QuestionSetEditor: React.FC = () => {
       year: "numeric",
     });
   };
-  const sendCreatorNotification = async () => {
-    try {
-      const isQueue = false;
-      const context = "CMS";
-      const key = "onContentPublish";
-      let url = `${window.location.origin}/editor?identifier=${identifier}`;
-
-      const doId = identifier?.toString();
-      if (doId) {
-        const hierarchyResponse = await fetch(
-          `/action/content/v3/read/${doId}`
-        );
-        const data = await hierarchyResponse.json();
-
-        const questionset = data?.result?.content;
-        console.log("hierarchyResponse:", questionset);
-        const userId = questionset?.createdBy;
-        const response = await getUserDetailsInfo(userId, true);
-        console.log("getUserDetailsInfo", response);
-        const replacements = {
-          "{reviewerName}": getLocalStoredUserName(),
-          "{creatorName}": response?.userData?.firstName,
-          "{contentId}": identifier,
-          "{appUrl}": url,
-          "{submissionDate}": formatDate(new Date().toLocaleDateString()),
-          "{contentTitle}": questionset.name,
-          "{reviewDate}": formatDate(questionset.createdOn),
-          "{status}": "Published",
-        };
-        const emailResponse = await sendCredentialService({
-          isQueue,
-          context,
-          key,
-          replacements,
-          email: { receipients: [response?.userData?.email] },
-        });
-        router.push({ pathname: `/workspace/content/up-review` });
-      }
-    } catch (error) {
-      console.error("Error sending email notifications:", error);
-    }
-  };
-  const sendContentRejectNotification = async () => {
-    try {
-      const isQueue = false;
-      const context = "CMS";
-      const key = "onContentReject";
-      let url = `${window.location.origin}/editor?identifier=${identifier}`;
-
-      const doId = identifier?.toString();
-      if (doId) {
-        const hierarchyResponse = await fetch(
-          `/action/content/v3/read/${doId}`
-        );
-        const data = await hierarchyResponse.json();
-
-        const questionset = data?.result?.content;
-        console.log("hierarchyResponse:", questionset);
-        const userId = questionset?.createdBy;
-        const response = await getUserDetailsInfo(userId, true);
-        console.log("getUserDetailsInfo", response);
-        const replacements = {
-          "{reviewerName}": getLocalStoredUserName(),
-          "{creatorName}": response?.userData?.firstName,
-          "{contentId}": identifier,
-          "{appUrl}": url,
-          "{submissionDate}": formatDate(questionset.createdOn),
-          "{contentTitle}": questionset.name,
-          "{reviewDate}": formatDate(new Date().toString()),
-          "{status}": "Rejected",
-          "{reviwerComment}": questionset.rejectComment,
-        };
-        const emailResponse = await sendCredentialService({
-          isQueue,
-          context,
-          key,
-          replacements,
-          email: { receipients: [response?.userData?.email] },
-        });
-        router.push({ pathname: `/workspace/content/up-review` });
-      }
-    } catch (error) {
-      console.error("Error sending email notifications:", error);
-    }
-  };
+  
+ 
+  const sendCreatorNotification = () => sendContentNotification("Published", "questionset" ,"", identifier, undefined, router);
+  const sendContentRejectNotification = () => sendContentNotification("Rejected", "questionset" ,"", identifier, undefined, router);
+ 
   useEffect(() => {
     const loadAssets = () => {
       if (!document.getElementById("sunbird-editor-css")) {
