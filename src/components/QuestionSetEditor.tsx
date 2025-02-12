@@ -147,21 +147,30 @@ const QuestionSetEditor: React.FC = () => {
   const isAppendedRef = useRef(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const sendReviewNotification = async (notificationData: any) => {
-    const response = await fetchCCTAList();
-    const cctaList = response;
-    console.log("response", response);
+   
   
     const isQueue = false;
     const context = "CMS";
     const key = "onContentReview";
     const url = `${window.location.origin}/editor?identifier=${notificationData?.contentId}`  
     try {
+      const response = await fetchCCTAList();
+      const cctaList = response;
+      const ContentDetail = await fetch(
+        `/action/content/v3/read/${notificationData?.contentId}`
+      );
+      const data = await ContentDetail.json();
+
+ 
       const promises = cctaList.map(async (user: any) => {
         const replacements = {
           "{reviewerName}": user?.name,
           "{creatorName}": notificationData?.creator,
           "{contentId}": notificationData?.contentId,
-          "{appUrl}": url
+          "{appUrl}": url,
+          "{submissionDate}": new Date().toLocaleDateString(),
+        "{contentType}":"Course",
+        "{contentTitle}":data?.result?.content?.name
         };
   
         return sendCredentialService({
@@ -255,7 +264,7 @@ const QuestionSetEditor: React.FC = () => {
               window.history.back();
             }
             localStorage.removeItem("contentMode");
-            window.history.back();
+          //  window.history.back();
             window.addEventListener(
               "popstate",
               () => {
