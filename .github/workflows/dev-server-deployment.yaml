@@ -14,12 +14,12 @@ jobs:
       - name: Deploy Stack
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_NAME_DEV }}
-          username: ${{ secrets.USERNAME_DEV }}
-          key: ${{ secrets.EC2_SSH_KEY_DEV }}
-          port: ${{ secrets.PORT_DEV }}
+          host: ${{ secrets.DEV_HOST_NAME }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_EC2_SSH_KEY }}
+          port: ${{ secrets.DEV_PORT }}
           script: |
-            cd ${{ secrets.TARGET_DIR_DEV }}
+            cd ${{ secrets.DEV_TARGET_DIR }}
             if [ -f .env ]; then
               rm .env
             fi
