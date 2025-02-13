@@ -46,6 +46,7 @@ const GenericEditor: React.FC = () => {
     window.location.hash = "no";
   };
   const sendReviewNotification = async (notificationData: any) => {
+    try{
     const response = await fetchCCTAList();
     const cctaList = response;
     console.log("response", response);
@@ -53,13 +54,20 @@ const GenericEditor: React.FC = () => {
     const context = "CMS";
     const key = "onContentReview";
     const url = `${window.location.origin}/workspace/content/review?identifier=${notificationData?.contentId}`;
+ const ContentDetail = await fetch(
+        `/action/content/v3/read/${notificationData?.contentId}`
+      );
+      const data = await ContentDetail.json();
 
     cctaList?.map(async (user: any) => {
       const replacements = {
-        "{reviewerName}": getLocalStoredUserName(),
+        "{reviewerName}": user?.name,
         "{creatorName}": notificationData?.creator,
         "{contentId}": notificationData?.contentId,
         "{appUrl}": url,
+        "{submissionDate}": new Date(),
+        "{contentType}":"Learning Resource",
+        "{contentTitle}":data?.result?.content?.name
       };
       const response = await sendCredentialService({
         isQueue,
@@ -69,7 +77,11 @@ const GenericEditor: React.FC = () => {
         email:  
         {receipients: [user?.email]},
       });
-    });
+    });}
+    catch(error){
+      console.error("Error sending email notifications:", error);
+
+    }
   };
 
   useEffect(() => {

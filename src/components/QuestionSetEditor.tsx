@@ -7,9 +7,11 @@ import {
   getLocalStoredUserName,
   getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
-import { fetchCCTAList } from "@/services/userServices";
+import { fetchCCTAList, getUserDetailsInfo } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
 import useTenantConfig from "@/hooks/useTenantConfig";
+import { sendContentNotification } from "@/services/sendContentNotification";
+import { ContentStatus, Editor } from "@/utils/app.constant";
 const QuestionSetEditor: React.FC = () => {
   const tenantConfig = useTenantConfig();
   const router = useRouter();
@@ -143,21 +145,30 @@ const QuestionSetEditor: React.FC = () => {
   const isAppendedRef = useRef(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const sendReviewNotification = async (notificationData: any) => {
-    const response = await fetchCCTAList();
-    const cctaList = response;
-    console.log("response", response);
+   
   
     const isQueue = false;
     const context = "CMS";
     const key = "onContentReview";
     const url = `${window.location.origin}/editor?identifier=${notificationData?.contentId}`  
     try {
+      const response = await fetchCCTAList();
+      const cctaList = response;
+      const ContentDetail = await fetch(
+        `/action/content/v3/read/${notificationData?.contentId}`
+      );
+      const data = await ContentDetail.json();
+
+ 
       const promises = cctaList.map(async (user: any) => {
         const replacements = {
-          "{reviewerName}": getLocalStoredUserName(),
+          "{reviewerName}": user?.name,
           "{creatorName}": notificationData?.creator,
           "{contentId}": notificationData?.contentId,
-          "{appUrl}": url
+          "{appUrl}": url,
+          "{submissionDate}": new Date().toLocaleDateString(),
+        "{contentType}":"Course",
+        "{contentTitle}":data?.result?.content?.name
         };
   
         return sendCredentialService({
@@ -178,6 +189,19 @@ const QuestionSetEditor: React.FC = () => {
       console.error("Error sending email notifications:", error);
     }
   };
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+  
+ 
+  const sendCreatorNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.QUESTION_SET ,"", identifier, undefined, router);
+  const sendContentRejectNotification = () => sendContentNotification(ContentStatus.REJECTED, Editor.QUESTION_SET ,"", identifier, undefined, router);
+ 
   useEffect(() => {
     const loadAssets = () => {
       if (!document.getElementById("sunbird-editor-css")) {
@@ -247,11 +271,21 @@ const QuestionSetEditor: React.FC = () => {
                 .catch((error) => {
                   console.error("Error in sendReviewNotification:", error);
                 });
-            } else {
+            } 
+            else if (event.detail?.action === "publishContent")
+            {
+              sendCreatorNotification()
+            }
+            else if(event.detail?.action === "rejectContent")
+            {
+              sendContentRejectNotification()
+            }
+            
+            else {
               window.history.back();
             }
             localStorage.removeItem("contentMode");
-            window.history.back();
+          //  window.history.back();
             window.addEventListener(
               "popstate",
               () => {
