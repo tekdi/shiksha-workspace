@@ -18,14 +18,14 @@ const SunbirdQuMLPlayer = ({ playerConfig }: PlayerConfigProps) => {
 
     const script = document.createElement("script");
     script.src =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-quml-player-web-component@3.0.0/sunbird-quml-player.js";
+      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-quml-player-web-component@5.0.0-beta.2/sunbird-quml-player.js";
     script.async = true;
     document.body.appendChild(script);
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href =
-      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-quml-player-web-component@3.0.0/styles.css";
+      "https://cdn.jsdelivr.net/npm/@project-sunbird/sunbird-quml-player-web-component@5.0.0-beta.2/styles.css";
     document.head.appendChild(link);
 
     const playerElement = SunbirdQuMLPlayerRef.current;
