@@ -92,8 +92,13 @@ export default async function handler(
     res.status(response.status).json(data);
   } catch (error: any) {
     console.error("Error in proxy:", error.message);
-    res
+
+    if (error?.response?.data?.responseCode === 401) {
+      return res.status(401).json({ message: "Unauthorized: Token is invalid" });
+    } else {
+      res
       .status(500)
       .json({ message: "Error fetching data", error: error.message });
+    }
   }
 }
