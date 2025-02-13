@@ -7,8 +7,11 @@ import {
   getLocalStoredUserId,
   getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
-import { fetchCCTAList } from "@/services/userServices";
+import { fetchCCTAList, getUserDetailsInfo } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
+import { formatDate } from "@/utils/Helper";
+import { sendContentNotification } from "@/services/sendContentNotification";
+import { ContentStatus, Editor } from "@/utils/app.constant";
 import useTenantConfig from "@/hooks/useTenantConfig";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
@@ -22,9 +25,7 @@ const CollectionEditor: React.FC = () => {
 
   const sendReviewNotification = async (notificationData: any) => {
     console.log("notificationData", notificationData);
-    const response = await fetchCCTAList();
-    const cctaList = response;
-    console.log("response", response);
+   
   
     const isQueue = false;
     const context = "CMS";
@@ -32,12 +33,22 @@ const CollectionEditor: React.FC = () => {
     const url = `${window.location.origin}/collection?identifier=${notificationData?.contentId}`;
   
     try {
+      const response = await fetchCCTAList();
+      const cctaList = response;
+      const ContentDetail = await fetch(
+        `/action/content/v3/read/${notificationData?.contentId}`
+      );
+      const data = await ContentDetail.json();
+ 
       const promises = cctaList.map(async (user: any) => {
         const replacements = {
-          "{reviewerName}": getLocalStoredUserName(),
+          "{reviewerName}": user?.name,
           "{creatorName}": notificationData?.creator,
           "{contentId}": notificationData?.contentId,
-          "{appUrl}": url
+          "{appUrl}": url,
+          "{submissionDate}": new Date().toLocaleDateString(),
+        "{contentType}":"Course",
+        "{contentTitle}":data?.result?.content?.name
         };
   
         return sendCredentialService({
@@ -188,9 +199,11 @@ const CollectionEditor: React.FC = () => {
       contentPolicyUrl: "/term-of-use.html",
     },
   };
-
-  console.log('editorConfig ====>', editorConfig)
-
+  
+  
+  const sendContentPublishNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.COLLECTION,"", identifier, undefined, router);
+  const sendContentRejectNotification = () => sendContentNotification(ContentStatus.REJECTED,Editor.COLLECTION,"", identifier, undefined , router);
+ 
   const editorRef = useRef<HTMLDivElement | null>(null);
   const isAppendedRef = useRef(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
@@ -301,7 +314,16 @@ const CollectionEditor: React.FC = () => {
                 .catch((error) => {
                   console.error("Error in sendReviewNotification:", error);
                 });
-            } else {
+            } 
+            else if( event.detail?.action === "publishContent")
+            {
+              sendContentPublishNotification();
+            }
+            else if( event.detail?.action === "rejectContent")
+            {
+              sendContentRejectNotification();
+            }
+            else {
               window.history.back();
             }
             localStorage.removeItem("contentMode");

@@ -4,7 +4,7 @@ import { publishContent, submitComment } from "@/services/ContentService";
 import { getLocalStoredUserName, getLocalStoredUserRole } from "@/services/LocalStorageService";
 import { fetchContent } from "@/services/PlayerService";
 import { MIME_TYPE } from "@/utils/app.config";
-import { Role } from "@/utils/app.constant";
+import { ContentStatus, Editor, Role } from "@/utils/app.constant";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -25,6 +25,9 @@ import {
 } from "../../../../components/players/PlayerConfig";
 import ReviewCommentPopup from "../../../../components/ReviewCommentPopup";
 import ToastNotification from "@/components/CommonToast";
+import { sendCredentialService } from "@/services/NotificationService";
+import { getUserDetailsInfo } from "@/services/userServices";
+import { sendContentNotification } from "@/services/sendContentNotification";
 import useTenantConfig from "@/hooks/useTenantConfig";
 
 const userFullName = getLocalStoredUserName() || "Anonymous User";
@@ -138,8 +141,8 @@ const ReviewContentSubmissions = () => {
 
       if (getLocalStoredUserRole() === Role.CCTA) {
         setPublishOpenToast(true)
+        sendContentPublishNotification()
 
-        router.push({ pathname: `/workspace/content/up-review` });
 
       }
       else
@@ -163,7 +166,7 @@ const ReviewContentSubmissions = () => {
       setOpenCommentPopup(false);
       if (getLocalStoredUserRole() === Role.CCTA) {
         setRequestOpenToast(true)
-        router.push({ pathname: `/workspace/content/up-review` });
+        sendContentRejectNotification(comment)
 
       }
       else
@@ -190,6 +193,13 @@ const ReviewContentSubmissions = () => {
   const handleBackClick = () => {
     router.back();
   };
+ 
+  
+  
+  const sendContentPublishNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.CONTENT,"", identifier, contentDetails, router);
+  const sendContentRejectNotification = (comment: any) => sendContentNotification(ContentStatus.REJECTED, Editor.CONTENT,comment, identifier, contentDetails , router);
+  
+
   return (
     <Card sx={{ padding: 2, backgroundColor: "white" }}>
            { publishOpenToast && (<ToastNotification message="Content published Successfully" type= "success" />)}
