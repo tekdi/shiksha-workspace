@@ -33,7 +33,7 @@ export const userList = async ({
     console.log("Request data", apiUrl);
     const headers: Record<string, string> = {
       Authorization: `Bearer ${getLocalStoredToken()}`,
-    tenantid : TenantService.getTenantId()
+      tenantid : TenantService.getTenantId()
 
     };
     const response = await axios.post(
@@ -58,7 +58,7 @@ export const getUserDetailsInfo = async (
   const apiUrl: string = `${process.env.NEXT_PUBLIC_BASE_URL}/user/v1/read/${userId}?fieldvalue=${fieldValue}`;
   const headers: Record<string, string> = {
     Authorization: `Bearer ${getLocalStoredToken()}`,
-    tenantid: TENANT_ID,
+    tenantid: TenantService.getTenantId(),
   };
   try {
     const response = await get(apiUrl);
