@@ -12,8 +12,11 @@ import {
   getLocalStoredUserId,
   getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
-import { fetchCCTAList } from "@/services/userServices";
+import { fetchCCTAList, getUserDetailsInfo } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
+import { formatDate } from "@/utils/Helper";
+import { sendContentNotification } from "@/services/sendContentNotification";
+import { ContentStatus, Editor } from "@/utils/app.constant";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -201,9 +204,11 @@ const CollectionEditor: React.FC = () => {
       contentPolicyUrl: "/term-of-use.html",
     },
   };
-
-  console.log('editorConfig ====>', editorConfig)
-
+  
+  
+  const sendContentPublishNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.COLLECTION,"", identifier, undefined, router);
+  const sendContentRejectNotification = () => sendContentNotification(ContentStatus.REJECTED,Editor.COLLECTION,"", identifier, undefined , router);
+ 
   const editorRef = useRef<HTMLDivElement | null>(null);
   const isAppendedRef = useRef(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
@@ -314,7 +319,16 @@ const CollectionEditor: React.FC = () => {
                 .catch((error) => {
                   console.error("Error in sendReviewNotification:", error);
                 });
-            } else {
+            } 
+            else if( event.detail?.action === "publishContent")
+            {
+              sendContentPublishNotification();
+            }
+            else if( event.detail?.action === "rejectContent")
+            {
+              sendContentRejectNotification();
+            }
+            else {
               window.history.back();
             }
             localStorage.removeItem("contentMode");

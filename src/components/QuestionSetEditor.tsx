@@ -12,8 +12,10 @@ import {
   getLocalStoredUserName,
   getLocalStoredUserSpecificBoard
 } from "@/services/LocalStorageService";
-import { fetchCCTAList } from "@/services/userServices";
+import { fetchCCTAList, getUserDetailsInfo } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
+import { sendContentNotification } from "@/services/sendContentNotification";
+import { ContentStatus, Editor } from "@/utils/app.constant";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -191,6 +193,19 @@ const QuestionSetEditor: React.FC = () => {
       console.error("Error sending email notifications:", error);
     }
   };
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+  
+ 
+  const sendCreatorNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.QUESTION_SET ,"", identifier, undefined, router);
+  const sendContentRejectNotification = () => sendContentNotification(ContentStatus.REJECTED, Editor.QUESTION_SET ,"", identifier, undefined, router);
+ 
   useEffect(() => {
     const loadAssets = () => {
       if (!document.getElementById("sunbird-editor-css")) {
@@ -260,7 +275,17 @@ const QuestionSetEditor: React.FC = () => {
                 .catch((error) => {
                   console.error("Error in sendReviewNotification:", error);
                 });
-            } else {
+            } 
+            else if (event.detail?.action === "publishContent")
+            {
+              sendCreatorNotification()
+            }
+            else if(event.detail?.action === "rejectContent")
+            {
+              sendContentRejectNotification()
+            }
+            
+            else {
               window.history.back();
             }
             localStorage.removeItem("contentMode");
