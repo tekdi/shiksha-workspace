@@ -4,7 +4,7 @@ import { publishContent, submitComment } from "@/services/ContentService";
 import { getLocalStoredUserName, getLocalStoredUserRole } from "@/services/LocalStorageService";
 import { fetchContent } from "@/services/PlayerService";
 import { CHANNEL_ID, MIME_TYPE } from "@/utils/app.config";
-import { Role } from "@/utils/app.constant";
+import { ContentStatus, Editor, Role } from "@/utils/app.constant";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -192,8 +192,8 @@ const ReviewContentSubmissions = () => {
  
   
   
-  const sendContentPublishNotification = () => sendContentNotification("Published", "content","", identifier, contentDetails, router);
-  const sendContentRejectNotification = (comment: any) => sendContentNotification("Rejected","content",comment, identifier, contentDetails , router);
+  const sendContentPublishNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.CONTENT,"", identifier, contentDetails, router);
+  const sendContentRejectNotification = (comment: any) => sendContentNotification(ContentStatus.REJECTED, Editor.CONTENT,comment, identifier, contentDetails , router);
   
 
   return (

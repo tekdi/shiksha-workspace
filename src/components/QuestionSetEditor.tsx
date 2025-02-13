@@ -15,6 +15,7 @@ import {
 import { fetchCCTAList, getUserDetailsInfo } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
 import { sendContentNotification } from "@/services/sendContentNotification";
+import { ContentStatus, Editor } from "@/utils/app.constant";
 const QuestionSetEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -202,8 +203,8 @@ const QuestionSetEditor: React.FC = () => {
   };
   
  
-  const sendCreatorNotification = () => sendContentNotification("Published", "questionset" ,"", identifier, undefined, router);
-  const sendContentRejectNotification = () => sendContentNotification("Rejected", "questionset" ,"", identifier, undefined, router);
+  const sendCreatorNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.QUESTION_SET ,"", identifier, undefined, router);
+  const sendContentRejectNotification = () => sendContentNotification(ContentStatus.REJECTED, Editor.QUESTION_SET ,"", identifier, undefined, router);
  
   useEffect(() => {
     const loadAssets = () => {

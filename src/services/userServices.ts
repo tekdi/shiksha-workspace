@@ -1,6 +1,6 @@
 
 import { getLocalStoredToken } from "./LocalStorageService";
-import { post } from "./RestClient";
+import { post , get} from "./RestClient";
 import axios from "axios";
 import {
   TENANT_ID
@@ -64,7 +64,7 @@ export const getUserDetailsInfo = async (
     tenantid: TENANT_ID,
   };
   try {
-    const response = await axios.get(apiUrl, { headers });
+    const response = await get(apiUrl);
     return response?.data?.result;
   } catch (error) {
     console.error("Error fetching user details:", error);

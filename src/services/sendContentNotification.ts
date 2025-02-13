@@ -2,10 +2,11 @@ import { formatDate } from "@/utils/Helper";
 import { sendCredentialService } from "./NotificationService";
 import { getLocalStoredUserName } from "./LocalStorageService";
 import { getUserDetailsInfo } from "./userServices";
+import { ContentStatus, Editor } from "@/utils/app.constant";
 
 export const sendContentNotification = async (
-    status: "Published" | "Rejected", 
-    editorType: "content" | "questionset" | "collection", 
+    status: ContentStatus.PUBLISHED | ContentStatus.REJECTED, 
+    editorType:  Editor.CONTENT | Editor.QUESTION_SET | Editor.COLLECTION, 
     comment = "",
     identifier?:any,
     contentInfo?:any,
@@ -16,11 +17,11 @@ export const sendContentNotification = async (
     try {
       const isQueue = false;
       const context = "CMS";
-      const key = status === "Published" ? "onContentPublish" : "onContentReject";
-      let url = `${window.location.origin}/${editorType === "content" ? "upload-editor" : editorType === "questionset" ? "editor" : "collection"}?identifier=${identifier}`;
+      const key = status ===  ContentStatus.PUBLISHED? "onContentPublish" : "onContentReject";
+      let url = `${window.location.origin}/${editorType === Editor.CONTENT ? "upload-editor" : editorType === Editor.QUESTION_SET ? "editor" : "collection"}?identifier=${identifier}`;
   
       let contentDetails: any = {};
-      if (editorType !== "content") {
+      if (editorType !== Editor.CONTENT) {
         const doId = identifier?.toString();
         if (doId) {
           const hierarchyResponse = await fetch(`/action/content/v3/read/${doId}`);
@@ -47,8 +48,8 @@ export const sendContentNotification = async (
         "{status}": status,
       };
   
-      if (status === "Rejected") {
-        replacements["{reviwerComment}"] = editorType === "content" ? comment : contentDetails?.rejectComment;
+      if (status ===  ContentStatus.REJECTED) {
+        replacements["{reviwerComment}"] = editorType === Editor.CONTENT ? comment : contentDetails?.rejectComment;
       }
   
       await sendCredentialService({

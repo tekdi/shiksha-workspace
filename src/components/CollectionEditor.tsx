@@ -16,6 +16,7 @@ import { fetchCCTAList, getUserDetailsInfo } from "@/services/userServices";
 import { sendCredentialService } from "@/services/NotificationService";
 import { formatDate } from "@/utils/Helper";
 import { sendContentNotification } from "@/services/sendContentNotification";
+import { ContentStatus, Editor } from "@/utils/app.constant";
 const CollectionEditor: React.FC = () => {
   const router = useRouter();
   const { identifier } = router.query;
@@ -205,8 +206,8 @@ const CollectionEditor: React.FC = () => {
   };
   
   
-  const sendContentPublishNotification = () => sendContentNotification("Published", "collection","", identifier, undefined, router);
-  const sendContentRejectNotification = () => sendContentNotification("Rejected","collection","", identifier, undefined , router);
+  const sendContentPublishNotification = () => sendContentNotification(ContentStatus.PUBLISHED, Editor.COLLECTION,"", identifier, undefined, router);
+  const sendContentRejectNotification = () => sendContentNotification(ContentStatus.REJECTED,Editor.COLLECTION,"", identifier, undefined , router);
  
   const editorRef = useRef<HTMLDivElement | null>(null);
   const isAppendedRef = useRef(false);
