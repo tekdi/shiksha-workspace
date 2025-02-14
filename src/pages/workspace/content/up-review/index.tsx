@@ -25,6 +25,7 @@ import { DataType } from 'ka-table/enums';
 import KaTableComponent from "@/components/KaTableComponent";
 import { timeAgo } from "@/utils/Helper";
 import useSharedStore from "@/utils/useSharedState";
+import useTenantConfig from "@/hooks/useTenantConfig";
 const columns = [
   { key: 'title_and_description', title: 'TITLE & DESCRIPTION', dataType: DataType.String, width: "480px" },
 
@@ -37,6 +38,7 @@ const columns = [
 
 ]
 const UpForReviewPage = () => {
+  const tenantConfig = useTenantConfig();
   const router = useRouter();
 
   const [selectedKey, setSelectedKey] = useState("up-review");
@@ -111,6 +113,7 @@ const UpForReviewPage = () => {
   useEffect(() => {
     const getReviewContentList = async () => {
       try {
+        if (!tenantConfig) return;
         setLoading(true);
         const query = debouncedSearchTerm || "";
         let offset =debouncedSearchTerm!==""? 0 : page * LIMIT;
@@ -131,6 +134,7 @@ const UpForReviewPage = () => {
           offset,
           primaryCategory,
           sort_by,
+          tenantConfig?.CHANNEL_ID,
           contentType
         );
         const contentList = (response?.content || []).concat(
@@ -145,7 +149,7 @@ const UpForReviewPage = () => {
       }
     };
     getReviewContentList();
-  }, [debouncedSearchTerm, filter, sortBy, fetchContentAPI,contentDeleted, page]);
+  }, [tenantConfig, debouncedSearchTerm, filter, sortBy, fetchContentAPI,contentDeleted, page]);
 
   
   return (

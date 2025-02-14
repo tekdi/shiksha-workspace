@@ -59,8 +59,9 @@ const getReqBodyWithStatus = (
   offset: number,
   primaryCategory: any,
   sort_by: any,
+  channel: string,
   contentType?: string,
-  state?: string
+  state?: string,
 ) => {
   if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
     var PrimaryCategory =
@@ -102,6 +103,7 @@ const getReqBodyWithStatus = (
           status,
           primaryCategory,
           createdBy: { "!=": getLocalStoredUserId() },
+          channel: channel
         },
 
         query,
@@ -119,6 +121,7 @@ const getReqBodyWithStatus = (
           ...upForReviewReqBody.request.filters,
           status,
           primaryCategory,
+          channel: channel
         },
         query,
         limit,
@@ -136,6 +139,7 @@ const getReqBodyWithStatus = (
         ...defaultReqBody.request.filters,
         status,
         primaryCategory,
+        channel: channel
       },
       query,
       limit,
@@ -152,6 +156,7 @@ export const getContent = async (
   offset: number,
   primaryCategory: string[],
   sort_by: any,
+  channel: any,
   contentType?: string,
   state?: string
 ) => {
@@ -164,6 +169,7 @@ export const getContent = async (
       offset,
       primaryCategory,
       sort_by,
+      channel,
       contentType,
       state
     );

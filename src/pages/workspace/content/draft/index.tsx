@@ -26,6 +26,7 @@ import KaTableComponent from "@/components/KaTableComponent";
 import Paper from "@mui/material/Paper";
 import { timeAgo } from "@/utils/Helper";
 import useSharedStore from "@/utils/useSharedState";
+import useTenantConfig from "@/hooks/useTenantConfig";
 
 const columns = [
   {
@@ -49,6 +50,7 @@ const columns = [
   { key: "action", title: "ACTION", dataType: DataType.String, width: "100px" },
 ];
 const DraftPage = () => {
+  const tenantConfig = useTenantConfig();
   const [selectedKey, setSelectedKey] = useState("draft");
   const router = useRouter();
 
@@ -123,6 +125,7 @@ const DraftPage = () => {
   useEffect(() => {
     const getDraftContentList = async () => {
       try {
+        if (!tenantConfig) return;
         setLoading(true);
         const query = debouncedSearchTerm || "";
         let offset = debouncedSearchTerm !== "" ? 0 : page * LIMIT;
@@ -141,7 +144,8 @@ const DraftPage = () => {
           LIMIT,
           offset,
           primaryCategory,
-          sort_by
+          sort_by,
+          tenantConfig?.CHANNEL_ID
         );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
@@ -156,6 +160,7 @@ const DraftPage = () => {
     };
     getDraftContentList();
   }, [
+    tenantConfig,
     debouncedSearchTerm,
     filter,
     sortBy,
