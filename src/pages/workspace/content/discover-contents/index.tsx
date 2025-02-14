@@ -22,7 +22,7 @@ import React, {
 import Layout from "../../../../components/Layout";
 import SearchBox from "../../../../components/SearchBox";
 import { getContent } from "../../../../services/ContentService";
-
+import useTenantConfig from "@/hooks/useTenantConfig";
 // const columns = [
 //   { key: 'name', title: 'Content', dataType: DataType.String, width: "450px" },
 //   { key: 'lastUpdatedOn', title: 'Last Updated', dataType: DataType.String, width: "300px" },
@@ -61,6 +61,7 @@ const columns = [
   },
 ];
 const ContentsPage = () => {
+  const tenantConfig = useTenantConfig();
   const theme = useTheme<any>();
   const router = useRouter();
 
@@ -131,6 +132,7 @@ const ContentsPage = () => {
   useEffect(() => {
     const getContentList = async () => {
       try {
+        if (!tenantConfig) return;
         setLoading(true);
         const status = [
           // "Draft",
@@ -164,6 +166,7 @@ const ContentsPage = () => {
           offset,
           primaryCategory,
           sort_by,
+          tenantConfig?.CHANNEL_ID,
           contentType,
           state !== "All" ? state : undefined
         );
@@ -179,7 +182,7 @@ const ContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter, fetchContentAPI, sortBy, state, page]);
+  }, [tenantConfig, debouncedSearchTerm, filter, fetchContentAPI, sortBy, state, page]);
 
   useEffect(() => {
     const filteredArray = contentList.map((item) => ({

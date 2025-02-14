@@ -35,6 +35,7 @@ import { DataType } from "ka-table/enums";
 import "ka-table/style.css";
 import KaTableComponent from "@/components/KaTableComponent";
 import useSharedStore from "@/utils/useSharedState";
+import useTenantConfig from "@/hooks/useTenantConfig";
 // const columns = [
 //   { key: 'name', title: 'Content', dataType: DataType.String, width: "450px" },
 //   { key: 'lastUpdatedOn', title: 'Last Updated', dataType: DataType.String, width: "300px" },
@@ -70,6 +71,7 @@ const columns = [
   },
 ];
 const AllContentsPage = () => {
+  const tenantConfig = useTenantConfig();
   const theme = useTheme<any>();
   const router = useRouter();
 
@@ -142,6 +144,7 @@ const AllContentsPage = () => {
   useEffect(() => {
     const getContentList = async () => {
       try {
+        if (!tenantConfig) return;
         setLoading(true);
         let status = [
           "Draft",
@@ -214,7 +217,8 @@ const AllContentsPage = () => {
           LIMIT,
           offset,
           primaryCategory,
-          sort_by
+          sort_by,
+          tenantConfig?.CHANNEL_ID
         );
         const contentList = (response?.content || []).concat(
           response?.QuestionSet || []
@@ -227,7 +231,7 @@ const AllContentsPage = () => {
       }
     };
     getContentList();
-  }, [debouncedSearchTerm, filter, fetchContentAPI, sortBy, statusBy, page]);
+  }, [tenantConfig, debouncedSearchTerm, filter, fetchContentAPI, sortBy, statusBy, page]);
 
   useEffect(() => {
     const filteredArray = contentList.map((item) => ({
