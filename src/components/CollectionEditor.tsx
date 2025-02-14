@@ -49,8 +49,8 @@ const CollectionEditor: React.FC = () => {
           "{creatorName}": notificationData?.creator,
           "{contentId}": notificationData?.contentId,
           "{appUrl}": url,
-          "{submissionDate}": new Date().toLocaleDateString(),
-        "{contentType}":"Course",
+          "{submissionDate}": formatDate(new Date().toString()),
+          "{contentType}":"Course",
         "{contentTitle}":data?.result?.content?.name
         };
   
